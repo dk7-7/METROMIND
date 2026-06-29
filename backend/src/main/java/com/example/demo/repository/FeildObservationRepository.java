@@ -1,5 +1,6 @@
 package com.example.demo.repository;
 
-public class FeildObservationRepository {
-    
+public interface FeildObservationRepository extends  {
+
+     
 }
