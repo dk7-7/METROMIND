@@ -1,5 +1,5 @@
 package com.example.demo.repository;
 
-public class AlertNotificationRepository e{
+public class AlertNotificationRepository extends JpaRe {
     
 }
