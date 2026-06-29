@@ -1,5 +1,5 @@
 package com.example.demo.repository;
 
-public class AlertNotificationRepository {
+public class AlertNotificationRepository e{
     
 }
