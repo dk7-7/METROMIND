@@ -5,6 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.demo.entity.UtilityOutage;
 
 public interface UtilityOutageRepository extends JpaRepository<UtilityOutage,Long>{
-
-     
+       
 }
