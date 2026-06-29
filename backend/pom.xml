@@ -29,7 +29,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        
+727824TUAD049 HAARISH H <727824tuad049@skct.edu.in>
+12:05 PM (0 minutes ago)
+to me
 
+<dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <optional>true</optional>
+</dependency>
         <!-- JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
