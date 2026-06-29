@@ -1,6 +1,10 @@
 package com.example.demo.repository;
 
-public interface FeildObservationRepository extends  {
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.example.demo.entity.FeildObservation;
+
+public interface FeildObservationRepository extends JpaRepository<FeildObservation,Long> {
 
      
 }
