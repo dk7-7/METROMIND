@@ -1,6 +1,12 @@
 package com.example.demo.entity;
 
-@E
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "city_users")
 public class CityUser {
-   
+    @Id
+    Private long userId;
 }
