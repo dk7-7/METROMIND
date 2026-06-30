@@ -10,5 +10,6 @@ public class CityUser {
     @Id
     private long userId;
     private String username ; 
+    private String passwordHash ;
     private 
 }
