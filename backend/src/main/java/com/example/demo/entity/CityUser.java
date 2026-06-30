@@ -8,5 +8,7 @@ import jakarta.persistence.Table;
 @Table(name = "city_users")
 public class CityUser {
     @Id
-    Private long userId;
+    private long userId;
+    private String username ; 
+    private 
 }
