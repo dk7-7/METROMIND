@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "city")
+@Table(name = "city_users")
 public class AlertNotification {
     
 }
