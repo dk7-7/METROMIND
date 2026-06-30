@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 @Entity
 public class TrafficZone {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
 }
