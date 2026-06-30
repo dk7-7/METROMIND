@@ -6,5 +6,6 @@ import jakarta.persistence.Id;
 @Entity
 public class Trafficincident {
     @Id
+    private long incidentId;
     
 }
