@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -10,7 +11,10 @@ import jakarta.persistence.Table;
 public class TrafficZone {
     @Id
     private long zoneId;
-    @Column()
+    @Column(unique = true  , nullable = false)
     private String zoneCode;
+    @Column(nullable = false)
+    private String zonename;
+    private
 
 }
