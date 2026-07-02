@@ -4,13 +4,15 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
-@Table(name = "incident")
-
+@Table(name = "traffic_incident")
+@Data
 public class Trafficincident {
     @Id
     private long incidentId;
-    @Column()
+    @Column(nullable = false)
+    private String title;
     
 }
