@@ -23,8 +23,8 @@ public class CityUser {
     private String fullname;
 
     private String district;
-    
+    @Column(unique = true)
     private String badgeNumber ;
     
-    private 
+    private boolean isActive;
 }
