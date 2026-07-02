@@ -8,5 +8,7 @@ import jakarta.persistence.ManyToOne;
 public class UtilityOutage {
     @Id
     private long outageId;
-    @ManyToOne 
+    @ManyToOne UtilityGrid
+    grid;
+    
 }
