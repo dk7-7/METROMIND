@@ -5,14 +5,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 
-@Entity
 @Table(name = "city_users")
 /**
  * 
- */
+*/
+@Entity
 @Data
 public class CityUser {
     @Id
     private long userId;
-    Private 
+    private String username ; 
 }
