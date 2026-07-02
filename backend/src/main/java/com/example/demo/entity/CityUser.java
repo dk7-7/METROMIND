@@ -17,5 +17,7 @@ public class CityUser {
     private long userId;
     @Column(unique = true,nullable = false)
     private String username ; 
-    private String password
+    @Column(nullable = false)
+    private String passwordHash;
+    private String 
 }
