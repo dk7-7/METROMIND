@@ -15,6 +15,7 @@ public class TrafficZone {
     private String zoneCode;
     @Column(nullable = false)
     private String zonename;
+    
     private String district;
     private int signalCycleSeconds;
 }

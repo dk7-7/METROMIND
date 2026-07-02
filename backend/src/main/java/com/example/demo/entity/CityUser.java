@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.Role;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -21,6 +23,8 @@ public class CityUser {
     private String passwordHash;
 
     private String fullname;
+
+    private Role role;
 
     private String district;
     @Column(unique = true)
