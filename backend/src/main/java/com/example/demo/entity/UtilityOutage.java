@@ -6,5 +6,6 @@ import jakarta.persistence.Id;
 @Entity
 public class UtilityOutage {
     @Id
-    private long outage;
+    private long outageId;
+    
 }
