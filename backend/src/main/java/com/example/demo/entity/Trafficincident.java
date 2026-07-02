@@ -19,6 +19,6 @@ public class Trafficincident {
     private 
     @ManyToOne TrafficZone
     zone;
-
-    
+    @ManyToOne CityUser
+    reported    
 }
