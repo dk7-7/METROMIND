@@ -21,5 +21,5 @@ public class Trafficincident {
     @ManyToOne TrafficZone
     zone;
 
-    
+    t
 }
