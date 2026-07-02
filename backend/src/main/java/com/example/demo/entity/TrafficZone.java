@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
 
+import com.example.demo.enums.CongestionLevel;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -15,7 +17,8 @@ public class TrafficZone {
     private String zoneCode;
     @Column(nullable = false)
     private String zonename;
-    
+
+    private CongestionLevel currentCongestionLevel;
     private String district;
     private int signalCycleSeconds;
 }
