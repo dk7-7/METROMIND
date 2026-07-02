@@ -16,7 +16,8 @@ public class Trafficincident {
     @Column(nullable = false)
     private String title;
     
-    @ManyToOne -> TrafficZone
+    @ManyToOne TrafficZone
     zone;
 
+    private reportedAt 
 }
