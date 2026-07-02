@@ -37,13 +37,13 @@
         </dependency>
 
         <!-- Security -->
-        <dependency>
+        <!-- <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+        </dependency> -->
 
         <!-- Explicit security jars for test compilation -->
-        <dependency>
+        <!-- <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
         </dependency>
@@ -56,7 +56,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-web</artifactId>
-        </dependency>
+        </dependency> -->
 
         <!-- Validation -->
         <dependency>
@@ -72,7 +72,7 @@
         </dependency>
 
         <!-- JWT -->
-        <dependency>
+        <!-- <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
             <version>0.11.5</version>
@@ -93,7 +93,7 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
+        </dependency> -->
 
         <!-- Mockito — needed by t12 -->
         <dependency>
@@ -118,11 +118,11 @@
             <optional>true</optional>
         </dependency>
         <!-- Spring Security Test -->
-        <dependency>
+        <!-- <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
 
     </dependencies>
 
