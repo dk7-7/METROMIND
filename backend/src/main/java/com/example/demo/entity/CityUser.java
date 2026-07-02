@@ -19,5 +19,12 @@ public class CityUser {
     private String username ; 
     @Column(nullable = false)
     private String passwordHash;
-    private String 
+
+    private String fullname;
+
+    private String district;
+    
+    private String badgeNumber ;
+    
+    private 
 }
