@@ -14,6 +14,7 @@ public class UtilityGrid {
     private long gridId;
     @Column(nullable = false)
     private String gridName;
-    
+    private double capacityUnits;
+    private double currentLoad;
     private GridStatus status;
 }
