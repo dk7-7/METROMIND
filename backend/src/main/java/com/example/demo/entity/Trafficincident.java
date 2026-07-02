@@ -17,6 +17,6 @@ public class Trafficincident {
     private String title;
     
     @ManyToOne -> TrafficZone
-    
+    zone;
 
 }
