@@ -1,5 +1,7 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.GridStatus;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -11,5 +13,6 @@ public class UtilityGrid {
     @Id
     private long gridId;
     @Column(nullable = false)
-    private Str
+    private String gridName;
+    private GridStatus grid
 }
