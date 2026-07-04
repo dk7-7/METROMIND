@@ -1,8 +1,3 @@
-package com.example.demo.enums;
-
 public enum Severity {
-    LOW,
-    MEDIUM,
-    HIGH,
-    CRITICAL
+LOW, MEDIUM, HIGH, CRITICAL
 }
