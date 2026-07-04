@@ -1,6 +1,6 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.CongestionLevel;
+import com.example.demo.enums.CongestionLevel;
 import com.example.demo.entity.TrafficZone;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
