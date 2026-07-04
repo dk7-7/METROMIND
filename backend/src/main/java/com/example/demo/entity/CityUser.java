@@ -1,38 +1,38 @@
 package com.example.demo.entity;
 
-import com.example.demo.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+
+import com.example.demo.enums.Role;
 
 @Entity
 @Table(name = "city_users")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class CityUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
-    @Column(nullable = false)
+    @Column(name = "full_name", nullable = false)
     private String fullName;
 
     private String district;
@@ -41,9 +41,12 @@ public class CityUser {
     private String badgeNumber;
 
     @Builder.Default
-    private Boolean isActive = true;
+    private boolean isActive = true;
 
-    @OneToMany(mappedBy = "reportedBy", cascade = CascadeType.ALL)
-    @Builder.Default
-    private List<TrafficIncident> reportedIncidents = new ArrayList<>();
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }
