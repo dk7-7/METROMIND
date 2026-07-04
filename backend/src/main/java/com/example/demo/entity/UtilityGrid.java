@@ -1,46 +1,55 @@
 package com.example.demo.entity;
 
+import com.example.demo.enums.GridStatus;
+import com.example.demo.enums.GridType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
-import com.example.demo.enums.GridStatus;
-import com.example.demo.enums.GridType;
+import java.util.List;
 
 @Entity
 @Table(name = "utility_grids")
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UtilityGrid {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long gridId;
 
-    @Column(name = "grid_name", nullable = false)
+    @Column(nullable = false)
     private String gridName;
 
+    @Column(nullable = false, unique = true)
+    private String gridCode;
+
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private GridType gridType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private GridStatus status;
 
     @Column(nullable = false)
     private String district;
 
     @Column(nullable = false)
-    private Double capacityUnits;
+    private Double capacity;
 
-    @Builder.Default
-    private Double currentLoad = 0.0;
+    @Column(nullable = false)
+    private Double currentLoad;
 
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private GridStatus status = GridStatus.OPERATIONAL;
+    @Column(nullable = false)
+    private String location;
 
-    private LocalDateTime lastInspectedAt;
+    @OneToMany(mappedBy = "utilityGrid",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<UtilityOutage> outages;
 }
