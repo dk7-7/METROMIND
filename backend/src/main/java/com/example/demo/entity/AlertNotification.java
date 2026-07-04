@@ -1,40 +1,53 @@
 package com.example.demo.entity;
 
-import com.example.demo.enums.Severity;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+
+import com.example.demo.enums.Role;
+import com.example.demo.enums.Severity;
 
 @Entity
 @Table(name = "alert_notifications")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class AlertNotification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long notificationId;
+    private Long alertId;
 
-    @Column(nullable = false)
-    private String title;
+    @Enumerated(EnumType.STRING)
+    private Role targetRole;
 
-    @Column(length = 2000)
+    @Column(nullable = false, length = 500)
     private String message;
+
+    private String relatedEntityType;
+
+    private Long relatedEntityId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Severity severity;
 
     @Builder.Default
-    private Boolean isRead = false;
+    private boolean isRead = false;
 
-    @Builder.Default
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
-    private CityUser cityUser;
-}
+    private CityUser user;
+
+    private LocalDateTime createdAt;
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
+}   
