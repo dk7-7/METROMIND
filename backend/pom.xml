@@ -92,10 +92,9 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
-    <groupId>io.swagger</groupId>
-    <artifactId>swagger-annotations</artifactId>
-    <version>1.5.22</version>
-    <scope>compile</scope>
+    <groupId>org.springdoc</groupId>
+    <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+    <version>2.5.0</version>
 </dependency>
         <!-- Mockito — needed by t12 -->
         <dependency>
