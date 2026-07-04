@@ -1,6 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.enums.Severity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,38 +11,40 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "alert_notifications")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class AlertNotification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long alertId;
 
-    @Column(nullable = false)
-    private String title;
+    @Enumerated(EnumType.STRING)
+    private Role targetRole;
 
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false, length = 500)
     private String message;
+
+    private String relatedEntityType;
+
+    private Long relatedEntityId;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Severity severity;
 
-    @Column(nullable = false)
-    private String targetArea;
+    @Builder.Default
+    private boolean isRead = false;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private CityUser user;
+
     private LocalDateTime createdAt;
 
-    @Builder.Default
-    @Column(nullable = false)
-    private Boolean sent = false;
-
-    private LocalDateTime sentAt;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", nullable = false)
-    private CityUser createdBy;
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now();
+    }
 }

@@ -28,7 +28,7 @@ public class TrafficIncident {
     private String title;
 
     @Enumerated(EnumType.STRING)
-    private Incide  ntType incidentType;
+    private IncidentType incidentType;
 
     @Enumerated(EnumType.STRING)
     private Severity severity;

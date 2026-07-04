@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.enums.GridStatus;
 import com.example.demo.enums.GridType;
 
 @Entity
