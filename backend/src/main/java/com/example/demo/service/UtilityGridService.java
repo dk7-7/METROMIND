@@ -2,6 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.OutageDto;
 import com.example.demo.entity.*;
+import com.example.demo.enums.*;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AlertNotificationRepository;
 import com.example.demo.repository.UtilityGridRepository;

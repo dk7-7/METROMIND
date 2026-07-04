@@ -21,13 +21,13 @@ import java.util.List;
 public class FieldObservationService {
 
     private final FieldObservationRepository fieldObservationRepository;
-    private final TrafficIncidentRepository trafficincidentRepository;
+    private final TrafficIncidentRepository trafficIncidentRepository;
     private final UtilityOutageRepository utilityOutageRepository;
     private final CityUserRepository cityUserRepository;
 
     public FieldObservation submitObservation(FieldObservationDto dto, String username) {
         TrafficIncident incident = dto.getIncidentId() != null
-                ? trafficincidentRepository.findById(dto.getIncidentId())
+                ? trafficIncidentRepository.findById(dto.getIncidentId())
                     .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"))
                 : null;
 

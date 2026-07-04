@@ -1,9 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.DashboardStatsDto;
-import com.example.demo.entity.IncidentStatus;
-import com.example.demo.entity.OutageStatus;
-import com.example.demo.entity.Severity;
+import com.example.demo.enums.*;
 import com.example.demo.repository.AlertNotificationRepository;
 import com.example.demo.repository.TrafficIncidentRepository;
 import com.example.demo.repository.TrafficZoneRepository;
