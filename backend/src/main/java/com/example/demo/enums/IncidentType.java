@@ -1,5 +1,12 @@
 package com.example.demo.enums;
 
 public enum IncidentType {
-ACCIDENT, ROADBLOCK, FLOOD, SIGNAL_FAULT, CONSTRUCTION
+    ACCIDENT,
+    ROAD_BLOCK,
+    TRAFFIC_JAM,
+    SIGNAL_FAILURE,
+    VEHICLE_BREAKDOWN,
+    FIRE,
+    FLOOD,
+    OTHER
 }

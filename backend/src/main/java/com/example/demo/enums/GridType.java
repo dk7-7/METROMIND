@@ -1,5 +1,8 @@
 package com.example.demo.enums;
 
 public enum GridType {
-POWER, WATER, WASTE
+    POWER,
+    WATER,
+    GAS,
+    TELECOMMUNICATION
 }
