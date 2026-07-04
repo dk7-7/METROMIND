@@ -7,7 +7,7 @@ import com.example.demo.exception.IllegalStateException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AlertNotificationRepository;
 import com.example.demo.repository.CityUserRepository;
-import com.example.demo.repository.TrafficIncidentRepository;
+import com.example.demo.repository.TrafficincidentRepository;
 import com.example.demo.repository.TrafficZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Transactional
 public class TrafficincidentService {
 
-    private final TrafficincidentRepository trafficIncidentRepository;
+    private final TrafficincidentRepository trafficincidentRepository;
     private final TrafficZoneRepository trafficZoneRepository;
     private final CityUserRepository cityUserRepository;
     private final AlertNotificationRepository alertNotificationRepository;
@@ -68,17 +68,17 @@ public class TrafficincidentService {
             throw new IllegalStateException("Incident must be in REPORTED state to dispatch");
         }
         incident.setStatus(IncidentStatus.DISPATCHED);
-        return trafficIncidentRepository.save(incident);
+        return trafficincidentRepository.save(incident);
     }
 
     @Transactional(readOnly = true)
-    public List<TrafficIncident> getAllIncidents() {
-        return trafficIncidentRepository.findAll();
+    public List<Trafficincident> getAllIncidents() {
+        return trafficincidentRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public Optional<TrafficIncident> getIncidentById(Long id) {
-        TrafficIncident incident = trafficIncidentRepository.findById(id)
+    public Optional<Trafficincident> getIncidentById(Long id) {
+        Trafficincident incident = trafficincidentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
         return Optional.of(incident);
     }
