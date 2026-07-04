@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-import com.example.demo.enums.Role;
-
 @Entity
 @Table(name = "city_users")
 @Data
