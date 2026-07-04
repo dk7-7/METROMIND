@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface TrafficIncidentRepository extends JpaRepository<TrafficIncident, Long> {
+public interface TrafficincidentRepository extends JpaRepository<TrafficIncident, Long> {
 
 List<TrafficIncident> findByZone_ZoneIdAndStatusNotIn(Long zoneId, List<IncidentStatus> statuses);
 

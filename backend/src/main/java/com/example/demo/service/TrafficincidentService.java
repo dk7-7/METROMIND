@@ -6,7 +6,7 @@ import com.example.demo.enums.*;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AlertNotificationRepository;
 import com.example.demo.repository.CityUserRepository;
-import com.example.demo.repository.TrafficIncidentRepository;
+import com.example.demo.repository.TrafficincidentRepository;
 import com.example.demo.repository.TrafficZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,9 +19,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class TrafficIncidentService {
+public class TrafficincidentService {
 
-    private final TrafficIncidentRepository trafficIncidentRepository;
+    private final TrafficincidentRepository trafficIncidentRepository;
     private final TrafficZoneRepository trafficZoneRepository;
     private final CityUserRepository cityUserRepository;
     private final AlertNotificationRepository alertNotificationRepository;
