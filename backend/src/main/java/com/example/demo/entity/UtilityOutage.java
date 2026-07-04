@@ -1,50 +1,59 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
 import com.example.demo.enums.OutageStatus;
 import com.example.demo.enums.OutageType;
 import com.example.demo.enums.Severity;
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "utility_outages")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class UtilityOutage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long outageId;
 
+    @ManyToOne
+    @JoinColumn(name = "grid_id", nullable = false)
+    private UtilityGrid grid;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OutageType outageType;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Severity severity;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    @Builder.Default
-    private OutageStatus status = OutageStatus.ACTIVE;
-
     @Column(nullable = false)
     private String affectedArea;
 
-    @Column(length = 1000)
-    private String description;
+    private LocalDateTime startTime;
 
+    private LocalDateTime estimatedRestorationTime;
+
+    private LocalDateTime actualRestorationTime;
+
+    @Enumerated(EnumType.STRING)
     @Builder.Default
-    private LocalDateTime reportedAt = LocalDateTime.now();
+    private OutageStatus status = OutageStatus.ACTIVE;
 
-    private LocalDateTime restoredAt;
+    @Enumerated(EnumType.STRING)
+    private Severity severity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "grid_id", nullable = false)
-    private UtilityGrid utilityGrid;
+    @ManyToOne
+    @JoinColumn(name = "registered_by_user_id")
+    private CityUser registeredBy;
+
+    @PrePersist
+    protected void onCreate() {
+        this.startTime = LocalDateTime.now();
+    }
 }

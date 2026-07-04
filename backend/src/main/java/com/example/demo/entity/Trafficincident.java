@@ -1,8 +1,5 @@
 package com.example.demo.entity;
 
-import com.example.demo.enums.IncidentStatus;
-import com.example.demo.enums.IncidentType;
-import com.example.demo.enums.Severity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +8,16 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.enums.IncidentStatus;
+import com.example.demo.enums.IncidentType;
+import com.example.demo.enums.Severity;
+
 @Entity
 @Table(name = "traffic_incidents")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class TrafficIncident {
 
     @Id
@@ -33,21 +34,26 @@ public class TrafficIncident {
     private Severity severity;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     @Builder.Default
+    @Column(nullable = false)
     private IncidentStatus status = IncidentStatus.REPORTED;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "zone_id", nullable = false)
     private TrafficZone zone;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "reported_by", nullable = false)
+    private LocalDateTime reportedAt;
+
+    private LocalDateTime resolvedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "reported_by_user_id")
     private CityUser reportedBy;
 
-    @Column(length = 1000)
     private String description;
 
-    @Builder.Default
-    private LocalDateTime reportedAt = LocalDateTime.now();
+    @PrePersist
+    protected void onCreate() {
+        this.reportedAt = LocalDateTime.now();
+    }
 }
