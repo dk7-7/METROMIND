@@ -17,11 +17,10 @@ public interface TrafficIncidentRepository extends JpaRepository<TrafficIncident
     );
  
     long countByStatusNotIn(List<IncidentStatus> statuses);
- 
-    @Query("""
-           SELECT i.incidentType, COUNT(i)
-           FROM Trafficincident i
-           GROUP BY i.incidentType
-           """)
-    List<Object[]> countIncidentsByType();
+ @Query("""
+       SELECT i.incidentType, COUNT(i)
+       FROM TrafficIncident i
+       GROUP BY i.incidentType
+       """)
+List<Object[]> countIncidentsByType();
 }
