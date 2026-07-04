@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.enums.Severity;
+
 @Entity
 @Table(name = "alert_notifications")
 @Data
