@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.IncidentDto;
-import com.example.demo.entity.TrafficIncident;
+import com.example.demo.entity.Trafficincident;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.service.TrafficIncidentService;
+import com.example.demo.service.TrafficincidentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,15 +20,15 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class TrafficIncidentController {
 
-    private final TrafficIncidentService trafficIncidentService;
+    private final TrafficincidentService trafficIncidentService;
 
     @GetMapping
-    public ResponseEntity<List<TrafficIncident>> getAll() {
+    public ResponseEntity<List<Trafficincident>> getAll() {
         return ResponseEntity.ok(trafficIncidentService.getAllIncidents());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TrafficIncident> getById(@PathVariable Long id) {
+    public ResponseEntity<Trafficincident> getById(@PathVariable Long id) {
         return trafficIncidentService.getIncidentById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
