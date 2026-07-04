@@ -1,4 +1,3 @@
-
 package com.example.demo.controller;
 
 import com.example.demo.dto.IncidentDto;
@@ -14,7 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/incidents")
@@ -38,23 +36,23 @@ public class TrafficIncidentController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER')")
-    public ResponseEntity<Map<String, String>> create(@Valid @RequestBody IncidentDto dto, Authentication auth) {
+    public ResponseEntity<String> create(@Valid @RequestBody IncidentDto dto, Authentication auth) {
         trafficIncidentService.reportIncident(dto, auth.getName());
-        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "TrafficIncident created successfully."));
+        return ResponseEntity.status(HttpStatus.CREATED).body("TrafficIncident created successfully.");
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER')")
-    public ResponseEntity<Map<String, String>> update(@PathVariable Long id, @Valid @RequestBody IncidentDto dto) {
+    public ResponseEntity<String> update(@PathVariable Long id, @Valid @RequestBody IncidentDto dto) {
         trafficIncidentService.updateIncident(id, dto);
-        return ResponseEntity.ok(Map.of("message", "TrafficIncident updated successfully."));
+        return ResponseEntity.ok("TrafficIncident updated successfully.");
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         trafficIncidentService.deleteIncident(id);
-        return ResponseEntity.ok(Map.of("message", "TrafficIncident deleted successfully."));
+        return ResponseEntity.ok("TrafficIncident deleted successfully.");
     }
 
     @PutMapping("/{id}/dispatch")

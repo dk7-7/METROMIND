@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/zones")
@@ -73,8 +72,8 @@ public class TrafficZoneController {
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
-    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         trafficZoneService.deleteZone(id);
-        return ResponseEntity.ok(Map.of("message", "TrafficZone deleted successfully."));
+        return ResponseEntity.ok("TrafficZone deleted successfully.");
     }
 }

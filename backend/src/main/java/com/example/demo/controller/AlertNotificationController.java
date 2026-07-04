@@ -8,7 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/alerts")
@@ -24,8 +23,8 @@ public class AlertNotificationController {
     }
 
     @PutMapping("/{id}/read")
-    public ResponseEntity<Map<String, String>> markAsRead(@PathVariable Long id) {
+    public ResponseEntity<String> markAsRead(@PathVariable Long id) {
         alertNotificationService.markAsRead(id);
-        return ResponseEntity.ok(Map.of("message", "Alert marked as read"));
+        return ResponseEntity.ok("Alert marked as read");
     }
 }
