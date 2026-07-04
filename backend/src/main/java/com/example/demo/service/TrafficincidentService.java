@@ -4,6 +4,7 @@ import com.example.demo.dto.IncidentDto;
 import com.example.demo.entity.*;
 import com.example.demo.enums.*;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.exception.IllegalStateException;
 import com.example.demo.repository.AlertNotificationRepository;
 import com.example.demo.repository.CityUserRepository;
 import com.example.demo.repository.TrafficincidentRepository;
@@ -32,11 +33,27 @@ public class TrafficincidentService {
 
         CityUser reportedBy = cityUserRepository.findByUsername(username).orElse(null);
 
-        Severity severity = dto.getSeverity() != null ? Severity.valueOf(dto.getSeverity()) : Severity.LOW;
+        Severity severity = Severity.LOW;
+        if (dto.getSeverity() != null) {
+            try {
+                severity = Severity.valueOf(dto.getSeverity());
+            } catch (IllegalArgumentException e) {
+                throw new com.example.demo.exception.BusinessValidationException("Invalid severity");
+            }
+        }
+
+        IncidentType type = null;
+        if (dto.getIncidentType() != null) {
+            try {
+                type = IncidentType.valueOf(dto.getIncidentType());
+            } catch (IllegalArgumentException e) {
+                throw new com.example.demo.exception.BusinessValidationException("Invalid incident type");
+            }
+        }
 
         TrafficIncident incident = TrafficIncident.builder()
                 .title(dto.getTitle())
-                .incidentType(dto.getIncidentType() != null ? IncidentType.valueOf(dto.getIncidentType()) : null)
+                .incidentType(type)
                 .severity(severity)
                 .status(IncidentStatus.REPORTED)
                 .zone(zone)
@@ -94,14 +111,29 @@ public class TrafficincidentService {
             incident.setZone(zone);
         }
         incident.setTitle(dto.getTitle());
-        if (dto.getIncidentType() != null) incident.setIncidentType(IncidentType.valueOf(dto.getIncidentType()));
-        if (dto.getSeverity() != null) incident.setSeverity(Severity.valueOf(dto.getSeverity()));
+        if (dto.getIncidentType() != null) {
+            try {
+                incident.setIncidentType(IncidentType.valueOf(dto.getIncidentType()));
+            } catch (IllegalArgumentException e) {
+                throw new com.example.demo.exception.BusinessValidationException("Invalid incident type");
+            }
+        }
+        if (dto.getSeverity() != null) {
+            try {
+                incident.setSeverity(Severity.valueOf(dto.getSeverity()));
+            } catch (IllegalArgumentException e) {
+                throw new com.example.demo.exception.BusinessValidationException("Invalid severity");
+            }
+        }
         incident.setDescription(dto.getDescription());
 
         return trafficIncidentRepository.save(incident);
     }
 
     public void deleteIncident(Long id) {
+        if (!trafficIncidentRepository.existsById(id)) {
+            throw new ResourceNotFoundException("TrafficIncident not found");
+        }
         trafficIncidentRepository.deleteById(id);
     }
 }

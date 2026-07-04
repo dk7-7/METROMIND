@@ -33,6 +33,9 @@ public class TrafficZoneService {
 
     @Transactional
     public void deleteZone(Long id) {
+        if (!trafficZoneRepository.existsById(id)) {
+            throw new ResourceNotFoundException("TrafficZone not found");
+        }
         trafficZoneRepository.deleteById(id);
     }
 }

@@ -23,11 +23,22 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponseDto register(RegisterDto dto) {
+        if (cityUserRepository.findByUsername(dto.getUsername()).isPresent()) {
+            throw new com.example.demo.exception.BusinessValidationException("Username already exists");
+        }
+
+        Role parsedRole;
+        try {
+            parsedRole = Role.valueOf(dto.getRole());
+        } catch (IllegalArgumentException e) {
+            throw new com.example.demo.exception.BusinessValidationException("Invalid role");
+        }
+
         CityUser user = CityUser.builder()
                 .username(dto.getUsername())
                 .passwordHash(passwordEncoder.encode(dto.getPassword()))
                 .fullName(dto.getFullName())
-                .role(Role.valueOf(dto.getRole()))
+                .role(parsedRole)
                 .district(dto.getDistrict())
                 .badgeNumber(dto.getBadgeNumber())
                 .isActive(true)
