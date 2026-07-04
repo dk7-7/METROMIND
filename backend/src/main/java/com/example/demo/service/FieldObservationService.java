@@ -7,7 +7,7 @@ import com.example.demo.entity.UtilityOutage;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CityUserRepository;
 import com.example.demo.repository.FieldObservationRepository;
-import com.example.demo.repository.TrafficIncidentRepository;
+import com.example.demo.repository.TrafficincidentRepository;
 import com.example.demo.repository.UtilityOutageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
