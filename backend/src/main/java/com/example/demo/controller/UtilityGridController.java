@@ -45,6 +45,8 @@ public class UtilityGridController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('UTILITY_SUPERVISOR')")
     public ResponseEntity<UtilityGrid> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+        UtilityGrid grid = utilityGridRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("UtilityGrid not found"));
         if (updates.containsKey("currentLoad")) {
             utilityGridService.updateLoad(id, Double.valueOf(updates.get("currentLoad").toString()));
         }

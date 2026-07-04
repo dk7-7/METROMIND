@@ -2,6 +2,8 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.IncidentDto;
 import com.example.demo.entity.TrafficIncident;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.TrafficIncidentRepository;
 import com.example.demo.service.TrafficIncidentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ import java.util.List;
 public class TrafficIncidentController {
 
     private final TrafficIncidentService trafficIncidentService;
+    private final TrafficIncidentRepository trafficIncidentRepository;
 
     @GetMapping
     public ResponseEntity<List<TrafficIncident>> getAll() {
@@ -30,7 +33,7 @@ public class TrafficIncidentController {
     public ResponseEntity<TrafficIncident> getById(@PathVariable Long id) {
         return trafficIncidentService.getIncidentById(id)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
     }
 
     @PostMapping
