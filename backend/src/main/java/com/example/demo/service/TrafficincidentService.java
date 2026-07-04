@@ -18,14 +18,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class TrafficIncidentService {
+public class TrafficincidentService {
 
-    private final TrafficIncidentRepository trafficIncidentRepository;
+    private final TrafficincidentRepository trafficIncidentRepository;
     private final TrafficZoneRepository trafficZoneRepository;
     private final CityUserRepository cityUserRepository;
     private final AlertNotificationRepository alertNotificationRepository;
 
-    public TrafficIncident reportIncident(IncidentDto dto, String username) {
+    public Trafficincident reportIncident(IncidentDto dto, String username) {
         TrafficZone zone = trafficZoneRepository.findById(dto.getZoneId())
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
 
@@ -33,7 +33,7 @@ public class TrafficIncidentService {
 
         Severity severity = dto.getSeverity() != null ? Severity.valueOf(dto.getSeverity()) : Severity.LOW;
 
-        TrafficIncident incident = TrafficIncident.builder()
+        Trafficincident incident = Trafficincident.builder()
                 .title(dto.getTitle())
                 .incidentType(dto.getIncidentType() != null ? IncidentType.valueOf(dto.getIncidentType()) : null)
                 .severity(severity)
@@ -43,7 +43,7 @@ public class TrafficIncidentService {
                 .description(dto.getDescription())
                 .build();
 
-        TrafficIncident saved = trafficIncidentRepository.save(incident);
+        Trafficincident saved = trafficincidentRepository.save(incident);
 
         if (severity == Severity.HIGH || severity == Severity.CRITICAL) {
             AlertNotification alert = AlertNotification.builder()
@@ -60,8 +60,8 @@ public class TrafficIncidentService {
         return saved;
     }
 
-    public TrafficIncident dispatchResponse(Long id) {
-        TrafficIncident incident = trafficIncidentRepository.findById(id)
+    public Trafficincident dispatchResponse(Long id) {
+        Trafficincident incident = trafficincidentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
 
         if (incident.getStatus() != IncidentStatus.REPORTED) {
