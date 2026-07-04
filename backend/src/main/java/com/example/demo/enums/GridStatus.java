@@ -1,7 +1,11 @@
 package com.example.demo.enums;
 
 public enum GridStatus {
-    OPERATIONAL ,
+
+    OPERATIONAL,
+
     DEGRADED,
+
     OFFLINE
+
 }
