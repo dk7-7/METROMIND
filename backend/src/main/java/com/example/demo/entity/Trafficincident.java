@@ -11,7 +11,7 @@ import lombok.Data;
 @Entity
 @Table(name = "traffic_incident")
 @Data
-public class Trafficincident {
+public class TrafficIncident {
     @Id
     private long incidentId;
     @Column(nullable = false)

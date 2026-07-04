@@ -1,24 +1,41 @@
 package com.example.demo.entity;
 
-
 import com.example.demo.enums.CongestionLevel;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "traffic_zones")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class TrafficZone {
-    @Id
-    private long zoneId;
-    @Column(unique = true  , nullable = false)
-    private String zoneCode;
-    @Column(nullable = false)
-    private String zonename;
 
-    private CongestionLevel currentCongestionLevel;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long zoneId;
+
+    @Column(nullable = false)
+    private String zoneName;
+
+    @Column(nullable = false, unique = true)
+    private String zoneCode;
+
     private String district;
-    private int signalCycleSeconds;
+
+    @Enumerated(EnumType.STRING)
+    private CongestionLevel currentCongestionLevel;
+
+    private Integer signalCycleSeconds;
+
+    @OneToMany(mappedBy = "zone", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<TrafficIncident> incidents = new ArrayList<>();
 }

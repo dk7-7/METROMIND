@@ -1,6 +1,6 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.Trafficincident;
+import com.example.demo.entity.TrafficIncident;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -15,9 +15,9 @@ public class IncidentDto {
     @NotBlank
     private String title;
 
-    private Trafficincident.IncidentType incidentType;
+    private TrafficIncident.IncidentType incidentType;
 
-    private Trafficincident.Severity severity;
+    private TrafficIncident.Severity severity;
 
     @NotNull
     private Long zoneId;
