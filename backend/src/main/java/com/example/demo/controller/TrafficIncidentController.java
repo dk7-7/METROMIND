@@ -22,8 +22,6 @@ import java.util.List;
 public class TrafficIncidentController {
 
     private final TrafficIncidentService trafficIncidentService;
-    private final TrafficIncidentRepository trafficIncidentRepository;
-
     @GetMapping
     public ResponseEntity<List<TrafficIncident>> getAll() {
         return ResponseEntity.ok(trafficIncidentService.getAllIncidents());
