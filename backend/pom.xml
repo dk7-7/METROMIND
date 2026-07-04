@@ -20,8 +20,6 @@
 
     <properties>
         <java.version>17</java.version>
-    <lombok.version>1.18.30</lombok.version>
-
     </properties>
 
     
@@ -117,11 +115,10 @@
         </dependency>
         <!-- Lombok Dependency-->
         <dependency>
-    <groupId>org.projectlombok</groupId>
-    <artifactId>lombok</artifactId>
-    <version>${lombok.version}</version>
-    <optional>true</optional>
-</dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
         <!-- Spring Security Test -->
         <dependency>
             <groupId>org.springframework.security</groupId>
