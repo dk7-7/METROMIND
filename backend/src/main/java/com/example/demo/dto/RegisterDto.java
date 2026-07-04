@@ -1,26 +1,28 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.Role;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterDto {
 
-    @NotBlank(message = "Username is required")
-    private String username;
+@NotBlank
+private String username;
 
-    @NotBlank(message = "Password is required")
-    private String password;
+@NotBlank
+private String password;
 
-    @NotBlank(message = "Full name is required")
-    private String fullName;
+@NotBlank
+private String fullName;
 
-    @NotNull(message = "Role is required")
-    private Role role;
+@NotBlank
+private String role;
 
-    private String district;
+private String district;
 
-    private String badgeNumber;
+private String badgeNumber;
 }

@@ -1,24 +1,28 @@
 package com.example.demo.dto;
 
-import com.example.demo.entity.Role;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AuthResponseDto {
+public class RegisterDto {
 
-    private String token;
+@NotBlank
+private String username;
 
-    private Long userId;
+@NotBlank
+private String password;
 
-    private String username;
+@NotBlank
+private String fullName;
 
-    private String fullName;
+@NotBlank
+private String role;
 
-    private Role role;
+private String district;
+
+private String badgeNumber;
 }
