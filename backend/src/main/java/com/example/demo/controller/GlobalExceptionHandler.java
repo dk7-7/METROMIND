@@ -16,11 +16,13 @@ import java.util.Map;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<Map<String, String>> handleResourceNotFound(ResourceNotFoundException ex) {
-        Map<String, String> body = new HashMap<>();
-        body.put("error", ex.getMessage());
-        return new ResponseEntity<>(body, HttpStatus.NOT_FOUND);
-    }
+public ResponseEntity<Map<String, String>> handleResourceNotFound(ResourceNotFoundException ex) {
+
+    Map<String, String> error = new HashMap<>();
+    error.put("error", ex.getMessage());
+
+    return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+}
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<Map<String, String>> handleIllegalState(IllegalStateException ex) {
