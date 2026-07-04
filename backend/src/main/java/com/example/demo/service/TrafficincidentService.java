@@ -31,11 +31,17 @@ public class TrafficIncidentService {
 
         CityUser reportedBy = cityUserRepository.findByUsername(username).orElse(null);
 
-        Severity severity = dto.getSeverity() != null ? Severity.valueOf(dto.getSeverity()) : Severity.LOW;
+        Severity severity = dto.getSeverity() != null
+                ? Severity.valueOf(dto.getSeverity().trim().toUpperCase())
+                : Severity.LOW;
+
+        IncidentType incidentType = dto.getIncidentType() != null
+                ? IncidentType.valueOf(dto.getIncidentType().trim().toUpperCase())
+                : null;
 
         TrafficIncident incident = TrafficIncident.builder()
                 .title(dto.getTitle())
-                .incidentType(dto.getIncidentType() != null ? IncidentType.valueOf(dto.getIncidentType()) : null)
+                .incidentType(incidentType)
                 .severity(severity)
                 .status(IncidentStatus.REPORTED)
                 .zone(zone)
@@ -93,8 +99,12 @@ public class TrafficIncidentService {
             incident.setZone(zone);
         }
         incident.setTitle(dto.getTitle());
-        if (dto.getIncidentType() != null) incident.setIncidentType(IncidentType.valueOf(dto.getIncidentType()));
-        if (dto.getSeverity() != null) incident.setSeverity(Severity.valueOf(dto.getSeverity()));
+        if (dto.getIncidentType() != null) {
+            incident.setIncidentType(IncidentType.valueOf(dto.getIncidentType().trim().toUpperCase()));
+        }
+        if (dto.getSeverity() != null) {
+            incident.setSeverity(Severity.valueOf(dto.getSeverity().trim().toUpperCase()));
+        }
         incident.setDescription(dto.getDescription());
 
         return trafficincidentRepository.save(incident);

@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -40,6 +41,7 @@ public class TrafficIncident {
 
     @ManyToOne
     @JoinColumn(name = "zone_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private TrafficZone zone;
 
     private LocalDateTime reportedAt;
@@ -48,6 +50,7 @@ public class TrafficIncident {
 
     @ManyToOne
     @JoinColumn(name = "reported_by_user_id")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private CityUser reportedBy;
 
     private String description;
