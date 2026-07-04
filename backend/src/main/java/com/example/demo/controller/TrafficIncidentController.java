@@ -54,7 +54,7 @@ public class TrafficIncidentController {
         return ResponseEntity.ok("TrafficIncident deleted successfully.");
     }
 
-    @PutMapping("/{id}/dispatch")
+    @PutMapping("/api/incidents/{id}/dispatch")
     @PreAuthorize("hasRole('TRAFFIC_CONTROLLER')")
     public ResponseEntity<TrafficIncident> dispatch(@PathVariable Long id) {
         return ResponseEntity.ok(trafficIncidentService.dispatchResponse(id));

@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/zones")
+ 
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class TrafficZoneController {
@@ -23,7 +23,7 @@ public class TrafficZoneController {
     private final TrafficZoneService trafficZoneService;
     private final TrafficZoneRepository trafficZoneRepository;
 
-    @GetMapping
+    @GetMapping("/api/zones")
     public ResponseEntity<List<TrafficZone>> getAll() {
         return ResponseEntity.ok(trafficZoneService.getAllZones());
     }
@@ -40,7 +40,7 @@ public class TrafficZoneController {
         return ResponseEntity.ok(trafficZoneService.getHighlyCongestedZones());
     }
 
-    @PostMapping
+    @PostMapping("/api/zones")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<TrafficZone> create(@RequestBody ZoneDto dto) {
         TrafficZone zone = TrafficZone.builder()
