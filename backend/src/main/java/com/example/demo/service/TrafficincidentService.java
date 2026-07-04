@@ -110,7 +110,10 @@ public class TrafficIncidentService {
         return trafficincidentRepository.save(incident);
     }
 
-    public void deleteIncident(Long id) {
-        trafficincidentRepository.deleteById(id);
+  public void deleteIncident(Long id) {
+    if (!trafficincidentRepository.existsById(id)) {
+        throw new ResourceNotFoundException("TrafficIncident not found");
     }
+    trafficincidentRepository.deleteById(id);
+}
 }
