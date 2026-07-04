@@ -1,9 +1,9 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.IncidentDto;
-import com.example.demo.entity.Trafficincident;
+import com.example.demo.entity.TrafficIncident;
 import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.service.TrafficincidentService;
+import com.example.demo.service.TrafficIncidentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,15 +20,15 @@ import java.util.List;
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class TrafficncidentController {
 
-    private final TrafficincidentService trafficIncidentService;
+    private final TrafficIncidentService trafficIncidentService;
 
     @GetMapping
-    public ResponseEntity<List<Trafficincident>> getAll() {
+    public ResponseEntity<List<TrafficIncident>> getAll() {
         return ResponseEntity.ok(trafficIncidentService.getAllIncidents());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Trafficincident> getById(@PathVariable Long id) {
+    public ResponseEntity<TrafficIncident> getById(@PathVariable Long id) {
         return trafficIncidentService.getIncidentById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
@@ -57,7 +57,7 @@ public class TrafficncidentController {
 
     @PutMapping("/{id}/dispatch")
     @PreAuthorize("hasRole('TRAFFIC_CONTROLLER')")
-    public ResponseEntity<Trafficincident> dispatch(@PathVariable Long id) {
+    public ResponseEntity<TrafficIncident> dispatch(@PathVariable Long id) {
         return ResponseEntity.ok(trafficIncidentService.dispatchResponse(id));
     }
 }
