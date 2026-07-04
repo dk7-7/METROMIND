@@ -18,7 +18,7 @@ import com.example.demo.enums.Severity;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Trafficincident {
+public class TrafficIncident {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
