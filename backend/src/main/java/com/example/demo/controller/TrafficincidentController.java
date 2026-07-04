@@ -24,7 +24,7 @@ public class TrafficIncidentController {
     private final TrafficIncidentService trafficIncidentService;
 
     @GetMapping
-    public ResponseEntity<List<TrafficIncident>> getAll() {
+    public ResponseEntity<List<TrafficIncidentDto>> getAll() {
         return ResponseEntity.ok(trafficIncidentService.getAllIncidents());
     }
 
