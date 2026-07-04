@@ -9,20 +9,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterDto {
-
     @NotBlank
     private String username;
-
     @NotBlank
     private String password;
-
     @NotBlank
     private String fullName;
-
     @NotBlank
     private String role;
-
     private String district;
-
     private String badgeNumber;
 }
