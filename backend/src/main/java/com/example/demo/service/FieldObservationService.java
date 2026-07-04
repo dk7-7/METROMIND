@@ -2,12 +2,12 @@ package com.example.demo.service;
 
 import com.example.demo.dto.FieldObservationDto;
 import com.example.demo.entity.FieldObservation;
-import com.example.demo.entity.TrafficIncident;
+import com.example.demo.entity.Trafficincident;
 import com.example.demo.entity.UtilityOutage;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CityUserRepository;
 import com.example.demo.repository.FieldObservationRepository;
-import com.example.demo.repository.TrafficIncidentRepository;
+import com.example.demo.repository.TrafficincidentRepository;
 import com.example.demo.repository.UtilityOutageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,13 +21,13 @@ import java.util.List;
 public class FieldObservationService {
 
     private final FieldObservationRepository fieldObservationRepository;
-    private final TrafficIncidentRepository trafficIncidentRepository;
+    private final TrafficincidentRepository trafficincidentRepository;
     private final UtilityOutageRepository utilityOutageRepository;
     private final CityUserRepository cityUserRepository;
 
     public FieldObservation submitObservation(FieldObservationDto dto, String username) {
-        TrafficIncident incident = dto.getIncidentId() != null
-                ? trafficIncidentRepository.findById(dto.getIncidentId())
+        Trafficincident incident = dto.getIncidentId() != null
+                ? trafficincidentRepository.findById(dto.getIncidentId())
                     .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"))
                 : null;
 
