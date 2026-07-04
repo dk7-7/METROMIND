@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
- 
+@RequestMapping("/api/zones")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class TrafficZoneController {
@@ -23,24 +23,24 @@ public class TrafficZoneController {
     private final TrafficZoneService trafficZoneService;
     private final TrafficZoneRepository trafficZoneRepository;
 
-    @GetMapping("/api/zones")
+    @GetMapping
     public ResponseEntity<List<TrafficZone>> getAll() {
         return ResponseEntity.ok(trafficZoneService.getAllZones());
     }
 
-    @GetMapping("/api/zones/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<TrafficZone> getById(@PathVariable Long id) {
         return trafficZoneService.getZoneById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
     }
 
-    @GetMapping("/api/zones/congested")
+    @GetMapping("/congested")
     public ResponseEntity<List<TrafficZone>> getCongested() {
         return ResponseEntity.ok(trafficZoneService.getHighlyCongestedZones());
     }
 
-    @PostMapping("/api/zones")
+    @PostMapping
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<TrafficZone> create(@RequestBody ZoneDto dto) {
         TrafficZone zone = TrafficZone.builder()
@@ -54,7 +54,7 @@ public class TrafficZoneController {
         return ResponseEntity.status(HttpStatus.CREATED).body(trafficZoneRepository.save(zone));
     }
 
-    @PutMapping("/api/zones/{id}")
+    @PutMapping("/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<TrafficZone> update(@PathVariable Long id, @RequestBody ZoneDto dto) {
         TrafficZone zone = trafficZoneRepository.findById(id)
@@ -70,7 +70,7 @@ public class TrafficZoneController {
         return ResponseEntity.ok(trafficZoneRepository.save(zone));
     }
 
-    @DeleteMapping("/api/zones/{id}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         trafficZoneService.deleteZone(id);
