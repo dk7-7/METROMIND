@@ -1,8 +1,13 @@
 package com.example.demo.enums;
 
 public enum CongestionLevel {
-    LOW , 
+
+    LOW,
+
     MODERATE,
+
     HIGH,
-    CRICTICAL
+
+    CRITICAL
+
 }

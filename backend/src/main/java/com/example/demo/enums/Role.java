@@ -1,9 +1,15 @@
 package com.example.demo.enums;
 
 public enum Role {
-      CITY_ADMINSTRATOR,
-      TRAFFIC_CONTROLLER,
-      UTITLITY_SUPERVISOR,
-      FIELD_TECHNICIAN,
-      CIVIC_ANALYST 
+
+    CITY_ADMINISTRATOR,
+
+    TRAFFIC_CONTROLLER,
+
+    UTILITY_SUPERVISOR,
+
+    FIELD_TECHNICIAN,
+
+    CIVIC_ANALYST
+
 }
