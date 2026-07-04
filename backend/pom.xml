@@ -114,11 +114,12 @@
 
         </dependency>
         <!-- Lombok Dependency-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
+       <dependency>
+    <groupId>org.projectlombok</groupId>
+    <artifactId>lombok</artifactId>
+    <version>1.18.34</version>
+    <optional>true</optional>
+</dependency>
         <!-- Spring Security Test -->
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -148,7 +149,7 @@
             </path>
         </annotationProcessorPaths>
     </configuration>
-</plugin>
+</plugin>   
             <!-- Surefire — NO testng.xml, auto-detect test classes -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
