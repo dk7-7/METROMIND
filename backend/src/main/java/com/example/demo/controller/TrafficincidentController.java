@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.IncidentDto;
 import com.example.demo.entity.TrafficIncident;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.service.TrafficIncidentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
