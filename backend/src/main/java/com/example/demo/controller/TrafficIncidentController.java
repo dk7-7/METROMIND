@@ -15,40 +15,39 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/incidents")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
 public class TrafficIncidentController {
 
     private final TrafficIncidentService trafficIncidentService;
 
-    @GetMapping
+    @GetMapping("/api/incidents")
     public ResponseEntity<List<TrafficIncident>> getAll() {
         return ResponseEntity.ok(trafficIncidentService.getAllIncidents());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/incidents/{id}")
     public ResponseEntity<TrafficIncident> getById(@PathVariable Long id) {
         return trafficIncidentService.getIncidentById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
     }
 
-    @PostMapping
+    @PostMapping("/api/incidents")
     @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER')")
     public ResponseEntity<String> create(@Valid @RequestBody IncidentDto dto, Authentication auth) {
         trafficIncidentService.reportIncident(dto, auth.getName());
         return ResponseEntity.status(HttpStatus.CREATED).body("TrafficIncident created successfully.");
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/incidents/{id}")
     @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER')")
     public ResponseEntity<String> update(@PathVariable Long id, @Valid @RequestBody IncidentDto dto) {
         trafficIncidentService.updateIncident(id, dto);
         return ResponseEntity.ok("TrafficIncident updated successfully.");
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/incidents/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         trafficIncidentService.deleteIncident(id);
