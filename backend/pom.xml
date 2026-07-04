@@ -91,7 +91,12 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
-        
+        <dependency>
+    <groupId>io.swagger</groupId>
+    <artifactId>swagger-annotations</artifactId>
+    <version>1.5.22</version>
+    <scope>compile</scope>
+</dependency>
         <!-- Mockito — needed by t12 -->
         <dependency>
             <groupId>org.mockito</groupId>
