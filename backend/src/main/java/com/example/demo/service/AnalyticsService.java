@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.dto.DashboardStatsDto;
-import com.example.demo.enums.*;
+import com.example.demo.entity.IncidentStatus;
+import com.example.demo.entity.OutageStatus;
+import com.example.demo.entity.Severity;
 import com.example.demo.repository.AlertNotificationRepository;
 import com.example.demo.repository.TrafficIncidentRepository;
 import com.example.demo.repository.TrafficZoneRepository;
@@ -17,13 +19,13 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class AnalyticsService {
 
-    private final TrafficIncidentRepository trafficincidentRepository;
+    private final TrafficIncidentRepository trafficIncidentRepository;
     private final TrafficZoneRepository trafficZoneRepository;
     private final UtilityOutageRepository utilityOutageRepository;
     private final AlertNotificationRepository alertNotificationRepository;
 
     public DashboardStatsDto getCityStats() {
-        long totalIncidents = trafficincidentRepository.countByStatusNotIn(
+        long totalIncidents = trafficIncidentRepository.countByStatusNotIn(
                 List.of(IncidentStatus.CLOSED));
         long activeOutages = utilityOutageRepository.findByStatus(OutageStatus.ACTIVE).size();
         long congestedZones = trafficZoneRepository.findHighlyCongestedZones().size();
