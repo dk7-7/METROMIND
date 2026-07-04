@@ -18,7 +18,7 @@ import java.util.List;
 @RequestMapping("/api/incidents")
 @RequiredArgsConstructor
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:5173"})
-public class TrafficIncidentController {
+public class TrafficncidentController {
 
     private final TrafficIncidentService trafficIncidentService;
 

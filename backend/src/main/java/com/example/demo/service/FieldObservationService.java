@@ -21,7 +21,7 @@ import java.util.List;
 public class FieldObservationService {
 
     private final FieldObservationRepository fieldObservationRepository;
-    private final TrafficIncidentRepository trafficincidentRepository;
+    private final TrafficincidentRepository trafficincidentRepository;
     private final UtilityOutageRepository utilityOutageRepository;
     private final CityUserRepository cityUserRepository;
 

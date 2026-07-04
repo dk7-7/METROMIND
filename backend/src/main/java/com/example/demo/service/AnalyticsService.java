@@ -17,7 +17,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class AnalyticsService {
 
-    private final TrafficIncidentRepository trafficincidentRepository;
+    private final TrafficincidentRepository trafficincidentRepository;
     private final TrafficZoneRepository trafficZoneRepository;
     private final UtilityOutageRepository utilityOutageRepository;
     private final AlertNotificationRepository alertNotificationRepository;

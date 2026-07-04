@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TrafficIncidentRepository extends JpaRepository<TrafficIncident, Long> {
+public interface TrafficincidentRepository extends JpaRepository<TrafficIncident, Long> {
  
     List<TrafficIncident> findByZone_ZoneIdAndStatusNotIn(
             Long zoneId,
