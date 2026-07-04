@@ -83,8 +83,8 @@ public class TrafficincidentService {
         return Optional.of(incident);
     }
 
-    public TrafficIncident updateIncident(Long id, IncidentDto dto) {
-        TrafficIncident incident = trafficIncidentRepository.findById(id)
+    public Trafficincident updateIncident(Long id, IncidentDto dto) {
+        Trafficincident incident = trafficincidentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
 
         if (dto.getZoneId() != null) {
@@ -97,10 +97,10 @@ public class TrafficincidentService {
         if (dto.getSeverity() != null) incident.setSeverity(Severity.valueOf(dto.getSeverity()));
         incident.setDescription(dto.getDescription());
 
-        return trafficIncidentRepository.save(incident);
+        return trafficincidentRepository.save(incident);
     }
 
     public void deleteIncident(Long id) {
-        trafficIncidentRepository.deleteById(id);
+        trafficincidentRepository.deleteById(id);
     }
 }
