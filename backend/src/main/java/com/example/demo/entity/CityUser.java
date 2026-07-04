@@ -1,34 +1,49 @@
 package com.example.demo.entity;
 
 import com.example.demo.enums.Role;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Table(name = "city_users")
-/**
- * 
-*/
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
+@Table(name = "city_users")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CityUser {
+
     @Id
-    private long userId;
-    @Column(unique = true,nullable = false)
-    private String username ; 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userId;
+
+    @Column(nullable = false, unique = true)
+    private String username;
+
     @Column(nullable = false)
     private String passwordHash;
 
-    private String fullname;
-
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
+    @Column(nullable = false)
+    private String fullName;
+
     private String district;
+
     @Column(unique = true)
-    private String badgeNumber ;
-    
-    private boolean isActive;
+    private String badgeNumber;
+
+    @Builder.Default
+    private Boolean isActive = true;
+
+    @OneToMany(mappedBy = "reportedBy", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<TrafficIncident> reportedIncidents = new ArrayList<>();
 }
