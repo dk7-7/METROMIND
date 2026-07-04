@@ -1,18 +1,24 @@
 package com.example.demo.dto;
 
+import com.example.demo.entity.Role;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class AuthResponseDto {
-    private String token;
-    private String username;
-    private String role;
 
-    public AuthResponseDto(String token, String username, String role) {
-        this.token = token;
-        this.username = username;
-        this.role = role;
-    }
+    private String token;
+
+    private Long userId;
+
+    private String username;
+
+    private String fullName;
+
+    private Role role;
 }
