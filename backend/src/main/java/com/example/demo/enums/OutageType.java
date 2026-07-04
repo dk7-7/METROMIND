@@ -8,6 +8,6 @@ public enum OutageType {
 
     GAS,
 
-    TELECOM
+    TELECOM, UNPLANNED
 
 }
