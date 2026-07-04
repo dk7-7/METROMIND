@@ -28,14 +28,14 @@ public class TrafficZoneController {
         return ResponseEntity.ok(trafficZoneService.getAllZones());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/zones/{id}")
     public ResponseEntity<TrafficZone> getById(@PathVariable Long id) {
         return trafficZoneService.getZoneById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
     }
 
-    @GetMapping("/congested")
+    @GetMapping("/api/zones/congested")
     public ResponseEntity<List<TrafficZone>> getCongested() {
         return ResponseEntity.ok(trafficZoneService.getHighlyCongestedZones());
     }
@@ -54,7 +54,7 @@ public class TrafficZoneController {
         return ResponseEntity.status(HttpStatus.CREATED).body(trafficZoneRepository.save(zone));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/zones/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<TrafficZone> update(@PathVariable Long id, @RequestBody ZoneDto dto) {
         TrafficZone zone = trafficZoneRepository.findById(id)
@@ -70,7 +70,7 @@ public class TrafficZoneController {
         return ResponseEntity.ok(trafficZoneRepository.save(zone));
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/zones/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         trafficZoneService.deleteZone(id);
