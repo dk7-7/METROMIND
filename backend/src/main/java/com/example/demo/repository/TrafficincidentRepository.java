@@ -1,15 +1,15 @@
 package com.example.demo.repository;
 
 import com.example.demo.enums.IncidentStatus;
-import com.example.demo.entity.Trafficincident;
+import com.example.demo.entity.TrafficIncident;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface TrafficincidentRepository extends JpaRepository<Trafficincident, Long> {
+public interface TrafficIncidentRepository extends JpaRepository<TrafficIncident, Long> {
 
-List<Trafficincident> findByZone_ZoneIdAndStatusNotIn(Long zoneId, List<IncidentStatus> statuses);
+List<TrafficIncident> findByZone_ZoneIdAndStatusNotIn(Long zoneId, List<IncidentStatus> statuses);
 
 long countByStatusNotIn(List<IncidentStatus> statuses);
 

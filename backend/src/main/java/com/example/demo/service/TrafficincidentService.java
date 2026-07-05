@@ -7,7 +7,7 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.exception.IllegalStateException;
 import com.example.demo.repository.AlertNotificationRepository;
 import com.example.demo.repository.CityUserRepository;
-import com.example.demo.repository.TrafficincidentRepository;
+import com.example.demo.repository.TrafficIncidentRepository;
 import com.example.demo.repository.TrafficZoneRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,14 +19,14 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-public class TrafficincidentService {
+public class TrafficIncidentService {
 
-    private final TrafficincidentRepository trafficIncidentRepository;
+    private final TrafficIncidentRepository trafficIncidentRepository;
     private final TrafficZoneRepository trafficZoneRepository;
     private final CityUserRepository cityUserRepository;
     private final AlertNotificationRepository alertNotificationRepository;
 
-    public Trafficincident reportIncident(IncidentDto dto, String username) {
+    public TrafficIncident reportIncident(IncidentDto dto, String username) {
         TrafficZone zone = trafficZoneRepository.findById(dto.getZoneId())
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
 
@@ -50,7 +50,7 @@ public class TrafficincidentService {
             }
         }
 
-        Trafficincident incident = Trafficincident.builder()
+        TrafficIncident incident = TrafficIncident.builder()
                 .title(dto.getTitle())
                 .incidentType(type)
                 .severity(severity)
@@ -60,7 +60,7 @@ public class TrafficincidentService {
                 .description(dto.getDescription())
                 .build();
 
-        Trafficincident saved = trafficIncidentRepository.save(incident);
+        TrafficIncident saved = trafficIncidentRepository.save(incident);
 
         if (severity == Severity.HIGH || severity == Severity.CRITICAL) {
             AlertNotification alert = AlertNotification.builder()
@@ -77,8 +77,8 @@ public class TrafficincidentService {
         return saved;
     }
 
-    public Trafficincident dispatchResponse(Long id) {
-        Trafficincident incident = trafficIncidentRepository.findById(id)
+    public TrafficIncident dispatchResponse(Long id) {
+        TrafficIncident incident = trafficIncidentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
 
         if (incident.getStatus() != IncidentStatus.REPORTED) {
@@ -89,19 +89,19 @@ public class TrafficincidentService {
     }
 
     @Transactional(readOnly = true)
-    public List<Trafficincident> getAllIncidents() {
+    public List<TrafficIncident> getAllIncidents() {
         return trafficIncidentRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public Optional<Trafficincident> getIncidentById(Long id) {
-        Trafficincident incident = trafficIncidentRepository.findById(id)
+    public Optional<TrafficIncident> getIncidentById(Long id) {
+        TrafficIncident incident = trafficIncidentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
         return Optional.of(incident);
     }
 
-    public Trafficincident updateIncident(Long id, IncidentDto dto) {
-        Trafficincident incident = trafficIncidentRepository.findById(id)
+    public TrafficIncident updateIncident(Long id, IncidentDto dto) {
+        TrafficIncident incident = trafficIncidentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
 
         if (dto.getZoneId() != null) {
