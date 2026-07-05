@@ -2,7 +2,7 @@ package com.example.demo.service;
 
 import com.example.demo.dto.FieldObservationDto;
 import com.example.demo.entity.FieldObservation;
-import com.example.demo.entity.TrafficIncident;
+import com.example.demo.entity.Trafficincident;
 import com.example.demo.entity.UtilityOutage;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.CityUserRepository;
@@ -26,7 +26,7 @@ public class FieldObservationService {
     private final CityUserRepository cityUserRepository;
 
     public FieldObservation submitObservation(FieldObservationDto dto, String username) {
-        TrafficIncident incident = dto.getIncidentId() != null
+        Trafficincident incident = dto.getIncidentId() != null
                 ? trafficincidentRepository.findById(dto.getIncidentId())
                     .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"))
                 : null;

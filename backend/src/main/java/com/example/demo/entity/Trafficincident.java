@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import com.example.demo.enums.IncidentStatus;
 import com.example.demo.enums.IncidentType;
 import com.example.demo.enums.Severity;
 
@@ -17,7 +18,7 @@ import com.example.demo.enums.Severity;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TrafficIncident {
+public class Trafficincident {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

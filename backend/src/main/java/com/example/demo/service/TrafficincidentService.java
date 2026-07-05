@@ -27,7 +27,7 @@ public class TrafficincidentService {
     private final CityUserRepository cityUserRepository;
     private final AlertNotificationRepository alertNotificationRepository;
 
-    public TrafficIncident reportIncident(IncidentDto dto, String username) {
+    public Trafficincident reportIncident(IncidentDto dto, String username) {
         TrafficZone zone = trafficZoneRepository.findById(dto.getZoneId())
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
 
@@ -51,7 +51,7 @@ public class TrafficincidentService {
             }
         }
 
-        TrafficIncident incident = TrafficIncident.builder()
+        Trafficincident incident = Trafficincident.builder()
                 .title(dto.getTitle())
                 .incidentType(type)
                 .severity(severity)
@@ -61,7 +61,7 @@ public class TrafficincidentService {
                 .description(dto.getDescription())
                 .build();
 
-        TrafficIncident saved = trafficIncidentRepository.save(incident);
+        Trafficincident saved = trafficIncidentRepository.save(incident);
 
         if (severity == Severity.HIGH || severity == Severity.CRITICAL) {
             AlertNotification alert = AlertNotification.builder()
@@ -78,8 +78,8 @@ public class TrafficincidentService {
         return saved;
     }
 
-    public TrafficIncident dispatchResponse(Long id) {
-        TrafficIncident incident = trafficIncidentRepository.findById(id)
+    public Trafficincident dispatchResponse(Long id) {
+        Trafficincident incident = trafficIncidentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
 
         if (incident.getStatus() != IncidentStatus.REPORTED) {
@@ -90,19 +90,19 @@ public class TrafficincidentService {
     }
 
     @Transactional(readOnly = true)
-    public List<TrafficIncident> getAllIncidents() {
+    public List<Trafficincident> getAllIncidents() {
         return trafficIncidentRepository.findAll();
     }
 
     @Transactional(readOnly = true)
-    public Optional<TrafficIncident> getIncidentById(Long id) {
-        TrafficIncident incident = trafficIncidentRepository.findById(id)
+    public Optional<Trafficincident> getIncidentById(Long id) {
+        Trafficincident incident = trafficIncidentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
         return Optional.of(incident);
     }
 
-    public TrafficIncident updateIncident(Long id, IncidentDto dto) {
-        TrafficIncident incident = trafficIncidentRepository.findById(id)
+    public Trafficincident updateIncident(Long id, IncidentDto dto) {
+        Trafficincident incident = trafficIncidentRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
 
         if (dto.getZoneId() != null) {

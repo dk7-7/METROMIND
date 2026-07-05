@@ -22,7 +22,7 @@ public class FieldObservation {
 
     @ManyToOne
     @JoinColumn(name = "incident_id")
-    private TrafficIncident incident;
+    private Trafficincident incident;
 
     @ManyToOne
     @JoinColumn(name = "outage_id")
