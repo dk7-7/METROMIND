@@ -66,7 +66,7 @@ public class UtilityOutageController {
         }
         UtilityOutage outage = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityOutage not found"));
-        outage.setStatus(com.example.demo.enums.OutageStatus.RESOLVED);
+        outage.setStatus(com.example.demo.enums.OutageStatus.RESTORED);
         outage.setActualRestorationTime(java.time.LocalDateTime.now());
         return ResponseEntity.ok(repository.save(outage));
     }
