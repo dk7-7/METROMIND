@@ -21,7 +21,7 @@ import java.util.List;
 public class TrafficIncidentController {
 
     private final TrafficIncidentService trafficIncidentService;
-    private final TrafficIncidentRepository trafficIncidentRepository;
+    private final TrafficIncidentRepository repository;
 
     @GetMapping
     public ResponseEntity<List<TrafficIncident>> getAll() {

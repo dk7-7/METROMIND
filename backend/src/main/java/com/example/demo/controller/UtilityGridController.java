@@ -21,7 +21,7 @@ import java.util.Map;
 public class UtilityGridController {
 
     private final UtilityGridService utilityGridService;
-    private final UtilityGridRepository utilityGridRepository;
+    private final UtilityGridRepository repository;
 
     @GetMapping
     public ResponseEntity<List<UtilityGrid>> getAll() {
@@ -38,18 +38,18 @@ public class UtilityGridController {
     @PostMapping
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<UtilityGrid> create(@RequestBody UtilityGrid grid) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(utilityGridRepository.save(grid));
+        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(grid));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('UTILITY_SUPERVISOR')")
     public ResponseEntity<UtilityGrid> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
-        UtilityGrid grid = utilityGridRepository.findById(id)
+        UtilityGrid grid = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityGrid not found"));
         if (updates.containsKey("currentLoad")) {
             utilityGridService.updateLoad(id, Double.valueOf(updates.get("currentLoad").toString()));
         }
-        return ResponseEntity.ok(utilityGridRepository.findById(id).get());
+        return ResponseEntity.ok(repository.findById(id).get());
     }
 
     @PostMapping("/{id}/outages")
@@ -61,10 +61,10 @@ public class UtilityGridController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
-        if (!utilityGridRepository.existsById(id)) {
+        if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("UtilityGrid not found");
         }
-        utilityGridRepository.deleteById(id);
+        repository.deleteById(id);
         return ResponseEntity.ok(Map.of("message", "UtilityGrid deleted successfully."));
     }
 }
