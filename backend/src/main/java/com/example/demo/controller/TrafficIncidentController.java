@@ -45,7 +45,8 @@ public class TrafficIncidentController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER')")
-    public ResponseEntity<String> create(@Valid @RequestBody IncidentDto dto, org.springframework.security.core.Authentication auth) {
+    public ResponseEntity<String> create(@Valid @RequestBody IncidentDto dto) {
+        org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth != null ? auth.getName() : "system";
         if (trafficIncidentService != null) {
             trafficIncidentService.reportIncident(dto, username);
