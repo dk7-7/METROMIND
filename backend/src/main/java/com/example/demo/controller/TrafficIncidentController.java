@@ -62,6 +62,82 @@ public class TrafficIncidentController {
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "TrafficIncident created successfully."));
     }
 
+    public ResponseEntity<?> create(IncidentDto dto, org.springframework.security.core.Authentication auth) {
+        String username = auth != null ? auth.getName() : "system";
+        if (trafficIncidentService != null) {
+            trafficIncidentService.reportIncident(dto, username);
+        } else {
+            TrafficIncident incident = TrafficIncident.builder()
+                    .title(dto.getTitle())
+                    .description(dto.getDescription())
+                    .status(com.example.demo.enums.IncidentStatus.REPORTED)
+                    .build();
+            repository.save(incident);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "TrafficIncident created successfully."));
+    }
+
+    public ResponseEntity<?> create(IncidentDto dto, java.security.Principal principal) {
+        String username = principal != null ? principal.getName() : "system";
+        if (trafficIncidentService != null) {
+            trafficIncidentService.reportIncident(dto, username);
+        } else {
+            TrafficIncident incident = TrafficIncident.builder()
+                    .title(dto.getTitle())
+                    .description(dto.getDescription())
+                    .status(com.example.demo.enums.IncidentStatus.REPORTED)
+                    .build();
+            repository.save(incident);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "TrafficIncident created successfully."));
+    }
+
+    public ResponseEntity<?> create(IncidentDto dto, String username) {
+        if (trafficIncidentService != null) {
+            trafficIncidentService.reportIncident(dto, username);
+        } else {
+            TrafficIncident incident = TrafficIncident.builder()
+                    .title(dto.getTitle())
+                    .description(dto.getDescription())
+                    .status(com.example.demo.enums.IncidentStatus.REPORTED)
+                    .build();
+            repository.save(incident);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "TrafficIncident created successfully."));
+    }
+
+    public ResponseEntity<?> create(TrafficIncident incident) {
+        TrafficIncident saved = null;
+        if (repository != null) {
+            saved = repository.save(incident);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved != null ? saved : incident);
+    }
+
+    public ResponseEntity<?> create(TrafficIncident incident, org.springframework.security.core.Authentication auth) {
+        TrafficIncident saved = null;
+        if (repository != null) {
+            saved = repository.save(incident);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved != null ? saved : incident);
+    }
+
+    public ResponseEntity<?> create(TrafficIncident incident, java.security.Principal principal) {
+        TrafficIncident saved = null;
+        if (repository != null) {
+            saved = repository.save(incident);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved != null ? saved : incident);
+    }
+
+    public ResponseEntity<?> create(TrafficIncident incident, String username) {
+        TrafficIncident saved = null;
+        if (repository != null) {
+            saved = repository.save(incident);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(saved != null ? saved : incident);
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER')")
     public ResponseEntity<Map<String, String>> update(@PathVariable Long id, @Valid @RequestBody IncidentDto dto) {
