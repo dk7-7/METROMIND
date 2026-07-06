@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/incidents")
@@ -45,8 +46,12 @@ public class TrafficIncidentController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER')")
-    public ResponseEntity<String> create(@Valid @RequestBody IncidentDto dto) {
+    public ResponseEntity<Map<String, String>> create(@Valid @RequestBody IncidentDto dto) {
         org.springframework.security.core.Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        return create(dto, auth);
+    }
+
+    public ResponseEntity<Map<String, String>> create(@Valid @RequestBody IncidentDto dto, org.springframework.security.core.Authentication auth) {
         String username = auth != null ? auth.getName() : "system";
         if (trafficIncidentService != null) {
             trafficIncidentService.reportIncident(dto, username);
@@ -58,12 +63,12 @@ public class TrafficIncidentController {
                     .build();
             repository.save(incident);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body("TrafficIncident created successfully.");
+        return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "TrafficIncident created successfully."));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER')")
-    public ResponseEntity<String> update(@PathVariable Long id, @Valid @RequestBody IncidentDto dto) {
+    public ResponseEntity<Map<String, String>> update(@PathVariable Long id, @Valid @RequestBody IncidentDto dto) {
         if (trafficIncidentService != null) {
             trafficIncidentService.updateIncident(id, dto);
         } else {
@@ -73,12 +78,12 @@ public class TrafficIncidentController {
             incident.setDescription(dto.getDescription());
             repository.save(incident);
         }
-        return ResponseEntity.ok("TrafficIncident updated successfully.");
+        return ResponseEntity.ok(Map.of("message", "TrafficIncident updated successfully."));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
         if (trafficIncidentService != null) {
             trafficIncidentService.deleteIncident(id);
         } else {
@@ -93,7 +98,7 @@ public class TrafficIncidentController {
             }
             repository.deleteById(id);
         }
-        return ResponseEntity.ok("TrafficIncident deleted successfully.");
+        return ResponseEntity.ok(Map.of("message", "TrafficIncident deleted successfully."));
     }
 
     @PutMapping("/{id}/dispatch")
