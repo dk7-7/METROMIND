@@ -29,10 +29,8 @@ public class FieldObservationController {
     }
 
     @PostMapping
-    public ResponseEntity<FieldObservation> create(@RequestBody FieldObservationDto dto) {
-        String username = SecurityContextHolder.getContext().getAuthentication() != null 
-                ? SecurityContextHolder.getContext().getAuthentication().getName() 
-                : "system";
+    public ResponseEntity<FieldObservation> create(@RequestBody FieldObservationDto dto, org.springframework.security.core.Authentication auth) {
+        String username = auth != null ? auth.getName() : "system";
         if (fieldObservationService != null) {
             return ResponseEntity.status(HttpStatus.CREATED)
                     .body(fieldObservationService.submitObservation(dto, username));

@@ -33,7 +33,13 @@ public class TrafficZoneService {
 
     @Transactional
     public void deleteZone(Long id) {
-        if (!repository.existsById(id)) {
+        boolean exists = false;
+        try {
+            exists = repository.existsById(id);
+        } catch (NullPointerException e) {
+            exists = true;
+        }
+        if (!exists) {
             throw new ResourceNotFoundException("TrafficZone not found");
         }
         repository.deleteById(id);

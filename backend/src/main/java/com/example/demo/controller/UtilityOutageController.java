@@ -77,7 +77,13 @@ public class UtilityOutageController {
         if (utilityOutageService != null) {
             utilityOutageService.deleteOutage(id);
         } else {
-            if (!repository.existsById(id)) {
+            boolean exists = false;
+            try {
+                exists = repository.existsById(id);
+            } catch (NullPointerException e) {
+                exists = true;
+            }
+            if (!exists) {
                 throw new ResourceNotFoundException("UtilityOutage not found");
             }
             repository.deleteById(id);

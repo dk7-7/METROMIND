@@ -45,10 +45,8 @@ public class TrafficIncidentController {
 
     @PostMapping
     @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER')")
-    public ResponseEntity<String> create(@Valid @RequestBody IncidentDto dto) {
-        String username = SecurityContextHolder.getContext().getAuthentication() != null 
-                ? SecurityContextHolder.getContext().getAuthentication().getName() 
-                : "system";
+    public ResponseEntity<String> create(@Valid @RequestBody IncidentDto dto, org.springframework.security.core.Authentication auth) {
+        String username = auth != null ? auth.getName() : "system";
         if (trafficIncidentService != null) {
             trafficIncidentService.reportIncident(dto, username);
         } else {
@@ -83,7 +81,13 @@ public class TrafficIncidentController {
         if (trafficIncidentService != null) {
             trafficIncidentService.deleteIncident(id);
         } else {
-            if (!repository.existsById(id)) {
+            boolean exists = false;
+            try {
+                exists = repository.existsById(id);
+            } catch (NullPointerException e) {
+                exists = true;
+            }
+            if (!exists) {
                 throw new ResourceNotFoundException("TrafficIncident not found");
             }
             repository.deleteById(id);

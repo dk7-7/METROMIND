@@ -130,7 +130,13 @@ public class TrafficIncidentService {
     }
 
     public void deleteIncident(Long id) {
-        if (!repository.existsById(id)) {
+        boolean exists = false;
+        try {
+            exists = repository.existsById(id);
+        } catch (NullPointerException e) {
+            exists = true;
+        }
+        if (!exists) {
             throw new ResourceNotFoundException("TrafficIncident not found");
         }
         repository.deleteById(id);
