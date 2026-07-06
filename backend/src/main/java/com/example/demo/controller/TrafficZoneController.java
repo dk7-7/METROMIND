@@ -20,7 +20,7 @@ import java.util.List;
 public class TrafficZoneController {
 
     private final TrafficZoneService trafficZoneService;
-    private final TrafficZoneRepository trafficZoneRepository;
+    private final TrafficZoneRepository repository;
 
     @GetMapping
     public ResponseEntity<List<TrafficZone>> getAll() {
@@ -50,13 +50,13 @@ public class TrafficZoneController {
                         ? CongestionLevel.valueOf(dto.getCurrentCongestionLevel()) : CongestionLevel.LOW)
                 .signalCycleSeconds(dto.getSignalCycleSeconds() != null ? dto.getSignalCycleSeconds() : 60)
                 .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(trafficZoneRepository.save(zone));
+        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(zone));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<TrafficZone> update(@PathVariable Long id, @RequestBody ZoneDto dto) {
-        TrafficZone zone = trafficZoneRepository.findById(id)
+        TrafficZone zone = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
         zone.setZoneName(dto.getZoneName());
         zone.setDistrict(dto.getDistrict());
@@ -66,7 +66,7 @@ public class TrafficZoneController {
         if (dto.getSignalCycleSeconds() != null) {
             zone.setSignalCycleSeconds(dto.getSignalCycleSeconds());
         }
-        return ResponseEntity.ok(trafficZoneRepository.save(zone));
+        return ResponseEntity.ok(repository.save(zone));
     }
 
     @DeleteMapping("/{id}")

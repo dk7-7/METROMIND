@@ -15,27 +15,27 @@ import java.util.Optional;
 @Transactional(readOnly = true)
 public class TrafficZoneService {
 
-    private final TrafficZoneRepository trafficZoneRepository;
+    private final TrafficZoneRepository repository;
 
     public List<TrafficZone> getAllZones() {
-        return trafficZoneRepository.findAll();
+        return repository.findAll();
     }
 
     public Optional<TrafficZone> getZoneById(Long id) {
-        TrafficZone zone = trafficZoneRepository.findById(id)
+        TrafficZone zone = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
         return Optional.of(zone);
     }
 
     public List<TrafficZone> getHighlyCongestedZones() {
-        return trafficZoneRepository.findHighlyCongestedZones();
+        return repository.findHighlyCongestedZones();
     }
 
     @Transactional
     public void deleteZone(Long id) {
-        if (!trafficZoneRepository.existsById(id)) {
+        if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("TrafficZone not found");
         }
-        trafficZoneRepository.deleteById(id);
+        repository.deleteById(id);
     }
 }

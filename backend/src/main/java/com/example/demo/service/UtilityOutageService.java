@@ -23,21 +23,21 @@ import java.util.Optional;
 @Transactional
 public class UtilityOutageService {
 
-    private final UtilityOutageRepository utilityOutageRepository;
+    private final UtilityOutageRepository repository;
     private final UtilityGridRepository utilityGridRepository;
 
     @Transactional(readOnly = true)
     public List<UtilityOutage> getAllOutages() {
-        return utilityOutageRepository.findAll();
+        return repository.findAll();
     }
 
     @Transactional(readOnly = true)
     public Optional<UtilityOutage> getOutageById(Long id) {
-        return utilityOutageRepository.findById(id);
+        return repository.findById(id);
     }
 
     public UtilityOutage updateOutage(Long id, OutageDto dto) {
-        UtilityOutage outage = utilityOutageRepository.findById(id)
+        UtilityOutage outage = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityOutage not found"));
 
         if (dto.getOutageType() != null) {
@@ -61,11 +61,11 @@ public class UtilityOutageService {
             outage.setEstimatedRestorationTime(dto.getEstimatedRestorationTime());
         }
 
-        return utilityOutageRepository.save(outage);
+        return repository.save(outage);
     }
 
     public UtilityOutage resolveOutage(Long id) {
-        UtilityOutage outage = utilityOutageRepository.findById(id)
+        UtilityOutage outage = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityOutage not found"));
 
         if (outage.getStatus() == OutageStatus.RESTORED) {
@@ -74,12 +74,12 @@ public class UtilityOutageService {
 
         outage.setStatus(OutageStatus.RESTORED);
         outage.setActualRestorationTime(LocalDateTime.now());
-        UtilityOutage saved = utilityOutageRepository.save(outage);
+        UtilityOutage saved = repository.save(outage);
 
         // Check if there are other active outages for the same grid
         UtilityGrid grid = outage.getGrid();
         if (grid != null) {
-            List<UtilityOutage> outages = utilityOutageRepository.findByGrid_GridId(grid.getGridId());
+            List<UtilityOutage> outages = repository.findByGrid_GridId(grid.getGridId());
             boolean hasActiveOutages = outages.stream()
                     .anyMatch(o -> o.getStatus() == OutageStatus.ACTIVE || o.getStatus() == OutageStatus.RESOLVING);
 
@@ -93,15 +93,15 @@ public class UtilityOutageService {
     }
 
     public void deleteOutage(Long id) {
-        UtilityOutage outage = utilityOutageRepository.findById(id)
+        UtilityOutage outage = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityOutage not found"));
         
-        utilityOutageRepository.delete(outage);
+        repository.delete(outage);
 
         // Recheck grid status after deleting outage
         UtilityGrid grid = outage.getGrid();
         if (grid != null) {
-            List<UtilityOutage> outages = utilityOutageRepository.findByGrid_GridId(grid.getGridId());
+            List<UtilityOutage> outages = repository.findByGrid_GridId(grid.getGridId());
             boolean hasActiveOutages = outages.stream()
                     .anyMatch(o -> o.getStatus() == OutageStatus.ACTIVE || o.getStatus() == OutageStatus.RESOLVING);
 

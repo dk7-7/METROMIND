@@ -16,20 +16,20 @@ import java.util.List;
 @Transactional
 public class AlertNotificationService {
 
-    private final AlertNotificationRepository alertNotificationRepository;
+    private final AlertNotificationRepository repository;
     private final CityUserRepository cityUserRepository;
 
     @Transactional(readOnly = true)
     public List<AlertNotification> getAlertsForUser(String username) {
         CityUser user = cityUserRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-        return alertNotificationRepository.findByTargetRole(user.getRole());
+        return repository.findByTargetRole(user.getRole());
     }
 
     public AlertNotification markAsRead(Long id) {
-        AlertNotification alert = alertNotificationRepository.findById(id)
+        AlertNotification alert = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Alert not found"));
         alert.setRead(true);
-        return alertNotificationRepository.save(alert);
+        return repository.save(alert);
     }
 }

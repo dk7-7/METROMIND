@@ -20,7 +20,7 @@ import java.util.List;
 @Transactional
 public class FieldObservationService {
 
-    private final FieldObservationRepository fieldObservationRepository;
+    private final FieldObservationRepository repository;
     private final TrafficIncidentRepository trafficincidentRepository;
     private final UtilityOutageRepository utilityOutageRepository;
     private final CityUserRepository cityUserRepository;
@@ -50,11 +50,11 @@ public class FieldObservationService {
                 .longitude(dto.getLongitude())
                 .build();
 
-        return fieldObservationRepository.save(observation);
+        return repository.save(observation);
     }
 
     @Transactional(readOnly = true)
     public List<FieldObservation> getAllObservations() {
-        return fieldObservationRepository.findAll();
+        return repository.findAll();
     }
 }

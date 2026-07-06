@@ -19,12 +19,12 @@ import java.util.Optional;
 @Transactional
 public class UtilityGridService {
 
-    private final UtilityGridRepository utilityGridRepository;
+    private final UtilityGridRepository repository;
     private final UtilityOutageRepository utilityOutageRepository;
     private final AlertNotificationRepository alertNotificationRepository;
 
     public void updateLoad(Long id, Double newLoad) {
-        UtilityGrid grid = utilityGridRepository.findById(id)
+        UtilityGrid grid = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityGrid not found"));
 
         grid.setCurrentLoad(newLoad);
@@ -41,11 +41,11 @@ public class UtilityGridService {
                     .build();
             alertNotificationRepository.save(alert);
         }
-        utilityGridRepository.save(grid);
+        repository.save(grid);
     }
 
     public UtilityOutage registerOutage(Long gridId, OutageDto dto) {
-        UtilityGrid grid = utilityGridRepository.findById(gridId)
+        UtilityGrid grid = repository.findById(gridId)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityGrid not found"));
 
         UtilityOutage outage = UtilityOutage.builder()
@@ -60,19 +60,19 @@ public class UtilityGridService {
         UtilityOutage saved = utilityOutageRepository.save(outage);
 
         grid.setStatus(GridStatus.DEGRADED);
-        utilityGridRepository.save(grid);
+        repository.save(grid);
 
         return saved;
     }
 
     @Transactional(readOnly = true)
     public List<UtilityGrid> getAllGrids() {
-        return utilityGridRepository.findAll();
+        return repository.findAll();
     }
 
     @Transactional(readOnly = true)
     public Optional<UtilityGrid> getGridById(Long id) {
-        UtilityGrid grid = utilityGridRepository.findById(id)
+        UtilityGrid grid = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityGrid not found"));
         return Optional.of(grid);
     }
