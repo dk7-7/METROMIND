@@ -77,7 +77,8 @@ public class UtilityGridController {
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityGrid not found"));
         UtilityOutage outage = UtilityOutage.builder()
                 .grid(grid)
-                .description(dto.getDescription())
+                .outageType(dto.getOutageType() != null ? com.example.demo.enums.OutageType.valueOf(dto.getOutageType()) : com.example.demo.enums.OutageType.UNPLANNED)
+                .affectedArea(dto.getAffectedArea() != null ? dto.getAffectedArea() : "Grid Area")
                 .status(com.example.demo.enums.OutageStatus.ACTIVE)
                 .startTime(java.time.LocalDateTime.now())
                 .build();

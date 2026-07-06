@@ -49,7 +49,12 @@ public class UtilityOutageController {
         }
         UtilityOutage outage = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityOutage not found"));
-        outage.setDescription(dto.getDescription());
+        if (dto.getOutageType() != null) {
+            outage.setOutageType(com.example.demo.enums.OutageType.valueOf(dto.getOutageType()));
+        }
+        if (dto.getAffectedArea() != null) {
+            outage.setAffectedArea(dto.getAffectedArea());
+        }
         return ResponseEntity.ok(repository.save(outage));
     }
 
@@ -62,7 +67,7 @@ public class UtilityOutageController {
         UtilityOutage outage = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityOutage not found"));
         outage.setStatus(com.example.demo.enums.OutageStatus.RESOLVED);
-        outage.setEndTime(java.time.LocalDateTime.now());
+        outage.setActualRestorationTime(java.time.LocalDateTime.now());
         return ResponseEntity.ok(repository.save(outage));
     }
 

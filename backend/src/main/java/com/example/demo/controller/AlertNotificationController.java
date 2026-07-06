@@ -33,7 +33,7 @@ public class AlertNotificationController {
         } else {
             AlertNotification alert = repository.findById(id)
                     .orElseThrow(() -> new com.example.demo.exception.ResourceNotFoundException("Alert not found"));
-            alert.setIsRead(true);
+            alert.setRead(true);
             repository.save(alert);
         }
         return ResponseEntity.ok("Alert marked as read");

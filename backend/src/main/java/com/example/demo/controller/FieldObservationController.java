@@ -38,8 +38,9 @@ public class FieldObservationController {
                     .body(fieldObservationService.submitObservation(dto, username));
         }
         FieldObservation obs = FieldObservation.builder()
-                .details(dto.getDetails())
-                .observationTime(java.time.LocalDateTime.now())
+                .observationText(dto.getObservationText() != null ? dto.getObservationText() : "Observation details")
+                .latitude(dto.getLatitude() != null ? dto.getLatitude() : 0.0)
+                .longitude(dto.getLongitude() != null ? dto.getLongitude() : 0.0)
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(obs));
     }
