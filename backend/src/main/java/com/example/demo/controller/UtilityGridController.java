@@ -35,11 +35,11 @@ public class UtilityGridController {
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityGrid not found"));
     }
 
-    @PostMapping
-    @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
-    public ResponseEntity<UtilityGrid> create(@RequestBody UtilityGrid grid) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(grid));
-    }
+    // @PostMapping
+    // @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
+    // public ResponseEntity<UtilityGrid> create(@RequestBody UtilityGrid grid) {
+    //     return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(grid));
+    // }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('UTILITY_SUPERVISOR')")
