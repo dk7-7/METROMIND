@@ -24,55 +24,73 @@ public class TrafficZoneController {
 
     @GetMapping
     public ResponseEntity<List<TrafficZone>> getAll() {
-        return ResponseEntity.ok(trafficZoneService.getAllZones());
+        if (trafficZoneService != null) {
+            return ResponseEntity.ok(trafficZoneService.getAllZones());
+        }
+        return ResponseEntity.ok(repository.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<TrafficZone> getById(@PathVariable Long id) {
-        return trafficZoneService.getZoneById(id)
+        if (trafficZoneService != null) {
+            return trafficZoneService.getZoneById(id)
+                    .map(ResponseEntity::ok)
+                    .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
+        }
+        return repository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
     }
 
     @GetMapping("/congested")
     public ResponseEntity<List<TrafficZone>> getCongested() {
-        return ResponseEntity.ok(trafficZoneService.getHighlyCongestedZones());
+        if (trafficZoneService != null) {
+            return ResponseEntity.ok(trafficZoneService.getHighlyCongestedZones());
+        }
+        return ResponseEntity.ok(repository.findHighlyCongestedZones());
     }
 
-    // @PostMapping
-    // @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
-    // public ResponseEntity<TrafficZone> create(@RequestBody ZoneDto dto) {
-    //     TrafficZone zone = TrafficZone.builder()
-    //             .zoneName(dto.getZoneName())
-    //             .zoneCode(dto.getZoneCode())
-    //             .district(dto.getDistrict())
-    //             .currentCongestionLevel(dto.getCurrentCongestionLevel() != null
-    //                     ? CongestionLevel.valueOf(dto.getCurrentCongestionLevel()) : CongestionLevel.LOW)
-    //             .signalCycleSeconds(dto.getSignalCycleSeconds() != null ? dto.getSignalCycleSeconds() : 60)
-    //             .build();
-    //     return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(zone));
-    // }
+    @PostMapping
+    @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
+    public ResponseEntity<TrafficZone> create(@RequestBody ZoneDto dto) {
+        TrafficZone zone = TrafficZone.builder()
+                .zoneName(dto.getZoneName())
+                .zoneCode(dto.getZoneCode())
+                .district(dto.getDistrict())
+                .currentCongestionLevel(dto.getCurrentCongestionLevel() != null
+                        ? CongestionLevel.valueOf(dto.getCurrentCongestionLevel()) : CongestionLevel.LOW)
+                .signalCycleSeconds(dto.getSignalCycleSeconds() != null ? dto.getSignalCycleSeconds() : 60)
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(zone));
+    }
 
-    // @PutMapping("/{id}")
-    // @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
-    // public ResponseEntity<TrafficZone> update(@PathVariable Long id, @RequestBody ZoneDto dto) {
-    //     TrafficZone zone = repository.findById(id)
-    //             .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
-    //     zone.setZoneName(dto.getZoneName());
-    //     zone.setDistrict(dto.getDistrict());
-    //     if (dto.getCurrentCongestionLevel() != null) {
-    //         zone.setCurrentCongestionLevel(CongestionLevel.valueOf(dto.getCurrentCongestionLevel()));
-    //     }
-    //     if (dto.getSignalCycleSeconds() != null) {
-    //         zone.setSignalCycleSeconds(dto.getSignalCycleSeconds());
-    //     }
-    //     return ResponseEntity.ok(repository.save(zone));
-    // }
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
+    public ResponseEntity<TrafficZone> update(@PathVariable Long id, @RequestBody ZoneDto dto) {
+        TrafficZone zone = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
+        zone.setZoneName(dto.getZoneName());
+        zone.setDistrict(dto.getDistrict());
+        if (dto.getCurrentCongestionLevel() != null) {
+            zone.setCurrentCongestionLevel(CongestionLevel.valueOf(dto.getCurrentCongestionLevel()));
+        }
+        if (dto.getSignalCycleSeconds() != null) {
+            zone.setSignalCycleSeconds(dto.getSignalCycleSeconds());
+        }
+        return ResponseEntity.ok(repository.save(zone));
+    }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-        trafficZoneService.deleteZone(id);
+        if (trafficZoneService != null) {
+            trafficZoneService.deleteZone(id);
+        } else {
+            if (!repository.existsById(id)) {
+                throw new ResourceNotFoundException("TrafficZone not found");
+            }
+            repository.deleteById(id);
+        }
         return ResponseEntity.ok("TrafficZone deleted successfully.");
     }
 }

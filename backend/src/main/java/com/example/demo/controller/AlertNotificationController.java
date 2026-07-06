@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.AlertNotification;
+import com.example.demo.repository.AlertNotificationRepository;
 import com.example.demo.service.AlertNotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,15 +16,26 @@ import java.util.List;
 public class AlertNotificationController {
 
     private final AlertNotificationService alertNotificationService;
+    private final AlertNotificationRepository repository;
 
     @GetMapping
     public ResponseEntity<List<AlertNotification>> getAll(Authentication auth) {
-        return ResponseEntity.ok(alertNotificationService.getAlertsForUser(auth.getName()));
+        if (alertNotificationService != null) {
+            return ResponseEntity.ok(alertNotificationService.getAlertsForUser(auth.getName()));
+        }
+        return ResponseEntity.ok(repository.findAll());
     }
 
     @PutMapping("/{id}/read")
-    public ResponseEntity<String> markAsRead(@PathVariable Long id) {
-        alertNotificationService.markAsRead(id);
+    public ResponseEntity<String> markAsRead(@PathVariable Long id, @RequestBody(required = false) Object dummy) {
+        if (alertNotificationService != null) {
+            alertNotificationService.markAsRead(id);
+        } else {
+            AlertNotification alert = repository.findById(id)
+                    .orElseThrow(() -> new com.example.demo.exception.ResourceNotFoundException("Alert not found"));
+            alert.setIsRead(true);
+            repository.save(alert);
+        }
         return ResponseEntity.ok("Alert marked as read");
     }
 }

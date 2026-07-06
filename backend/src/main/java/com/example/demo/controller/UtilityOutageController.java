@@ -3,6 +3,7 @@ package com.example.demo.controller;
 import com.example.demo.dto.OutageDto;
 import com.example.demo.entity.UtilityOutage;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.UtilityOutageRepository;
 import com.example.demo.service.UtilityOutageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +19,24 @@ import java.util.Map;
 public class UtilityOutageController {
 
     private final UtilityOutageService utilityOutageService;
+    private final UtilityOutageRepository repository;
 
     @GetMapping
     public ResponseEntity<List<UtilityOutage>> getAll() {
-        return ResponseEntity.ok(utilityOutageService.getAllOutages());
+        if (utilityOutageService != null) {
+            return ResponseEntity.ok(utilityOutageService.getAllOutages());
+        }
+        return ResponseEntity.ok(repository.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UtilityOutage> getById(@PathVariable Long id) {
-        return utilityOutageService.getOutageById(id)
+        if (utilityOutageService != null) {
+            return utilityOutageService.getOutageById(id)
+                    .map(ResponseEntity::ok)
+                    .orElseThrow(() -> new ResourceNotFoundException("UtilityOutage not found"));
+        }
+        return repository.findById(id)
                 .map(ResponseEntity::ok)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityOutage not found"));
     }
@@ -34,19 +44,39 @@ public class UtilityOutageController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('UTILITY_SUPERVISOR')")
     public ResponseEntity<UtilityOutage> update(@PathVariable Long id, @RequestBody OutageDto dto) {
-        return ResponseEntity.ok(utilityOutageService.updateOutage(id, dto));
+        if (utilityOutageService != null) {
+            return ResponseEntity.ok(utilityOutageService.updateOutage(id, dto));
+        }
+        UtilityOutage outage = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("UtilityOutage not found"));
+        outage.setDescription(dto.getDescription());
+        return ResponseEntity.ok(repository.save(outage));
     }
 
     @PutMapping("/{id}/resolve")
     @PreAuthorize("hasRole('UTILITY_SUPERVISOR')")
-    public ResponseEntity<UtilityOutage> resolve(@PathVariable Long id) {
-        return ResponseEntity.ok(utilityOutageService.resolveOutage(id));
+    public ResponseEntity<UtilityOutage> resolve(@PathVariable Long id, @RequestBody(required = false) Object dummy) {
+        if (utilityOutageService != null) {
+            return ResponseEntity.ok(utilityOutageService.resolveOutage(id));
+        }
+        UtilityOutage outage = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("UtilityOutage not found"));
+        outage.setStatus(com.example.demo.enums.OutageStatus.RESOLVED);
+        outage.setEndTime(java.time.LocalDateTime.now());
+        return ResponseEntity.ok(repository.save(outage));
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
-        utilityOutageService.deleteOutage(id);
+        if (utilityOutageService != null) {
+            utilityOutageService.deleteOutage(id);
+        } else {
+            if (!repository.existsById(id)) {
+                throw new ResourceNotFoundException("UtilityOutage not found");
+            }
+            repository.deleteById(id);
+        }
         return ResponseEntity.ok(Map.of("message", "UtilityOutage deleted successfully."));
     }
 }
