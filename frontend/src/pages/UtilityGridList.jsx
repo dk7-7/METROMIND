@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getUtilityGrids, deleteUtilityGrid } from '../services/utilityGridService';
-import Loader from '../components/common/Loader';
+import Loader from '../Components/common/Loader';
 import { Plus, Search, Trash2, Cpu, Wrench, MapPin } from 'lucide-react';
 import { getStatusBadgeClass } from '../utils/helpers';
 

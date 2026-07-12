@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getUtilityOutages, deleteUtilityOutage } from '../services/utilityOutageService';
-import Loader from '../components/common/Loader';
+import Loader from '../Components/common/Loader';
 import { Plus, Search, Calendar, Users, AlertOctagon, Trash2 } from 'lucide-react';
 import { formatDate, getStatusBadgeClass } from '../utils/helpers';
 
