@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getIncidents, deleteIncident } from '../services/incidentService';
 import Loader from '../components/common/Loader';
-import { AlertTriangle, Plus, Search, Eye, Edit2, Trash2, Calendar } from 'lucide-react';
+import { AlertTriangle, Plus, Search, Edit2, Trash2, Calendar } from 'lucide-react';
 import { formatDate, getSeverityBadgeClass, getStatusBadgeClass } from '../utils/helpers';
 
 export const IncidentList = () => {

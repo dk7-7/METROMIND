@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getDashboardStats } from '../services/dashboardService';
 import Loader from '../components/common/Loader';
-import { AlertTriangle, Clock, Layers, Users, TrendingUp, ShieldAlert, CheckCircle, ArrowRight } from 'lucide-react';
+import { AlertTriangle, Clock, Layers, Users, ArrowRight } from 'lucide-react';
 import { formatDate, getSeverityBadgeClass, getStatusBadgeClass } from '../utils/helpers';
 
 export const Dashboard = () => {

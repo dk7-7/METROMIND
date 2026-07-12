@@ -3,7 +3,7 @@ import { useNavigate, useParams, Link } from 'react-router-dom';
 import { getIncidentById, updateIncident } from '../services/incidentService';
 import { getUtilityGrids } from '../services/utilityGridService';
 import Loader from '../components/common/Loader';
-import { AlertTriangle, ArrowLeft, Save } from 'lucide-react';
+import { ArrowLeft, Save } from 'lucide-react';
 import { validateRequired } from '../utils/validators';
 
 export const EditIncident = () => {

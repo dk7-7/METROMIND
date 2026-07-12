@@ -1,6 +1,6 @@
 import React from 'react';
 import useAuth from '../hooks/useAuth';
-import { User, Shield, Mail, Key, Bell, Check } from 'lucide-react';
+import { User, Shield, Mail, Key, Bell } from 'lucide-react';
 
 export const Profile = () => {
   const { user } = useAuth();
