@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { createIncident } from '../services/incidentService';
 import { getUtilityGrids } from '../services/utilityGridService';
-import { AlertTriangle, ArrowLeft, Send } from 'lucide-react';
+import { ArrowLeft, Send } from 'lucide-react';
 import { validateRequired } from '../utils/validators';
 
 export const AddIncident = () => {

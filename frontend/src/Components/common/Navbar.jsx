@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
-import { LogOut, Bell, ShieldAlert, Cpu } from 'lucide-react';
+import { LogOut, Bell, Cpu } from 'lucide-react';
 
 export const Navbar = ({ toggleSidebar }) => {
   const { user, logout } = useAuth();

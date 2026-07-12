@@ -35,12 +35,12 @@ class ApiClient {
       }
 
       if (!response.ok) {
-        throw { 
-          response: { 
-            status: response.status, 
-            data: data || { message: 'Something went wrong' } 
-          } 
+        const error = new Error(data?.message || 'Something went wrong');
+        error.response = { 
+          status: response.status, 
+          data: data || { message: 'Something went wrong' } 
         };
+        throw error;
       }
 
       return { data, status: response.status };
@@ -48,7 +48,9 @@ class ApiClient {
       if (error.response) {
         throw error;
       }
-      throw { response: { status: 500, data: { message: error.message || 'Network Error' } } };
+      const networkError = new Error(error.message || 'Network Error');
+      networkError.response = { status: 500, data: { message: error.message || 'Network Error' } };
+      throw networkError;
     }
   }
 

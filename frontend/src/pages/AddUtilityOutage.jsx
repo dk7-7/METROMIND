@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { createUtilityOutage } from '../services/utilityOutageService';
 import { getUtilityGrids } from '../services/utilityGridService';
-import { ArrowLeft, Send, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Send } from 'lucide-react';
 import { validateRequired } from '../utils/validators';
 
 export const AddUtilityOutage = () => {
