@@ -107,7 +107,7 @@ public class TrafficIncidentController {
             trafficIncidentService.deleteIncident(id);
         } else {
 
-            if (!repository.existsById(id)) {
+            if (Boolean.FALSE.equals(repository.existsById(id))) {
                 throw new ResourceNotFoundException("TrafficIncident not found");
             }
 
