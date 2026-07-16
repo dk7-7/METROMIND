@@ -3,8 +3,9 @@ package com.example.demo.service;
 import com.example.demo.dto.IncidentDto;
 import com.example.demo.entity.*;
 import com.example.demo.enums.*;
-import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.exception.BusinessValidationException;
 import com.example.demo.exception.IllegalStateException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AlertNotificationRepository;
 import com.example.demo.repository.CityUserRepository;
 import com.example.demo.repository.TrafficIncidentRepository;
@@ -26,7 +27,11 @@ public class TrafficIncidentService {
     private final CityUserRepository cityUserRepository;
     private final AlertNotificationRepository alertNotificationRepository;
 
+    // ==========================
+    // CREATE USING DTO
+    // ==========================
     public TrafficIncident reportIncident(IncidentDto dto, String username) {
+
         TrafficZone zone = trafficZoneRepository.findById(dto.getZoneId())
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
 
@@ -37,7 +42,7 @@ public class TrafficIncidentService {
             try {
                 severity = Severity.valueOf(dto.getSeverity());
             } catch (IllegalArgumentException e) {
-                throw new com.example.demo.exception.BusinessValidationException("Invalid severity");
+                throw new BusinessValidationException("Invalid severity");
             }
         }
 
@@ -46,7 +51,7 @@ public class TrafficIncidentService {
             try {
                 type = IncidentType.valueOf(dto.getIncidentType());
             } catch (IllegalArgumentException e) {
-                throw new com.example.demo.exception.BusinessValidationException("Invalid incident type");
+                throw new BusinessValidationException("Invalid incident type");
             }
         }
 
@@ -63,6 +68,7 @@ public class TrafficIncidentService {
         TrafficIncident saved = repository.save(incident);
 
         if (severity == Severity.HIGH || severity == Severity.CRITICAL) {
+
             AlertNotification alert = AlertNotification.builder()
                     .targetRole(Role.TRAFFIC_CONTROLLER)
                     .message("Traffic incident reported: " + saved.getTitle())
@@ -71,36 +77,68 @@ public class TrafficIncidentService {
                     .severity(severity)
                     .isRead(false)
                     .build();
+
             alertNotificationRepository.save(alert);
         }
 
         return saved;
     }
 
+    // ==========================
+    // CREATE USING ENTITY
+    // (Needed for validator)
+    // ==========================
+    public TrafficIncident createIncident(TrafficIncident incident) {
+
+        if (incident.getStatus() == null) {
+            incident.setStatus(IncidentStatus.REPORTED);
+        }
+
+        return repository.save(incident);
+    }
+
+    // ==========================
+    // DISPATCH
+    // ==========================
     public TrafficIncident dispatchResponse(Long id) {
+
         TrafficIncident incident = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
 
         if (incident.getStatus() != IncidentStatus.REPORTED) {
             throw new IllegalStateException("Incident must be in REPORTED state to dispatch");
         }
+
         incident.setStatus(IncidentStatus.DISPATCHED);
+
         return repository.save(incident);
     }
 
+    // ==========================
+    // GET ALL
+    // ==========================
     @Transactional(readOnly = true)
     public List<TrafficIncident> getAllIncidents() {
         return repository.findAll();
     }
 
+    // ==========================
+    // GET BY ID
+    // ==========================
     @Transactional(readOnly = true)
     public Optional<TrafficIncident> getIncidentById(Long id) {
+
         TrafficIncident incident = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
+
         return Optional.of(incident);
     }
 
+    // ==========================
+    // UPDATE USING DTO
+    // ==========================
     public TrafficIncident updateIncident(Long id, IncidentDto dto) {
+
         TrafficIncident incident = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
 
@@ -109,36 +147,83 @@ public class TrafficIncidentService {
                     .orElseThrow(() -> new ResourceNotFoundException("TrafficZone not found"));
             incident.setZone(zone);
         }
+
         incident.setTitle(dto.getTitle());
+
         if (dto.getIncidentType() != null) {
             try {
                 incident.setIncidentType(IncidentType.valueOf(dto.getIncidentType()));
             } catch (IllegalArgumentException e) {
-                throw new com.example.demo.exception.BusinessValidationException("Invalid incident type");
+                throw new BusinessValidationException("Invalid incident type");
             }
         }
+
         if (dto.getSeverity() != null) {
             try {
                 incident.setSeverity(Severity.valueOf(dto.getSeverity()));
             } catch (IllegalArgumentException e) {
-                throw new com.example.demo.exception.BusinessValidationException("Invalid severity");
+                throw new BusinessValidationException("Invalid severity");
             }
         }
+
         incident.setDescription(dto.getDescription());
 
         return repository.save(incident);
     }
 
+    // ==========================
+    // UPDATE USING ENTITY
+    // (Needed for validator)
+    // ==========================
+    public TrafficIncident updateIncident(Long id, TrafficIncident updatedIncident) {
+
+        TrafficIncident incident = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
+
+        if (updatedIncident.getTitle() != null) {
+            incident.setTitle(updatedIncident.getTitle());
+        }
+
+        if (updatedIncident.getDescription() != null) {
+            incident.setDescription(updatedIncident.getDescription());
+        }
+
+        if (updatedIncident.getSeverity() != null) {
+            incident.setSeverity(updatedIncident.getSeverity());
+        }
+
+        if (updatedIncident.getIncidentType() != null) {
+            incident.setIncidentType(updatedIncident.getIncidentType());
+        }
+
+        if (updatedIncident.getStatus() != null) {
+            incident.setStatus(updatedIncident.getStatus());
+        }
+
+        if (updatedIncident.getZone() != null) {
+            incident.setZone(updatedIncident.getZone());
+        }
+
+        return repository.save(incident);
+    }
+
+    // ==========================
+    // DELETE
+    // ==========================
     public void deleteIncident(Long id) {
+
         boolean exists = false;
+
         try {
             exists = repository.existsById(id);
         } catch (NullPointerException e) {
             exists = true;
         }
+
         if (!exists) {
             throw new ResourceNotFoundException("TrafficIncident not found");
         }
+
         repository.deleteById(id);
     }
 }
