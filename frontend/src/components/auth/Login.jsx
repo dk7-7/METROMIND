@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import useAuth from '../../hooks/useAuth';
-import { validateEmail, validatePassword } from '../../utils/validators';
+import { validatePassword, validateRequired } from '../../utils/validators';
 import { LogIn, Key, Mail, ShieldAlert } from 'lucide-react';
 
 export const LoginComponent = () => {
