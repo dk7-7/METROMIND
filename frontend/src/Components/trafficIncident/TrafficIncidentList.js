@@ -62,10 +62,6 @@ const TrafficIncidentList = () => {
     fetchItems();
   };
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div style={{ padding: '24px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
@@ -90,6 +86,8 @@ const TrafficIncidentList = () => {
           </button>
         )}
       </div>
+
+      {loading && <div>Loading...</div>}
 
       {error && (
         <div
