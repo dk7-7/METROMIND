@@ -81,7 +81,7 @@ export const LoginComponent = () => {
 
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label className="form-label" htmlFor="comp-email-input">Control Email</label>
+          <label className="form-label" htmlFor="comp-email-input">Control Username</label>
           <div style={{ position: 'relative' }}>
             <Mail 
               size={18} 
@@ -89,12 +89,12 @@ export const LoginComponent = () => {
             />
             <input
               id="comp-email-input"
-              type="email"
+              type="text"
               className="form-control"
               style={{ paddingLeft: '40px' }}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="e.g. admin@utility.com"
+              placeholder="e.g. admin"
               disabled={loading}
             />
           </div>
