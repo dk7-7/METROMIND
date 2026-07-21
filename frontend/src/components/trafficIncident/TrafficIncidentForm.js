@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
 
-const TrafficIncidentForm = ({ item, onClose }) => {
+const TrafficIncidentForm = ({ item, onClose = () => {} }) => {
   const { items: zones } = useSelector((state) => state.trafficZones);
 
   const [title, setTitle] = useState(item?.title || '');

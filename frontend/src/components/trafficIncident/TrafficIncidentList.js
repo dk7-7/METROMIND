@@ -6,7 +6,7 @@ import TrafficIncidentForm from './TrafficIncidentForm';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
 
 const TrafficIncidentList = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user, role: authRole } = useSelector((state) => state.auth || {});
   const reduxItems = useSelector((state) => state.trafficIncidents?.items);
   const [items, setItems] = useState(reduxItems || []);
   const [loading, setLoading] = useState(true);
@@ -15,7 +15,7 @@ const TrafficIncidentList = () => {
   const [editItem, setEditItem] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  const userRole = user?.role;
+  const userRole = user?.role || authRole;
   const isAdmin = userRole === 'CITY_ADMINISTRATOR';
 
   const fetchItems = async () => {

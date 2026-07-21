@@ -85,3 +85,13 @@ export const getCurrentUser = () => {
   const userJson = localStorage.getItem(CURRENT_USER_KEY);
   return userJson ? JSON.parse(userJson) : null;
 };
+
+const authService = {
+  login,
+  register,
+  logout,
+  getCurrentUser,
+};
+
+export default authService;
+
