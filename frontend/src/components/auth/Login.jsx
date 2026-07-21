@@ -9,7 +9,7 @@ export const LoginComponent = () => {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const [email, setEmail] = useState('admin@utility.com');
+  const [email, setEmail] = useState('admin');
   const [password, setPassword] = useState('admin123');
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState('');
@@ -22,7 +22,7 @@ export const LoginComponent = () => {
     setSubmitError('');
     
     const newErrors = {};
-    if (!validateEmail(email)) newErrors.email = 'Please enter a valid email address';
+    if (!validateRequired(email)) newErrors.email = 'Please enter a valid username or email';
     if (!validatePassword(password)) newErrors.password = 'Password must be at least 6 characters';
     
     if (Object.keys(newErrors).length > 0) {

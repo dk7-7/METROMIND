@@ -14,10 +14,17 @@ const saveMockUser = (user) => {
 export const login = async (email, password) => {
   try {
     // Attempt real API login
-    const response = await api.post('/auth/login', { email, password });
+    const response = await api.post('/auth/login', { username: email, password });
     if (response.data.token) {
+      const user = {
+        id: response.data.username,
+        name: response.data.username,
+        email: response.data.username,
+        role: response.data.role
+      };
       localStorage.setItem('token', response.data.token);
-      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(response.data.user));
+      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+      return { token: response.data.token, user };
     }
     return response.data;
   } catch (error) {
@@ -54,7 +61,12 @@ export const login = async (email, password) => {
 
 export const register = async (name, email, password) => {
   try {
-    const response = await api.post('/auth/register', { name, email, password });
+    const response = await api.post('/auth/register', {
+      username: email,
+      password,
+      fullName: name,
+      role: 'CITY_ADMINISTRATOR' // Default to admin for full privileges
+    });
     return response.data;
   } catch (error) {
     console.warn('Real API Registration failed, falling back to mock registration', error);
