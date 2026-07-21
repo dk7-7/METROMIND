@@ -7,7 +7,8 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
 
 const TrafficIncidentList = () => {
   const { user } = useSelector((state) => state.auth);
-  const [items, setItems] = useState([]);
+  const reduxItems = useSelector((state) => state.trafficIncidents?.items);
+  const [items, setItems] = useState(reduxItems || []);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showForm, setShowForm] = useState(false);
@@ -22,10 +23,16 @@ const TrafficIncidentList = () => {
     setError(null);
     try {
       const response = await axios.get(`${API_URL}/traffic-incidents`);
-      setItems(response.data || []);
+      if (response && response.data) {
+        setItems(response.data);
+      }
     } catch (err) {
-      const message = err.response?.data?.message || 'Failed to fetch traffic incidents';
+      const message = err?.response?.data?.message || err?.message || 'Failed to fetch traffic incidents';
       setError(message);
+      // On fetch failure, keep any pre-existing items from Redux
+      if (reduxItems && reduxItems.length > 0) {
+        setItems(reduxItems);
+      }
     } finally {
       setLoading(false);
     }
@@ -33,6 +40,7 @@ const TrafficIncidentList = () => {
 
   useEffect(() => {
     fetchItems();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDelete = async (incidentId) => {
@@ -40,10 +48,10 @@ const TrafficIncidentList = () => {
 
     try {
       const response = await axios.delete(`${API_URL}/traffic-incidents/${incidentId}`);
-      setSuccessMessage(response.data);
+      setSuccessMessage(typeof response.data === 'string' ? response.data : response.data?.message);
       setItems((prev) => prev.filter((item) => item.incidentId !== incidentId));
     } catch (err) {
-      const message = err.response?.data?.message || 'Failed to delete incident';
+      const message = err?.response?.data?.message || 'Failed to delete incident';
       setError(message);
     }
   };
@@ -172,9 +180,9 @@ const TrafficIncidentList = () => {
                   {item.title}
                 </h3>
                 <div style={{ display: 'flex', gap: '12px', fontSize: '12px', color: '#94a3b8' }}>
-                  <span>Severity: {item.severity}</span>
-                  <span>Type: {item.incidentType}</span>
-                  <span>Status: {item.status}</span>
+                  {item.severity && <span>Severity: {item.severity}</span>}
+                  {item.incidentType && <span>Type: {item.incidentType}</span>}
+                  {item.status && <span>Status: {item.status}</span>}
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
