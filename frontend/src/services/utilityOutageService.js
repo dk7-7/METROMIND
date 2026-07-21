@@ -51,10 +51,31 @@ const saveMockOutages = (outages) => {
   localStorage.setItem(MOCK_OUTAGES_KEY, JSON.stringify(outages));
 };
 
+const mapStatusToFrontend = (status, type) => {
+  if (status === 'RESTORED') return 'RESOLVED';
+  if (type === 'PLANNED' && status === 'ACTIVE') return 'SCHEDULED';
+  return status || 'ACTIVE';
+};
+
+const mapBackendOutageToFrontend = (o) => {
+  if (!o) return null;
+  return {
+    id: o.outageId?.toString() || o.id,
+    title: o.affectedArea || o.title || 'Outage Event',
+    description: o.description || `Grid segment outage of type ${o.outageType}`,
+    type: o.grid?.gridType || o.type || 'POWER',
+    affectedCustomers: o.grid?.capacityUnits || 100,
+    status: mapStatusToFrontend(o.status, o.outageType),
+    gridId: o.grid?.gridId?.toString() || o.gridId || '1',
+    startTime: o.startTime || new Date().toISOString(),
+    estimatedRestoration: o.estimatedRestorationTime || o.estimatedRestoration || new Date().toISOString()
+  };
+};
+
 export const getUtilityOutages = async () => {
   try {
     const response = await api.get('/outages');
-    return response.data;
+    return Array.isArray(response.data) ? response.data.map(mapBackendOutageToFrontend) : [];
   } catch (error) {
     console.warn('Real API getUtilityOutages failed, returning mock data');
     return getMockOutages();
@@ -64,7 +85,7 @@ export const getUtilityOutages = async () => {
 export const getUtilityOutageById = async (id) => {
   try {
     const response = await api.get(`/outages/${id}`);
-    return response.data;
+    return mapBackendOutageToFrontend(response.data);
   } catch (error) {
     console.warn(`Real API getUtilityOutageById (${id}) failed, returning mock outage`);
     return getMockOutages().find(o => o.id === id) || null;
@@ -73,8 +94,15 @@ export const getUtilityOutageById = async (id) => {
 
 export const createUtilityOutage = async (outage) => {
   try {
-    const response = await api.post('/outages', outage);
-    return response.data;
+    const gridId = parseInt(outage.gridId) || 1;
+    const outageDto = {
+      outageType: outage.status === 'SCHEDULED' ? 'PLANNED' : 'UNPLANNED',
+      affectedArea: outage.title,
+      severity: 'MEDIUM',
+      estimatedRestorationTime: outage.estimatedRestoration ? new Date(outage.estimatedRestoration).toISOString() : null
+    };
+    const response = await api.post(`/grids/${gridId}/outages`, outageDto);
+    return mapBackendOutageToFrontend(response.data);
   } catch (error) {
     console.warn('Real API createUtilityOutage failed, saving mock outage');
     const list = getMockOutages();
@@ -91,8 +119,18 @@ export const createUtilityOutage = async (outage) => {
 
 export const updateUtilityOutage = async (id, outage) => {
   try {
-    const response = await api.put(`/outages/${id}`, outage);
-    return response.data;
+    if (outage.status === 'RESOLVED') {
+      const response = await api.put(`/outages/${id}/resolve`, {});
+      return mapBackendOutageToFrontend(response.data);
+    }
+    const outageDto = {
+      outageType: outage.status === 'SCHEDULED' ? 'PLANNED' : 'UNPLANNED',
+      affectedArea: outage.title,
+      severity: 'MEDIUM',
+      estimatedRestorationTime: outage.estimatedRestoration ? new Date(outage.estimatedRestoration).toISOString() : null
+    };
+    const response = await api.put(`/outages/${id}`, outageDto);
+    return mapBackendOutageToFrontend(response.data);
   } catch (error) {
     console.warn(`Real API updateUtilityOutage (${id}) failed, updating mock outage`);
     const list = getMockOutages();

@@ -58,10 +58,38 @@ const saveMockGrids = (grids) => {
   localStorage.setItem(MOCK_GRIDS_KEY, JSON.stringify(grids));
 };
 
+const mapStatusToFrontend = (status) => {
+  if (status === 'OPERATIONAL') return 'OPTIMAL';
+  if (status === 'DEGRADED') return 'WARNING';
+  if (status === 'OFFLINE') return 'CRITICAL';
+  return status || 'OPTIMAL';
+};
+
+const mapStatusToBackend = (status) => {
+  if (status === 'OPTIMAL') return 'OPERATIONAL';
+  if (status === 'WARNING') return 'DEGRADED';
+  if (status === 'CRITICAL') return 'OFFLINE';
+  return status || 'OPERATIONAL';
+};
+
+const mapBackendGridToFrontend = (g) => {
+  if (!g) return null;
+  return {
+    id: g.gridId?.toString() || g.id,
+    name: g.gridName || g.name,
+    type: g.gridType || g.type,
+    capacity: g.capacityUnits ? `${g.capacityUnits} MW` : g.capacity,
+    currentLoad: g.currentLoad !== undefined ? `${g.currentLoad} MW` : g.currentLoad,
+    status: mapStatusToFrontend(g.status),
+    location: g.district || g.location || 'Unknown',
+    lastMaintenance: g.lastInspectedAt ? g.lastInspectedAt.split('T')[0] : (g.lastMaintenance || new Date().toISOString().split('T')[0])
+  };
+};
+
 export const getUtilityGrids = async () => {
   try {
     const response = await api.get('/grids');
-    return response.data;
+    return Array.isArray(response.data) ? response.data.map(mapBackendGridToFrontend) : [];
   } catch (error) {
     console.warn('Real API getUtilityGrids failed, returning mock data');
     return getMockGrids();
@@ -71,7 +99,7 @@ export const getUtilityGrids = async () => {
 export const getUtilityGridById = async (id) => {
   try {
     const response = await api.get(`/grids/${id}`);
-    return response.data;
+    return mapBackendGridToFrontend(response.data);
   } catch (error) {
     console.warn(`Real API getUtilityGridById (${id}) failed, returning mock grid`);
     return getMockGrids().find(g => g.id === id) || null;
@@ -80,8 +108,17 @@ export const getUtilityGridById = async (id) => {
 
 export const createUtilityGrid = async (grid) => {
   try {
-    const response = await api.post('/grids', grid);
-    return response.data;
+    const backendGrid = {
+      gridName: grid.name,
+      gridType: grid.type,
+      district: grid.location,
+      capacityUnits: parseFloat(grid.capacity) || 0,
+      currentLoad: parseFloat(grid.currentLoad) || 0,
+      status: mapStatusToBackend(grid.status || 'OPTIMAL'),
+      lastInspectedAt: grid.lastMaintenance ? new Date(grid.lastMaintenance).toISOString() : new Date().toISOString()
+    };
+    const response = await api.post('/grids', backendGrid);
+    return mapBackendGridToFrontend(response.data);
   } catch (error) {
     console.warn('Real API createUtilityGrid failed, saving mock grid');
     const list = getMockGrids();
@@ -98,8 +135,18 @@ export const createUtilityGrid = async (grid) => {
 
 export const updateUtilityGrid = async (id, grid) => {
   try {
-    const response = await api.put(`/grids/${id}`, grid);
-    return response.data;
+    const backendGrid = {
+      gridId: parseInt(id),
+      gridName: grid.name,
+      gridType: grid.type,
+      district: grid.location,
+      capacityUnits: parseFloat(grid.capacity) || 0,
+      currentLoad: parseFloat(grid.currentLoad) || 0,
+      status: mapStatusToBackend(grid.status || 'OPTIMAL'),
+      lastInspectedAt: grid.lastMaintenance ? new Date(grid.lastMaintenance).toISOString() : new Date().toISOString()
+    };
+    const response = await api.put(`/grids/${id}`, backendGrid);
+    return mapBackendGridToFrontend(response.data);
   } catch (error) {
     console.warn(`Real API updateUtilityGrid (${id}) failed, updating mock grid`);
     const list = getMockGrids();
