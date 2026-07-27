@@ -9,4 +9,4 @@ import java.util.Optional;
 public interface UtilityGridRepository extends JpaRepository<UtilityGrid, Long> {
 List<UtilityGrid> findByDistrict(String district);
 Optional<UtilityGrid> findByGridId(Long gridId);
-}
+}  
