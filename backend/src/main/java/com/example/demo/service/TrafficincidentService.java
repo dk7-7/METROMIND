@@ -152,10 +152,6 @@ public class TrafficIncidentService {
         return repository.save(incident);
     }
 
-    // ==========================
-    // UPDATE USING ENTITY
-    // (Needed for validator)
-    // ==========================
     public TrafficIncident updateIncident(Long id, TrafficIncident updatedIncident) {
 
         TrafficIncident incident = repository.findById(id)
@@ -188,9 +184,6 @@ public class TrafficIncidentService {
         return repository.save(incident);
     }
 
-    // ==========================
-    // DELETE
-    // ==========================
     public void deleteIncident(Long id) {
 
         boolean exists = false;
