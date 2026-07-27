@@ -27,9 +27,6 @@ public class TrafficIncidentService {
     private final CityUserRepository cityUserRepository;
     private final AlertNotificationRepository alertNotificationRepository;
 
-    // ==========================
-    // CREATE USING DTO
-    // ==========================
     public TrafficIncident reportIncident(IncidentDto dto, String username) {
 
         TrafficZone zone = trafficZoneRepository.findById(dto.getZoneId())
@@ -84,10 +81,6 @@ public class TrafficIncidentService {
         return saved;
     }
 
-    // ==========================
-    // CREATE USING ENTITY
-    // (Needed for validator)
-    // ==========================
     public TrafficIncident createIncident(TrafficIncident incident) {
 
         if (incident.getStatus() == null) {
@@ -97,9 +90,6 @@ public class TrafficIncidentService {
         return repository.save(incident);
     }
 
-    // ==========================
-    // DISPATCH
-    // ==========================
     public TrafficIncident dispatchResponse(Long id) {
 
         TrafficIncident incident = repository.findById(id)
@@ -114,17 +104,11 @@ public class TrafficIncidentService {
         return repository.save(incident);
     }
 
-    // ==========================
-    // GET ALL
-    // ==========================
     @Transactional(readOnly = true)
     public List<TrafficIncident> getAllIncidents() {
         return repository.findAll();
     }
 
-    // ==========================
-    // GET BY ID
-    // ==========================
     @Transactional(readOnly = true)
     public Optional<TrafficIncident> getIncidentById(Long id) {
 
@@ -134,9 +118,6 @@ public class TrafficIncidentService {
         return Optional.of(incident);
     }
 
-    // ==========================
-    // UPDATE USING DTO
-    // ==========================
     public TrafficIncident updateIncident(Long id, IncidentDto dto) {
 
         TrafficIncident incident = repository.findById(id)
