@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import Navbar from ".../Components/common/Navbar.jsx";
-import Sidebar from "../Components/common/Sidebar.jsx";
-import Footer from "../Components/common/Footer.jsx";
+import Navbar from "../components/common/Navbar.jsx";
+import Sidebar from "../components/common/Sidebar.jsx";
+import Footer from "../components/common/Footer.jsx";
 
 export const MainLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);

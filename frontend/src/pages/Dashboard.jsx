@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getDashboardStats } from '../services/dashboardService';
-import Loader from '../Components/common/Loader';
+import Loader from '../components/common/Loader';
 import { AlertTriangle, Clock, Layers, Users, ArrowRight } from 'lucide-react';
 import { formatDate, getSeverityBadgeClass, getStatusBadgeClass } from '../utils/helpers';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import RegisterComponent from '../Components/auth/Register.jsx';
+import RegisterComponent from '../components/auth/Register.jsx';
 
 export const Register = () => {
   return <RegisterComponent />;
