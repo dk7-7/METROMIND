@@ -39,14 +39,14 @@ const UtilityGridList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {paginatedGrids.map(grid => (
-                                <tr key={grid.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                                    <td style={{ padding: '1rem' }}>{grid.name}</td>
-                                    <td style={{ padding: '1rem' }}>{grid.type}</td>
+                            {paginatedGrids.map((grid, index) => (
+                                <tr key={grid.gridId || grid.id || index} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                                    <td style={{ padding: '1rem' }}>{grid.gridName || grid.name}</td>
+                                    <td style={{ padding: '1rem' }}>{grid.gridType || grid.type}</td>
                                     <td style={{ padding: '1rem' }}>{grid.district}</td>
                                     <td style={{ padding: '1rem', width: '200px' }}>
-                                        <div style={{ marginBottom: '4px', fontSize: '0.875rem' }}>{grid.currentLoad} / {grid.maxCapacity}</div>
-                                        <CapacityBar current={grid.currentLoad} total={grid.maxCapacity} />
+                                        <div style={{ marginBottom: '4px', fontSize: '0.875rem' }}>{grid.currentLoad} / {grid.capacityUnits || grid.maxCapacity}</div>
+                                        <CapacityBar current={grid.currentLoad} total={grid.capacityUnits || grid.maxCapacity} />
                                     </td>
                                     <td style={{ padding: '1rem' }}>{grid.status}</td>
                                 </tr>
