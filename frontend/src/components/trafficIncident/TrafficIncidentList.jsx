@@ -10,7 +10,7 @@ import TrafficIncidentForm from './TrafficIncidentForm';
 
 const TrafficIncidentList = () => {
     const dispatch = useDispatch();
-    const { items: incidents = [], loading, error } = useSelector(state => state.trafficIncident);
+    const { items: incidents = [], loading, error } = useSelector(state => state.trafficIncident) || {};
     const { role } = useSelector(state => state.auth);
     
     const [currentPage, setCurrentPage] = useState(1);

@@ -48,6 +48,21 @@ const trafficIncidentSlice = createSlice({
       );
     },
   },
+  extraReducers: (builder) => {
+    builder
+      .addCase(require('./trafficIncidentActions').fetchAllIncidents.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(require('./trafficIncidentActions').fetchAllIncidents.fulfilled, (state, action) => {
+        state.items = action.payload;
+        state.loading = false;
+      })
+      .addCase(require('./trafficIncidentActions').fetchAllIncidents.rejected, (state, action) => {
+        state.error = action.payload;
+        state.loading = false;
+      });
+  }
 });
 
 export const {
