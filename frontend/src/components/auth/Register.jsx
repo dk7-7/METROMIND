@@ -1,201 +1,71 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import useAuth from '../../hooks/useAuth';
-import { validateEmail, validatePassword, validateRequired } from '../../utils/validators';
-import { UserPlus, User, Mail, Key, ShieldAlert, CheckCircle } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../../store/auth/authActions';
+import Alert from '../common/Alert';
 
-export const RegisterComponent = () => {
-  const { register } = useAuth();
-  const navigate = useNavigate();
-
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({});
-  const [submitError, setSubmitError] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitError('');
+const Register = () => {
+    const [formData, setFormData] = useState({
+        username: '',
+        password: '',
+        fullName: '',
+        role: 'CITY_ADMINISTRATOR',
+        district: '',
+        badgeNumber: ''
+    });
     
-    const newErrors = {};
-    if (!validateRequired(name)) newErrors.name = 'Full name is required';
-    if (!validateEmail(email)) newErrors.email = 'Please enter a valid email address';
-    if (!validatePassword(password)) newErrors.password = 'Password must be at least 6 characters';
-    
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
-    setErrors({});
-    setLoading(true);
-    
-    try {
-      await register(name, email, password);
-      setSuccess(true);
-      window.dispatchEvent(new CustomEvent('add-notification', {
-        detail: { type: 'success', message: 'New Operator Node Configured!' }
-      }));
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
-    } catch (err) {
-      setSubmitError(err.message || 'Registration failed');
-      window.dispatchEvent(new CustomEvent('add-notification', {
-        detail: { type: 'danger', message: 'Registration Authorized Rejection' }
-      }));
-    } finally {
-      setLoading(false);
-    }
-  };
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { loading, error } = useSelector((state) => state.auth);
 
-  return (
-    <div className="fade-in">
-      <h2 style={{ fontSize: '20px', fontWeight: '700', marginBottom: '8px', textAlign: 'center' }}>
-        Register Node
-      </h2>
-      <p style={{ color: 'var(--text-secondary)', fontSize: '14px', marginBottom: '24px', textAlign: 'center' }}>
-        Register a new operator profile with central control
-      </p>
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const resultAction = await dispatch(registerUser(formData));
+        if (registerUser.fulfilled.match(resultAction)) {
+            navigate('/login');
+        }
+    };
 
-      {submitError && (
-        <div 
-          style={{
-            background: 'rgba(239, 68, 68, 0.1)',
-            border: '1px solid rgba(239, 68, 68, 0.2)',
-            borderRadius: 'var(--border-radius-sm)',
-            padding: '12px',
-            color: 'var(--color-danger)',
-            fontSize: '13px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            marginBottom: '20px',
-          }}
-        >
-          <ShieldAlert size={16} />
-          <span>{submitError}</span>
+    return (
+        <div style={{ maxWidth: '500px', margin: '4rem auto', padding: '2rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem' }}>
+            <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Register Official</h2>
+            {error && <Alert message={error} type="error" />}
+            <form onSubmit={handleSubmit}>
+                <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Username</label>
+                    <input type="text" placeholder="Choose a username" required value={formData.username} onChange={e => setFormData({...formData, username: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }} />
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Password</label>
+                    <input type="password" placeholder="Choose a password" required value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }} />
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Full Name</label>
+                    <input type="text" placeholder="Enter full name" required value={formData.fullName} onChange={e => setFormData({...formData, fullName: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }} />
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Role</label>
+                    <select value={formData.role} onChange={e => setFormData({...formData, role: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}>
+                        <option value="CITY_ADMINISTRATOR">CITY_ADMINISTRATOR</option>
+                        <option value="TRAFFIC_CONTROLLER">TRAFFIC_CONTROLLER</option>
+                        <option value="UTILITY_SUPERVISOR">UTILITY_SUPERVISOR</option>
+                        <option value="FIELD_TECHNICIAN">FIELD_TECHNICIAN</option>
+                    </select>
+                </div>
+                <div style={{ marginBottom: '1rem' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>District</label>
+                    <input type="text" value={formData.district} onChange={e => setFormData({...formData, district: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }} />
+                </div>
+                <div style={{ marginBottom: '1.5rem' }}>
+                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Badge Number</label>
+                    <input type="text" value={formData.badgeNumber} onChange={e => setFormData({...formData, badgeNumber: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }} />
+                </div>
+                <button type="submit" disabled={loading} style={{ width: '100%', padding: '0.75rem', backgroundColor: '#2563eb', color: 'white', border: 'none', borderRadius: '4px', cursor: loading ? 'not-allowed' : 'pointer' }}>
+                    {loading ? 'Registering' : 'Register'}
+                </button>
+            </form>
         </div>
-      )}
-
-      {success && (
-        <div 
-          style={{
-            background: 'rgba(16, 185, 129, 0.1)',
-            border: '1px solid rgba(16, 185, 129, 0.2)',
-            borderRadius: 'var(--border-radius-sm)',
-            padding: '12px',
-            color: 'var(--color-success)',
-            fontSize: '13px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            marginBottom: '20px',
-          }}
-        >
-          <CheckCircle size={16} />
-          <span>Node Registered! Redirecting to login...</span>
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label className="form-label" htmlFor="comp-name-input">Full Name</label>
-          <div style={{ position: 'relative' }}>
-            <User 
-              size={18} 
-              style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-muted)' }} 
-            />
-            <input
-              id="comp-name-input"
-              type="text"
-              className="form-control"
-              style={{ paddingLeft: '40px' }}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Marcus Vance"
-              disabled={loading || success}
-            />
-          </div>
-          {errors.name && (
-            <span style={{ color: 'var(--color-danger)', fontSize: '12px', marginTop: '4px', display: 'block' }}>
-              {errors.name}
-            </span>
-          )}
-        </div>
-
-        <div className="form-group">
-          <label className="form-label" htmlFor="comp-reg-email-input">Control Email</label>
-          <div style={{ position: 'relative' }}>
-            <Mail 
-              size={18} 
-              style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-muted)' }} 
-            />
-            <input
-              id="comp-reg-email-input"
-              type="email"
-              className="form-control"
-              style={{ paddingLeft: '40px' }}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="e.g. user@utility.com"
-              disabled={loading || success}
-            />
-          </div>
-          {errors.email && (
-            <span style={{ color: 'var(--color-danger)', fontSize: '12px', marginTop: '4px', display: 'block' }}>
-              {errors.email}
-            </span>
-          )}
-        </div>
-
-        <div className="form-group" style={{ marginBottom: '24px' }}>
-          <label className="form-label" htmlFor="comp-reg-password-input">Terminal Key</label>
-          <div style={{ position: 'relative' }}>
-            <Key 
-              size={18} 
-              style={{ position: 'absolute', left: '12px', top: '12px', color: 'var(--text-muted)' }} 
-            />
-            <input
-              id="comp-reg-password-input"
-              type="password"
-              className="form-control"
-              style={{ paddingLeft: '40px' }}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              disabled={loading || success}
-            />
-          </div>
-          {errors.password && (
-            <span style={{ color: 'var(--color-danger)', fontSize: '12px', marginTop: '4px', display: 'block' }}>
-              {errors.password}
-            </span>
-          )}
-        </div>
-
-        <button 
-          type="submit" 
-          className="btn btn-primary" 
-          style={{ width: '100%', padding: '12px', display: 'flex', gap: '8px' }}
-          disabled={loading || success}
-        >
-          <UserPlus size={18} />
-          {loading ? 'Authorizing key...' : 'Register Operator Node'}
-        </button>
-      </form>
-
-      <div style={{ marginTop: '24px', textAlign: 'center', fontSize: '13px', color: 'var(--text-secondary)' }}>
-        Already registered?{' '}
-        <Link to="/login" style={{ color: 'var(--accent-primary)', fontWeight: '600', textDecoration: 'none' }}>
-          Log In
-        </Link>
-      </div>
-    </div>
-  );
+    );
 };
 
-export default RegisterComponent;
+export default Register;
