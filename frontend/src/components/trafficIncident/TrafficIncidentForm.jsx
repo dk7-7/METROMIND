@@ -14,7 +14,7 @@ const TrafficIncidentForm = ({ mode = 'create', initialData, onClose }) => {
     const [successMessage, setSuccessMessage] = useState(null);
 
     const dispatch = useDispatch();
-    const { zones } = useSelector(state => state.trafficZone);
+    const { zones = [] } = useSelector(state => state.trafficZone) || {};
 
     useEffect(() => {
         dispatch(fetchAllZones());
@@ -37,7 +37,7 @@ const TrafficIncidentForm = ({ mode = 'create', initialData, onClose }) => {
             if (errStr && errStr.match(/already exists/i)) {
                 setLocalError('Traffic Incident already exists.');
             } else if (errStr && errStr.match(/unable to save/i)) {
-                setLocalError('Unable to save traffic incident.');
+                setLocalError(errStr);
             } else {
                 setLocalError(errStr || 'An error occurred.');
             }
