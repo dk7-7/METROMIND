@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 import TrafficIncidentForm from './TrafficIncidentForm';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
+import { API_BASE_URL as API_URL } from '../../utils/constants';
 
 const TrafficIncidentList = () => {
   const { user, role: authRole } = useSelector((state) => state.auth || {});

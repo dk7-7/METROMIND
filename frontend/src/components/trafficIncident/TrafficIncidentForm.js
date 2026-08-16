@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080/api';
+import { API_BASE_URL as API_URL } from '../../utils/constants';
 
 const TrafficIncidentForm = ({ item, onClose = () => {} }) => {
   const { items: zones } = useSelector((state) => state.trafficZones);
