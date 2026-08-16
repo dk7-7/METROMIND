@@ -1,7 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.AlertDto;
 import com.example.demo.entity.AlertNotification;
+import com.example.demo.entity.Role;
+import com.example.demo.enums.Severity;
 import com.example.demo.repository.AlertNotificationRepository;
+import org.springframework.http.HttpStatus;
 import com.example.demo.service.AlertNotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -38,5 +42,18 @@ public class AlertNotificationController {
             repository.save(alert);
         }
         return ResponseEntity.ok(Map.of("message", "Alert marked as read"));
+    }
+
+    @PostMapping
+    public ResponseEntity<AlertNotification> create(@RequestBody AlertDto dto) {
+        AlertNotification alert = AlertNotification.builder()
+                .targetRole(dto.getTargetRole() != null ? Role.valueOf(dto.getTargetRole()) : null)
+                .message(dto.getMessage())
+                .severity(dto.getSeverity() != null ? Severity.valueOf(dto.getSeverity()) : Severity.LOW)
+                .relatedEntityType(dto.getRelatedEntityType())
+                .relatedEntityId(dto.getRelatedEntityId())
+                .isRead(false)
+                .build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(alert));
     }
 }

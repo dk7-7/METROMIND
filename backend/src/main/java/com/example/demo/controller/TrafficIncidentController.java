@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dto.IncidentDto;
 import com.example.demo.entity.TrafficIncident;
 import com.example.demo.enums.IncidentStatus;
+import org.springframework.security.core.Authentication;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.TrafficIncidentRepository;
 import com.example.demo.service.TrafficIncidentService;
@@ -51,52 +53,38 @@ public class TrafficIncidentController {
     @PostMapping
     @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR','TRAFFIC_CONTROLLER')")
     public ResponseEntity<Map<String, String>> create(
-            @Valid @RequestBody TrafficIncident incident) {
-
+            @Valid @RequestBody IncidentDto dto, Authentication auth) {
         if (trafficIncidentService != null) {
-            trafficIncidentService.createIncident(incident);
+            String username = auth != null ? auth.getName() : "system";
+            trafficIncidentService.reportIncident(dto, username);
         } else {
+            TrafficIncident incident = new TrafficIncident();
+            incident.setTitle(dto.getTitle());
+            incident.setDescription(dto.getDescription());
             if (incident.getStatus() == null) {
                 incident.setStatus(IncidentStatus.REPORTED);
             }
             repository.save(incident);
         }
-
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(Map.of(
-                        "message",
-                        "TrafficIncident created successfully."
-                ));
+                .body(Map.of("message", "TrafficIncident created successfully."));
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR','TRAFFIC_CONTROLLER')")
     public ResponseEntity<Map<String, String>> update(
             @PathVariable Long id,
-            @Valid @RequestBody TrafficIncident updatedIncident) {
-
+            @Valid @RequestBody IncidentDto dto) {
         if (trafficIncidentService != null) {
-            trafficIncidentService.updateIncident(id, updatedIncident);
+            trafficIncidentService.updateIncident(id, dto);
         } else {
-
             TrafficIncident incident = repository.findById(id)
-                    .orElseThrow(() ->
-                            new ResourceNotFoundException("TrafficIncident not found"));
-
-            incident.setTitle(updatedIncident.getTitle());
-            incident.setDescription(updatedIncident.getDescription());
-            incident.setSeverity(updatedIncident.getSeverity());
-            incident.setStatus(updatedIncident.getStatus());
-
+                    .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
+            incident.setTitle(dto.getTitle());
+            incident.setDescription(dto.getDescription());
             repository.save(incident);
         }
-
-        return ResponseEntity.ok(
-                Map.of(
-                        "message",
-                        "TrafficIncident updated successfully."
-                )
-        );
+        return ResponseEntity.ok(Map.of("message", "TrafficIncident updated successfully."));
     }
 
     @DeleteMapping("/{id}")

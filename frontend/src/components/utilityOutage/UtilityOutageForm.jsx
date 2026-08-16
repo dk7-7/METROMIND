@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createOutage, fetchAll } from "../../store/slices/utilityOutageSlice";
+import { registerOutageOnGrid, fetchAll as fetchGrids } from "../../store/slices/utilityGridSlice";
+import { fetchAll as fetchOutages } from "../../store/slices/utilityOutageSlice";
 
 const OUTAGE_TYPES = ["PLANNED", "UNPLANNED"];
 const SEVERITIES = ["LOW", "MEDIUM", "HIGH", "CRITICAL"];
@@ -16,22 +17,31 @@ const UtilityOutageForm = ({ onClose }) => {
   const [estimatedRestorationTime, setEstimatedRestorationTime] = useState("");
   const [error, setError] = useState(null);
 
+  useEffect(() => {
+    if (grids.length === 0) {
+      dispatch(fetchGrids());
+    }
+  }, [dispatch, grids.length]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
+    if (!gridId) {
+      setError("Please select a utility grid");
+      return;
+    }
     const payload = {
-      gridId: gridId ? Number(gridId) : undefined,
       outageType,
       affectedArea,
       severity,
-      estimatedRestorationTime,
+      estimatedRestorationTime: estimatedRestorationTime || undefined,
     };
-    const result = await dispatch(createOutage(payload));
-    if (createOutage.fulfilled.match(result)) {
-      dispatch(fetchAll());
+    const result = await dispatch(registerOutageOnGrid({ id: Number(gridId), data: payload }));
+    if (registerOutageOnGrid.fulfilled.match(result)) {
+      dispatch(fetchOutages());
       onClose();
     } else {
-      setError(result.payload || "Overlapping outage registered");
+      setError(result.payload || "Unable to register outage");
     }
   };
 
