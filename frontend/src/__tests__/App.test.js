@@ -191,7 +191,7 @@ test('T16 — UPDATE: frontend renders exact backend update confirmation string'
   // Cross-ref: Backend t10 — must use identical body string
   axios.put.mockResolvedValue({ status: 200, data: CRUD_UPDATE_MSG });
   const store = createMockStore({ trafficZone: { zones: [] } });
-  render(<Provider store={store}><MemoryRouter><TrafficIncidentForm initialData={{ incidentId: 1, title: 'Old Title' }} onClose={() => {}} /></MemoryRouter></Provider>);
+  render(<Provider store={store}><MemoryRouter><TrafficIncidentForm mode="edit" initialData={{ incidentId: 1, title: 'Old Title' }} onClose={() => {}} /></MemoryRouter></Provider>);
   fireEvent.change(screen.getByPlaceholderText(/e.g. Major Collision on Main St/i), { target: { value: DOMAIN_VALUE_1 } });
   fireEvent.click(screen.getByRole('button', { name: /Save Changes/i }));
   await waitFor(() => {
@@ -221,7 +221,7 @@ test('T18 — Edit form pre-fills with backend response', async () => {
     data: [] // Mock zones fetch
   });
   const store = createMockStore({ trafficZone: { zones: [] } });
-  render(<Provider store={store}><MemoryRouter><TrafficIncidentForm initialData={{ incidentId: 1, title: DOMAIN_VALUE_1 }} onClose={() => {}} /></MemoryRouter></Provider>);
+  render(<Provider store={store}><MemoryRouter><TrafficIncidentForm mode="edit" initialData={{ incidentId: 1, title: DOMAIN_VALUE_1 }} onClose={() => {}} /></MemoryRouter></Provider>);
   expect(screen.getByDisplayValue(DOMAIN_VALUE_1)).toBeInTheDocument();
   console.log('CRUD logic: TrafficIncident Edit form pre-fill verified against Backend t11');
 });

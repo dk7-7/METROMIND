@@ -64,7 +64,7 @@ const TrafficIncidentForm = ({ mode = 'create', initialData, onClose }) => {
                 <form onSubmit={handleSubmit}>
                     <div style={{ marginBottom: '1rem' }}>
                         <label style={{ display: 'block', marginBottom: '0.5rem' }}>Title</label>
-                        <input type="text" placeholder="e.g. Major Collision on Main St" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }} />
+                        <input type="text" placeholder="e.g. Major Collision on Main St" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }} autoFocus />
                     </div>
                     <div style={{ marginBottom: '1rem' }}>
                         <label style={{ display: 'block', marginBottom: '0.5rem' }}>Severity</label>
@@ -87,7 +87,7 @@ const TrafficIncidentForm = ({ mode = 'create', initialData, onClose }) => {
                     <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
                         <button type="button" onClick={onClose} style={{ padding: '0.5rem 1rem', background: '#e2e8f0', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Cancel</button>
                         <button type="submit" disabled={!formData.title} style={{ padding: '0.5rem 1rem', background: '#2563eb', color: 'white', border: 'none', borderRadius: '4px', cursor: !formData.title ? 'not-allowed' : 'pointer' }}>
-                            {mode === 'create' ? 'Report Incident' : 'Update Incident'}
+                            {mode === 'create' ? 'Report Incident' : 'Save Changes'}
                         </button>
                     </div>
                 </form>
