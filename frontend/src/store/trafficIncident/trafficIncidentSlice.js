@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAllIncidents, createIncident, updateIncident, deleteIncident } from './trafficIncidentActions';
+import { fetchAllIncidents, createIncident, deleteIncident } from './trafficIncidentActions';
 
 const initialState = {
     incidents: [],

@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const navigate = useNavigate();
   const { error } = useSelector((state) => state.auth);
 
   const [username, setUsername] = useState('');
