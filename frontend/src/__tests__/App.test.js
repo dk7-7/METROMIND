@@ -6,6 +6,22 @@ import { MemoryRouter } from 'react-router-dom';
 import axios from 'axios';
 import '@testing-library/jest-dom';
 
+jest.mock('axios', () => {
+  const mAxios = {
+    get: jest.fn(),
+    post: jest.fn(),
+    put: jest.fn(),
+    delete: jest.fn(),
+    create: jest.fn(() => mAxios),
+    interceptors: {
+      request: { use: jest.fn(), eject: jest.fn() },
+      response: { use: jest.fn(), eject: jest.fn() }
+    },
+    defaults: { headers: { common: {} } }
+  };
+  return mAxios;
+});
+
 // Import slices and components
 import authReducer from '../store/auth/authSlice'; // Adjusting path if needed later
 import trafficIncidentReducer from '../store/trafficIncident/trafficIncidentSlice'; // Adjusting path if needed later
@@ -25,8 +41,8 @@ const CRUD_UPDATE_MSG = "TrafficIncident updated successfully.";
 const createMockStore = (preloadedState) => configureStore({
   reducer: {
     auth: authReducer,
-    trafficIncidents: trafficIncidentReducer,
-    trafficZones: trafficZoneReducer
+    trafficIncident: trafficIncidentReducer,
+    trafficZone: trafficZoneReducer
   },
   preloadedState
 });
@@ -77,13 +93,13 @@ test('T5 — ErrorHandler renders domain-specific error message', async () => {
 });
 
 test('T6 — Admin view: privileged action button is visible', () => {
-  const store = createMockStore({ auth: { role: 'CITY_ADMINISTRATOR', user: { role: 'CITY_ADMINISTRATOR' } }, trafficIncidents: { items: [] } });
+  const store = createMockStore({ auth: { role: 'CITY_ADMINISTRATOR', user: { role: 'CITY_ADMINISTRATOR' } }, trafficIncident: { items: [] } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentList /></MemoryRouter></Provider>);
   expect(screen.getByRole('button', { name: /\+ Add Record/i })).toBeInTheDocument();
 });
 
 test('T7 — Non-admin view: privileged button is absent', () => {
-  const store = createMockStore({ auth: { role: 'FIELD_TECHNICIAN', user: { role: 'FIELD_TECHNICIAN' } }, trafficIncidents: { items: [] } });
+  const store = createMockStore({ auth: { role: 'FIELD_TECHNICIAN', user: { role: 'FIELD_TECHNICIAN' } }, trafficIncident: { items: [] } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentList /></MemoryRouter></Provider>);
   expect(screen.queryByRole('button', { name: /\+ Add Record/i })).not.toBeInTheDocument();
 });
@@ -93,7 +109,7 @@ test('T7 — Non-admin view: privileged button is absent', () => {
 // 
 
 test('T8 — useState: typing in domain text input updates value', () => {
-  const store = createMockStore({ trafficZones: { items: [] } });
+  const store = createMockStore({ trafficZone: { items: [] } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentForm onClose={() => {}} /></MemoryRouter></Provider>);
   const input = screen.getByPlaceholderText(/e.g. Major Collision on Main St/i);
   fireEvent.change(input, { target: { value: DOMAIN_VALUE_1 } });
@@ -101,7 +117,7 @@ test('T8 — useState: typing in domain text input updates value', () => {
 });
 
 test('T9 — useState: selecting from domain dropdown updates UI', () => {
-  const store = createMockStore({ trafficZones: { items: [] } });
+  const store = createMockStore({ trafficZone: { items: [] } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentForm onClose={() => {}} /></MemoryRouter></Provider>);
   const select = screen.getByLabelText(/Severity/i);
   fireEvent.change(select, { target: { value: 'HIGH' } });
@@ -110,27 +126,27 @@ test('T9 — useState: selecting from domain dropdown updates UI', () => {
 
 test('T10 — useEffect: trafficIncidentService fetchAll called exactly once', async () => {
   axios.get.mockResolvedValue({ status: 200, data: [] });
-  const store = createMockStore({ trafficIncidents: { items: [] }, auth: { user: { role: 'CITY_ADMINISTRATOR' } } });
+  const store = createMockStore({ trafficIncident: { items: [] }, auth: { user: { role: 'CITY_ADMINISTRATOR' } } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentList /></MemoryRouter></Provider>);
   await waitFor(() => expect(axios.get).toHaveBeenCalled());
 });
 
 test('T11 — useEffect: re-fetches when state changes', async () => {
   axios.get.mockResolvedValue({ status: 200, data: [] });
-  const store = createMockStore({ trafficIncidents: { items: [] }, auth: { user: { role: 'CITY_ADMINISTRATOR' } } });
+  const store = createMockStore({ trafficIncident: { items: [] }, auth: { user: { role: 'CITY_ADMINISTRATOR' } } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentList /></MemoryRouter></Provider>);
   await waitFor(() => expect(axios.get).toHaveBeenCalledTimes(1));
 });
 
 test('T12 — useRef: modal focus behavior', async () => {
-  const store = createMockStore({ trafficZones: { items: [] } });
+  const store = createMockStore({ trafficZone: { items: [] } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentForm onClose={() => {}} /></MemoryRouter></Provider>);
   const input = screen.getByPlaceholderText(/e.g. Major Collision on Main St/i);
   await waitFor(() => expect(document.activeElement).toBe(input));
 });
 
 test('T13 — Modal opens and displays content', async () => {
-  const store = createMockStore({ auth: { role: 'CITY_ADMINISTRATOR', user: { role: 'CITY_ADMINISTRATOR' } }, trafficIncidents: { items: [], loading: false }, trafficZones: { items: [] } });
+  const store = createMockStore({ auth: { role: 'CITY_ADMINISTRATOR', user: { role: 'CITY_ADMINISTRATOR' } }, trafficIncident: { items: [], loading: false }, trafficZone: { items: [] } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentList /></MemoryRouter></Provider>);
   await waitFor(() => expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument());
   fireEvent.click(screen.getByRole('button', { name: /\+ Add Record/i }));
@@ -146,8 +162,8 @@ test('T14 — DELETE: frontend renders exact backend success string', async () =
   axios.delete.mockResolvedValue({ status: 200, data: CRUD_DELETE_MSG });
   const store = createMockStore({ 
     auth: { role: 'CITY_ADMINISTRATOR', user: { role: 'CITY_ADMINISTRATOR' } }, 
-    trafficIncidents: { items: [{ incidentId: 1, title: DOMAIN_VALUE_1 }], loading: false },
-    trafficZones: { items: [] }
+    trafficIncident: { items: [{ incidentId: 1, title: DOMAIN_VALUE_1 }], loading: false },
+    trafficZone: { items: [] }
   });
   window.confirm = jest.fn(() => true);
   render(<Provider store={store}><MemoryRouter><TrafficIncidentList /></MemoryRouter></Provider>);
@@ -162,7 +178,7 @@ test('T14 — DELETE: frontend renders exact backend success string', async () =
 test('T15 — CREATE: frontend renders exact backend 201 confirmation string', async () => {
   // Cross-ref: Backend t9 — must use identical body string
   axios.post.mockResolvedValue({ status: 201, data: CRUD_CREATE_MSG });
-  const store = createMockStore({ trafficZones: { items: [] } });
+  const store = createMockStore({ trafficZone: { items: [] } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentForm onClose={() => {}} /></MemoryRouter></Provider>);
   fireEvent.change(screen.getByPlaceholderText(/e.g. Major Collision on Main St/i), { target: { value: DOMAIN_VALUE_1 } });
   fireEvent.click(screen.getByRole('button', { name: /Report Incident/i }));
@@ -174,7 +190,7 @@ test('T15 — CREATE: frontend renders exact backend 201 confirmation string', a
 test('T16 — UPDATE: frontend renders exact backend update confirmation string', async () => {
   // Cross-ref: Backend t10 — must use identical body string
   axios.put.mockResolvedValue({ status: 200, data: CRUD_UPDATE_MSG });
-  const store = createMockStore({ trafficZones: { items: [] } });
+  const store = createMockStore({ trafficZone: { items: [] } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentForm item={{ incidentId: 1, title: 'Old Title' }} onClose={() => {}} /></MemoryRouter></Provider>);
   fireEvent.change(screen.getByPlaceholderText(/e.g. Major Collision on Main St/i), { target: { value: DOMAIN_VALUE_1 } });
   fireEvent.click(screen.getByRole('button', { name: /Save Changes/i }));
@@ -189,7 +205,7 @@ test('T17 — GET-ALL: list component renders domain records from backend mock',
     status: 200,
     data: [{ incidentId: 1, title: DOMAIN_VALUE_1, severity: DOMAIN_VALUE_2, incidentType: 'ACCIDENT', status: 'REPORTED' }]
   });
-  const store = createMockStore({ auth: { user: { role: 'CITY_ADMINISTRATOR' } }, trafficIncidents: { items: [] } });
+  const store = createMockStore({ auth: { user: { role: 'CITY_ADMINISTRATOR' } }, trafficIncident: { items: [] } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentList /></MemoryRouter></Provider>);
   await waitFor(() => expect(screen.queryByText(/Loading.../i)).not.toBeInTheDocument());
   await waitFor(() => {
@@ -204,7 +220,7 @@ test('T18 — Edit form pre-fills with backend response', async () => {
     status: 200,
     data: [] // Mock zones fetch
   });
-  const store = createMockStore({ trafficZones: { items: [] } });
+  const store = createMockStore({ trafficZone: { items: [] } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentForm item={{ incidentId: 1, title: DOMAIN_VALUE_1 }} onClose={() => {}} /></MemoryRouter></Provider>);
   expect(screen.getByDisplayValue(DOMAIN_VALUE_1)).toBeInTheDocument();
   console.log('CRUD logic: TrafficIncident Edit form pre-fill verified against Backend t11');
@@ -214,7 +230,7 @@ test('T19 — 500 error: domain-specific alert message rendered', async () => {
   // Use a unique error message that we can explicitly check for
   const errorMessage = 'Internal Server Error: Unable to save TrafficIncident details';
   axios.post.mockRejectedValue({ response: { status: 500, data: { message: errorMessage } } });
-  const store = createMockStore({ trafficZones: { items: [] } });
+  const store = createMockStore({ trafficZone: { items: [] } });
   render(<Provider store={store}><MemoryRouter><TrafficIncidentForm onClose={() => {}} /></MemoryRouter></Provider>);
   
   fireEvent.change(screen.getByPlaceholderText(/e.g. Major Collision on Main St/i), { target: { value: 'Test Incident' } });
