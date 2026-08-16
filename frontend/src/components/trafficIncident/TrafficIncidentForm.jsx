@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllZones } from '../../store/trafficZone/trafficZoneActions';
 import { createIncident, updateIncident, fetchAllIncidents } from '../../store/trafficIncident/trafficIncidentActions';
@@ -15,6 +15,14 @@ const TrafficIncidentForm = ({ mode = 'create', initialData, onClose }) => {
 
     const dispatch = useDispatch();
     const { zones = [] } = useSelector(state => state.trafficZone) || {};
+    
+    const titleRef = useRef(null);
+
+    useEffect(() => {
+        if (titleRef.current) {
+            titleRef.current.focus();
+        }
+    }, []);
 
     useEffect(() => {
         dispatch(fetchAllZones());
@@ -64,11 +72,11 @@ const TrafficIncidentForm = ({ mode = 'create', initialData, onClose }) => {
                 <form onSubmit={handleSubmit}>
                     <div style={{ marginBottom: '1rem' }}>
                         <label style={{ display: 'block', marginBottom: '0.5rem' }}>Title</label>
-                        <input type="text" placeholder="e.g. Major Collision on Main St" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }} autoFocus />
+                        <input ref={titleRef} type="text" placeholder="e.g. Major Collision on Main St" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }} autoFocus />
                     </div>
                     <div style={{ marginBottom: '1rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.5rem' }}>Severity</label>
-                        <select value={formData.severity} onChange={e => setFormData({...formData, severity: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}>
+                        <label htmlFor="severity-select" style={{ display: 'block', marginBottom: '0.5rem' }}>Severity</label>
+                        <select id="severity-select" value={formData.severity} onChange={e => setFormData({...formData, severity: e.target.value})} style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}>
                             <option value="LOW">LOW</option>
                             <option value="MEDIUM">MEDIUM</option>
                             <option value="HIGH">HIGH</option>
