@@ -1,19 +1,24 @@
 import React from 'react';
-import { BrowserRouter } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { Provider } from 'react-redux';
+import store from './store/store';
 import AppRoutes from './routes/AppRoutes';
-import AlertNotificationList from './components/alertNotification/AlertNotificationList';
-import './assets/styles/global.css';
+import Navbar from './components/layout/Navbar';
+import './styles/global.css';
 
-export const App = () => {
+function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-        <AlertNotificationList />
-      </AuthProvider>
-    </BrowserRouter>
+    <Provider store={store}>
+      <Router>
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#f8fafc' }}>
+          <Navbar />
+          <main style={{ flex: 1, padding: '1rem', maxWidth: '1200px', margin: '0 auto', width: '100%' }}>
+            <AppRoutes />
+          </main>
+        </div>
+      </Router>
+    </Provider>
   );
-};
+}
 
 export default App;
