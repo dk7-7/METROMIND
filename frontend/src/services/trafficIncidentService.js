@@ -1,30 +1,11 @@
 import api from './api';
 
 const trafficIncidentService = {
-    getAll: async () => {
-        const response = await api.get('/incidents');
-        return response.data;
-    },
-    getById: async (id) => {
-        const response = await api.get(`/incidents/${id}`);
-        return response.data;
-    },
-    create: async (data) => {
-        const response = await api.post('/incidents', data);
-        return response.data;
-    },
-    update: async (id, data) => {
-        const response = await api.put(`/incidents/${id}`, data);
-        return response.data;
-    },
-    delete: async (id) => {
-        const response = await api.delete(`/incidents/${id}`);
-        return response.data;
-    },
-    dispatch: async (id) => {
-        const response = await api.put(`/incidents/${id}/dispatch`);
-        return response.data;
-    },
+    getAll: () => api.get('/incidents').then(res => res.data),
+    getById: (id) => api.get(`/incidents/${id}`).then(res => res.data),
+    create: (data) => api.post('/incidents', data).then(res => res.data),
+    update: (id, data) => api.put(`/incidents/${id}`, data).then(res => res.data),
+    delete: (id) => api.delete(`/incidents/${id}`).then(res => res.data),
+    dispatch: (id) => api.put(`/incidents/${id}/dispatch`).then(res => res.data),
 };
-
 export default trafficIncidentService;

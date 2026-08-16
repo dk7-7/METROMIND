@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { loginUser } from '../../store/auth/authActions';
 import { clearError } from '../../store/auth/authSlice';
-import Alert from '../common/Alert';
+import { useNavigate } from 'react-router-dom';
+import ErrorHandler from '../common/ErrorHandler';
 
 const Login = () => {
-    const [credentials, setCredentials] = useState({ username: '', password: '' });
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user, loading, error } = useSelector((state) => state.auth);
+    const { user, loading, error } = useSelector(state => state.auth);
+    
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
     useEffect(() => {
         if (user) {
@@ -17,47 +19,48 @@ const Login = () => {
         }
     }, [user, navigate]);
 
+    useEffect(() => {
+        return () => {
+            if (error) dispatch(clearError());
+        };
+    }, [error, dispatch]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        dispatch(loginUser(credentials));
-    };
-
-    const handleCloseError = () => {
-        dispatch(clearError());
+        dispatch(loginUser({ username, password }));
     };
 
     return (
-        <div style={{ maxWidth: '400px', margin: '4rem auto', padding: '2rem', border: '1px solid #e2e8f0', borderRadius: '0.5rem' }}>
-            <h2 style={{ marginBottom: '1.5rem', textAlign: 'center' }}>Login</h2>
-            {error && <Alert message={error} type="error" onClose={handleCloseError} />}
-            <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '1rem' }}>
+        <div style={{ maxWidth: '400px', margin: '4rem auto', padding: '2rem', backgroundColor: 'white', borderRadius: '8px', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}>
+            <h2>Login</h2>
+            <ErrorHandler error={error} />
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                <div>
                     <label htmlFor="username" style={{ display: 'block', marginBottom: '0.5rem' }}>Username</label>
-                    <input
-                        type="text"
+                    <input 
                         id="username"
-                        placeholder="Username"
-                        value={credentials.username}
-                        onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
-                        required
+                        type="text" 
+                        placeholder="username"
+                        value={username} 
+                        onChange={(e) => setUsername(e.target.value)} 
+                        style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #cbd5e1' }}
                     />
                 </div>
-                <div style={{ marginBottom: '1.5rem' }}>
+                <div>
                     <label htmlFor="password" style={{ display: 'block', marginBottom: '0.5rem' }}>Password</label>
-                    <input
-                        type="password"
+                    <input 
                         id="password"
-                        value={credentials.password}
-                        onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-                        style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
-                        required
+                        type="password"
+                        placeholder="Password"
+                        value={password} 
+                        onChange={(e) => setPassword(e.target.value)} 
+                        style={{ width: '100%', padding: '0.5rem', borderRadius: '4px', border: '1px solid #cbd5e1' }}
                     />
                 </div>
-                <button
-                    type="submit"
+                <button 
+                    type="submit" 
                     disabled={loading}
-                    style={{ width: '100%', padding: '0.75rem', backgroundColor: '#2563eb', color: 'white', border: 'none', borderRadius: '4px', cursor: loading ? 'not-allowed' : 'pointer' }}
+                    style={{ padding: '0.75rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: loading ? 'not-allowed' : 'pointer' }}
                 >
                     {loading ? 'Authenticating...' : 'Login'}
                 </button>
@@ -65,5 +68,4 @@ const Login = () => {
         </div>
     );
 };
-
 export default Login;

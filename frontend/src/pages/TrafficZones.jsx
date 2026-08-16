@@ -1,66 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllZones } from '../store/trafficZone/trafficZoneActions';
-import trafficZoneService from '../services/trafficZoneService';
-import ErrorHandler from '../components/common/ErrorHandler';
+import { fetchAllZones, deleteZone } from '../store/trafficZone/trafficZoneActions';
+import Pagination from '../components/common/Pagination';
 import EmptyState from '../components/common/EmptyState';
 
 const TrafficZones = () => {
     const dispatch = useDispatch();
-    const { zones, loading, error } = useSelector(state => state.trafficZone);
+    const { zones, loading } = useSelector(state => state.trafficZone);
     const { role } = useSelector(state => state.auth);
-    const [localError, setLocalError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     useEffect(() => {
         dispatch(fetchAllZones());
     }, [dispatch]);
 
-    const handleDelete = async (id) => {
-        try {
-            await trafficZoneService.delete(id);
-            dispatch(fetchAllZones());
-        } catch (err) {
-            setLocalError(err.response?.data?.message || 'Failed to delete zone');
+    const handleDelete = (id) => {
+        if (window.confirm('Are you sure you want to delete this zone?')) {
+            dispatch(deleteZone(id));
         }
     };
 
+    const paginated = zones.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
     return (
-        <div style={{ padding: '2rem' }}>
+        <div>
             <h2>Traffic Zones</h2>
-            <ErrorHandler error={error || localError} />
-            
-            {!loading && zones.length === 0 ? (
-                <EmptyState message="No traffic zones found." />
-            ) : (
-                <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
-                    <thead>
-                        <tr style={{ backgroundColor: '#f1f5f9', textAlign: 'left' }}>
-                            <th style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0' }}>Name</th>
-                            <th style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0' }}>Status</th>
-                            <th style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0' }}>Congestion Level</th>
-                            {role === 'CITY_ADMINISTRATOR' && (
-                                <th style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0' }}>Actions</th>
-                            )}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {zones.map(zone => (
-                            <tr key={zone.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                                <td style={{ padding: '1rem' }}>{zone.name}</td>
-                                <td style={{ padding: '1rem' }}>{zone.status}</td>
-                                <td style={{ padding: '1rem' }}>{zone.congestionLevel}</td>
-                                {role === 'CITY_ADMINISTRATOR' && (
-                                    <td style={{ padding: '1rem' }}>
-                                        <button onClick={() => handleDelete(zone.id)} style={{ color: 'red', cursor: 'pointer' }}>Delete</button>
-                                    </td>
-                                )}
+            {loading ? <p>Loading...</p> : 
+                paginated.length === 0 ? <EmptyState message="No traffic zones found." /> : (
+                <>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white' }}>
+                        <thead>
+                            <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '2px solid #cbd5e1' }}>
+                                <th style={{ padding: '0.75rem', textAlign: 'left' }}>Zone Name</th>
+                                <th style={{ padding: '0.75rem', textAlign: 'left' }}>Actions</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {paginated.map(zone => (
+                                <tr key={zone.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                                    <td style={{ padding: '0.75rem' }}>{zone.name}</td>
+                                    <td style={{ padding: '0.75rem' }}>
+                                        {role === 'ADMIN' && <button onClick={() => handleDelete(zone.id)}>Delete</button>}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    <Pagination totalItems={zones.length} itemsPerPage={itemsPerPage} currentPage={currentPage} onPageChange={setCurrentPage} />
+                </>
             )}
         </div>
     );
 };
-
 export default TrafficZones;

@@ -1,9 +1,10 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import Dashboard from '../pages/Dashboard';
+
 import Login from '../components/auth/Login';
 import Register from '../components/auth/Register';
+import Dashboard from '../pages/Dashboard';
 import TrafficIncidents from '../pages/TrafficIncidents';
 import TrafficZones from '../pages/TrafficZones';
 import UtilityGrids from '../pages/UtilityGrids';
@@ -12,31 +13,27 @@ import Observations from '../pages/Observations';
 import Alerts from '../pages/Alerts';
 
 const AppRoutes = () => {
-    const { user, role } = useSelector(state => state.auth);
-
-    const ProtectedRoute = ({ children, allowedRoles }) => {
-        if (!user) {
-            return <Navigate to="/login" />;
-        }
-        if (allowedRoles && !allowedRoles.includes(role)) {
-            return <Navigate to="/" />;
-        }
-        return children;
-    };
+    const { isAuthenticated, token } = useSelector(state => state.auth);
+    const isLoggedIn = isAuthenticated || !!token;
 
     return (
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            
-            <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/incidents" element={<ProtectedRoute><TrafficIncidents /></ProtectedRoute>} />
-            <Route path="/zones" element={<ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER']}><TrafficZones /></ProtectedRoute>} />
-            <Route path="/grids" element={<ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR', 'UTILITY_SUPERVISOR']}><UtilityGrids /></ProtectedRoute>} />
-            <Route path="/outages" element={<ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR', 'UTILITY_SUPERVISOR']}><Outages /></ProtectedRoute>} />
-            <Route path="/observations" element={<ProtectedRoute><Observations /></ProtectedRoute>} />
-            <Route path="/alerts" element={<ProtectedRoute><Alerts /></ProtectedRoute>} />
-            <Route path="/registry" element={<ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR']}><div>Official Registry</div></ProtectedRoute>} />
+            {isLoggedIn ? (
+                <>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/incidents" element={<TrafficIncidents />} />
+                    <Route path="/zones" element={<TrafficZones />} />
+                    <Route path="/grids" element={<UtilityGrids />} />
+                    <Route path="/outages" element={<Outages />} />
+                    <Route path="/observations" element={<Observations />} />
+                    <Route path="/alerts" element={<Alerts />} />
+                </>
+            ) : (
+                <Route path="*" element={<Navigate to="/login" />} />
+            )}
+            <Route path="*" element={<Navigate to="/" />} />
         </Routes>
     );
 };

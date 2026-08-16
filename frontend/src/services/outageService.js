@@ -1,9 +1,6 @@
-import utilityGridService from './utilityGridService';
-
+import api from './api';
+// Mostly handled by utilityGridService registerOutage, but if needed:
 const outageService = {
-    register: async (gridId, data) => {
-        return utilityGridService.registerOutage(gridId, data);
-    }
+    register: (gridId, data) => api.post(`/grids/${gridId}/outages`, data).then(res => res.data),
 };
-
 export default outageService;

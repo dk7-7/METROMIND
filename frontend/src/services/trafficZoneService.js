@@ -1,22 +1,9 @@
 import api from './api';
 
 const trafficZoneService = {
-    getAll: async () => {
-        const response = await api.get('/zones');
-        return response.data;
-    },
-    getById: async (id) => {
-        const response = await api.get(`/zones/${id}`);
-        return response.data;
-    },
-    getCongested: async () => {
-        const response = await api.get('/zones/congested');
-        return response.data;
-    },
-    delete: async (id) => {
-        const response = await api.delete(`/zones/${id}`);
-        return response.data;
-    },
+    getAll: () => api.get('/zones').then(res => res.data),
+    getById: (id) => api.get(`/zones/${id}`).then(res => res.data),
+    getCongested: () => api.get('/zones/congested').then(res => res.data),
+    delete: (id) => api.delete(`/zones/${id}`).then(res => res.data),
 };
-
 export default trafficZoneService;

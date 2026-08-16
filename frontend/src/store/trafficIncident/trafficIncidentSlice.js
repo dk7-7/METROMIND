@@ -1,80 +1,28 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { fetchAllIncidents, createIncident, updateIncident, deleteIncident } from './trafficIncidentActions';
 
 const trafficIncidentSlice = createSlice({
-  name: 'trafficIncidents',
-  initialState: {
-    items: [],
-    selectedItem: null,
-    loading: false,
-    error: null,
-    successMessage: null,
-  },
-  reducers: {
-    setItems(state, action) {
-      state.items = action.payload;
-      state.loading = false;
+    name: 'trafficIncident',
+    initialState: {
+        incidents: [],
+        loading: false,
+        error: null,
     },
-    setLoading(state, action) {
-      state.loading = action.payload;
+    reducers: {
+        clearIncidentError: (state) => { state.error = null; }
     },
-    setError(state, action) {
-      state.error = action.payload;
-      state.loading = false;
-    },
-    setSelectedItem(state, action) {
-      state.selectedItem = action.payload;
-    },
-    setSuccessMessage(state, action) {
-      state.successMessage = action.payload;
-    },
-    clearMessages(state) {
-      state.error = null;
-      state.successMessage = null;
-    },
-    addItem(state, action) {
-      state.items.unshift(action.payload);
-    },
-    updateItem(state, action) {
-      const index = state.items.findIndex(
-        (item) => item.incidentId === action.payload.incidentId
-      );
-      if (index !== -1) {
-        state.items[index] = action.payload;
-      }
-    },
-    removeItem(state, action) {
-      state.items = state.items.filter(
-        (item) => item.incidentId !== action.payload
-      );
-    },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(require('./trafficIncidentActions').fetchAllIncidents.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(require('./trafficIncidentActions').fetchAllIncidents.fulfilled, (state, action) => {
-        state.items = action.payload;
-        state.loading = false;
-      })
-      .addCase(require('./trafficIncidentActions').fetchAllIncidents.rejected, (state, action) => {
-        state.error = action.payload;
-        state.loading = false;
-      });
-  }
+    extraReducers: (builder) => {
+        builder
+            .addCase(fetchAllIncidents.pending, (state) => { state.loading = true; state.error = null; })
+            .addCase(fetchAllIncidents.fulfilled, (state, action) => { state.loading = false; state.incidents = action.payload; })
+            .addCase(fetchAllIncidents.rejected, (state, action) => { state.loading = false; state.error = action.payload; })
+            .addCase(createIncident.rejected, (state, action) => { state.error = action.payload; })
+            .addCase(updateIncident.rejected, (state, action) => { state.error = action.payload; })
+            .addCase(deleteIncident.fulfilled, (state, action) => {
+                state.incidents = state.incidents.filter(i => i.id !== action.payload);
+            })
+            .addCase(deleteIncident.rejected, (state, action) => { state.error = action.payload; });
+    }
 });
-
-export const {
-  setItems,
-  setLoading,
-  setError,
-  setSelectedItem,
-  setSuccessMessage,
-  clearMessages,
-  addItem,
-  updateItem,
-  removeItem,
-} = trafficIncidentSlice.actions;
-
+export const { clearIncidentError } = trafficIncidentSlice.actions;
 export default trafficIncidentSlice.reducer;

@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
+// Simplistic Alert component. In a real app, you might use a global alert context for stacking.
 const Alert = ({ message, type = 'info', duration = 3000, onClose }) => {
     const [visible, setVisible] = useState(true);
 
     useEffect(() => {
-        if (duration) {
+        if (duration && duration > 0) {
             const timer = setTimeout(() => {
                 setVisible(false);
                 if (onClose) onClose();
@@ -13,36 +14,25 @@ const Alert = ({ message, type = 'info', duration = 3000, onClose }) => {
         }
     }, [duration, onClose]);
 
-    if (!visible) return null;
+    if (!visible || !message) return null;
 
-    const getBgColor = () => {
-        switch (type) {
-            case 'success': return '#dcfce7'; // green-100
-            case 'error': return '#fee2e2'; // red-100
-            case 'warning': return '#fef3c7'; // yellow-100
-            case 'info':
-            default: return '#e0f2fe'; // blue-100
-        }
+    const styles = {
+        success: { backgroundColor: '#dcfce7', color: '#166534', border: '1px solid #bbf7d0' },
+        error: { backgroundColor: '#fee2e2', color: '#991b1b', border: '1px solid #fecaca' },
+        warning: { backgroundColor: '#fef3c7', color: '#92400e', border: '1px solid #fde68a' },
+        info: { backgroundColor: '#dbeafe', color: '#1e40af', border: '1px solid #bfdbfe' }
     };
 
-    const getTextColor = () => {
-        switch (type) {
-            case 'success': return '#166534'; // green-800
-            case 'error': return '#991b1b'; // red-800
-            case 'warning': return '#92400e'; // yellow-800
-            case 'info':
-            default: return '#075985'; // blue-800
-        }
-    };
+    const currentStyle = styles[type] || styles.info;
 
     return (
-        <div style={{
-            padding: '1rem',
+        <div style={{ 
+            ...currentStyle, 
+            padding: '1rem', 
+            borderRadius: '4px', 
             marginBottom: '1rem',
-            backgroundColor: getBgColor(),
-            color: getTextColor(),
-            borderRadius: '0.375rem',
-            border: `1px solid ${getTextColor()}20`
+            position: 'relative',
+            zIndex: 1000
         }}>
             {message}
         </div>

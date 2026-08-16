@@ -1,22 +1,9 @@
 import api from './api';
 
 const utilityGridService = {
-    getAll: async () => {
-        const response = await api.get('/grids');
-        return response.data;
-    },
-    getById: async (id) => {
-        const response = await api.get(`/grids/${id}`);
-        return response.data;
-    },
-    update: async (id, data) => {
-        const response = await api.put(`/grids/${id}`, data);
-        return response.data;
-    },
-    registerOutage: async (id, data) => {
-        const response = await api.post(`/grids/${id}/outages`, data);
-        return response.data;
-    },
+    getAll: () => api.get('/grids').then(res => res.data),
+    getById: (id) => api.get(`/grids/${id}`).then(res => res.data),
+    update: (id, data) => api.put(`/grids/${id}`, data).then(res => res.data),
+    registerOutage: (id, data) => api.post(`/grids/${id}/outages`, data).then(res => res.data),
 };
-
 export default utilityGridService;

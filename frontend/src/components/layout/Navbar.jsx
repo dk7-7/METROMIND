@@ -1,26 +1,21 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { logout } from '../../store/auth/authSlice';
-import authService from '../../services/authService';
+import { logoutUser } from '../../store/auth/authActions';
 
 const Navbar = () => {
+    const { user, role } = useSelector(state => state.auth);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user, role } = useSelector(state => state.auth);
 
     const handleLogout = () => {
-        authService.logout();
-        dispatch(logout());
+        dispatch(logoutUser());
         navigate('/login');
     };
 
     return (
         <nav style={{ backgroundColor: '#1e293b', color: 'white', padding: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div>
-                <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.25rem' }}>MetroMind</Link>
-            </div>
-            
+            <Link to="/" style={{ color: 'white', textDecoration: 'none', fontWeight: 'bold', fontSize: '1.25rem' }}>MetroMind</Link>
             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                 {!user ? (
                     <>
@@ -29,11 +24,11 @@ const Navbar = () => {
                     </>
                 ) : (
                     <>
-                        {role === 'CITY_ADMINISTRATOR' && (
+                        {(role === 'CITY_ADMINISTRATOR' || role === 'ADMIN') && (
                             <>
+                                <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Dashboard</Link>
                                 <Link to="/incidents" style={{ color: 'white', textDecoration: 'none' }}>Incidents</Link>
                                 <Link to="/grids" style={{ color: 'white', textDecoration: 'none' }}>Utility Grids</Link>
-                                <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Dashboard</Link>
                                 <Link to="/registry" style={{ color: 'white', textDecoration: 'none' }}>Official Registry</Link>
                             </>
                         )}
@@ -49,12 +44,8 @@ const Navbar = () => {
                                 <Link to="/outages" style={{ color: 'white', textDecoration: 'none' }}>Outages</Link>
                             </>
                         )}
-                        
                         <span style={{ marginLeft: '1rem', color: '#94a3b8' }}>{user.username}</span>
-                        <button 
-                            onClick={handleLogout}
-                            style={{ backgroundColor: 'transparent', border: '1px solid white', color: 'white', padding: '0.25rem 0.75rem', borderRadius: '4px', cursor: 'pointer' }}
-                        >
+                        <button onClick={handleLogout} style={{ padding: '0.5rem 1rem', backgroundColor: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                             Logout
                         </button>
                     </>
@@ -63,5 +54,4 @@ const Navbar = () => {
         </nav>
     );
 };
-
 export default Navbar;

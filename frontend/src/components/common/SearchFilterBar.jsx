@@ -7,12 +7,12 @@ const SearchFilterBar = ({ onSearch, onFilterChange, filterOptions = [] }) => {
                 type="text" 
                 placeholder="Search by title" 
                 onChange={(e) => onSearch(e.target.value)}
-                style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', flex: 1 }}
+                style={{ padding: '0.5rem', flex: 1, borderRadius: '4px', border: '1px solid #cbd5e1' }}
             />
             {filterOptions.length > 0 && (
                 <select 
                     onChange={(e) => onFilterChange(e.target.value)}
-                    style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc' }}
+                    style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #cbd5e1' }}
                 >
                     <option value="">All Statuses</option>
                     {filterOptions.map(opt => (

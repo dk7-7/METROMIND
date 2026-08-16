@@ -5,14 +5,13 @@ import trafficZoneReducer from './trafficZone/trafficZoneSlice';
 import utilityGridReducer from './utilityGrid/utilityGridSlice';
 import alertReducer from './alert/alertSlice';
 
-export const store = configureStore({
+const store = configureStore({
     reducer: {
         auth: authReducer,
         trafficIncident: trafficIncidentReducer,
         trafficZone: trafficZoneReducer,
         utilityGrid: utilityGridReducer,
         alert: alertReducer,
-    },
+    }
 });
-
 export default store;

@@ -1,127 +1,114 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllIncidents, deleteIncident } from '../../store/trafficIncident/trafficIncidentActions';
+import { clearIncidentError } from '../../store/trafficIncident/trafficIncidentSlice';
 import EmptyState from '../common/EmptyState';
 import Pagination from '../common/Pagination';
 import SearchFilterBar from '../common/SearchFilterBar';
 import Alert from '../common/Alert';
-import ErrorHandler from '../common/ErrorHandler';
 import TrafficIncidentForm from './TrafficIncidentForm';
 
 const TrafficIncidentList = () => {
     const dispatch = useDispatch();
-    const { items: incidents = [], loading, error } = useSelector(state => state.trafficIncident) || {};
+    const { incidents, loading, error } = useSelector(state => state.trafficIncident);
     const { role } = useSelector(state => state.auth);
     
-    const [currentPage, setCurrentPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
-    const [statusFilter, setStatusFilter] = useState('');
-    const [showForm, setShowForm] = useState(false);
-    const [editingIncident, setEditingIncident] = useState(null);
-    const [successMessage, setSuccessMessage] = useState('');
+    const [filterStatus, setFilterStatus] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
+    
+    const [alert, setAlert] = useState(null);
+    const [showForm, setShowForm] = useState(false);
+    const [editRecord, setEditRecord] = useState(null);
 
     useEffect(() => {
         dispatch(fetchAllIncidents());
     }, [dispatch]);
 
-    const handleDelete = async (id) => {
+    const handleDelete = (id) => {
         if (window.confirm('Are you sure you want to delete this incident?')) {
-            const resultAction = await dispatch(deleteIncident(id));
-            if (deleteIncident.fulfilled.match(resultAction)) {
-                setSuccessMessage('Traffic Incident deleted successfully.');
-                dispatch(fetchAllIncidents());
-                setTimeout(() => setSuccessMessage(''), 3000);
-            }
+            dispatch(deleteIncident(id)).unwrap()
+                .then(() => setAlert({ message: 'Traffic Incident deleted successfully.', type: 'success' }))
+                .catch((err) => setAlert({ message: err, type: 'error' }));
         }
     };
 
-    const filteredIncidents = incidents.filter(i => {
-        const matchTitle = i.title.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchStatus = statusFilter ? i.status === statusFilter : true;
-        return matchTitle && matchStatus;
-    });
+    const handleFormSuccess = (msg) => {
+        setShowForm(false);
+        setEditRecord(null);
+        setAlert({ message: msg, type: 'success' });
+        dispatch(fetchAllIncidents());
+    };
 
-    const startIndex = (currentPage - 1) * itemsPerPage;
-    const paginatedIncidents = filteredIncidents.slice(startIndex, startIndex + itemsPerPage);
+    const filtered = incidents.filter(i => 
+        i.title?.toLowerCase().includes(searchTerm.toLowerCase()) &&
+        (filterStatus === '' || i.severity === filterStatus)
+    );
+    
+    const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
+    const canManage = role === 'ADMIN' || role === 'CITY_ADMINISTRATOR' || role === 'TRAFFIC_CONTROLLER';
+    const canDelete = role === 'ADMIN' || role === 'CITY_ADMINISTRATOR';
 
     return (
-        <div style={{ padding: '2rem' }}>
+        <div>
             <h2>Traffic Incidents</h2>
+            {alert && <Alert message={alert.message} type={alert.type} onClose={() => setAlert(null)} />}
+            {error && <Alert message={error} type="error" onClose={() => dispatch(clearIncidentError())} />}
             
-            <ErrorHandler error={error} />
-            {successMessage && <Alert message={successMessage} type="success" />}
-            
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
                 <SearchFilterBar 
                     onSearch={setSearchTerm} 
-                    onFilterChange={setStatusFilter} 
+                    onFilterChange={setFilterStatus} 
                     filterOptions={[
-                        {value: 'ACTIVE', label: 'Active'},
-                        {value: 'RESOLVED', label: 'Resolved'}
+                        {value: 'LOW', label: 'Low'}, {value: 'MEDIUM', label: 'Medium'},
+                        {value: 'HIGH', label: 'High'}, {value: 'CRITICAL', label: 'Critical'}
                     ]}
                 />
-                {(role === 'CITY_ADMINISTRATOR' || role === 'TRAFFIC_CONTROLLER') && (
-                    <button 
-                        onClick={() => { setEditingIncident(null); setShowForm(true); }}
-                        style={{ padding: '0.5rem 1rem', backgroundColor: '#2563eb', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer', marginBottom: '1rem' }}
-                    >
+                {canManage && (
+                    <button onClick={() => { setEditRecord(null); setShowForm(true); }} style={{ padding: '0.5rem 1rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>
                         + Add Record
                     </button>
                 )}
             </div>
 
-            {!loading && filteredIncidents.length === 0 ? (
-                <EmptyState message="No incidents found." />
-            ) : (
+            {loading ? <p>Loading...</p> : 
+                paginated.length === 0 ? <EmptyState message="No incidents found." /> : (
                 <>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', backgroundColor: 'white' }}>
                         <thead>
-                            <tr style={{ backgroundColor: '#f1f5f9', textAlign: 'left' }}>
-                                <th style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0' }}>Title</th>
-                                <th style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0' }}>Severity</th>
-                                <th style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0' }}>Status</th>
-                                <th style={{ padding: '1rem', borderBottom: '1px solid #e2e8f0' }}>Actions</th>
+                            <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '2px solid #cbd5e1' }}>
+                                <th style={{ padding: '0.75rem', textAlign: 'left' }}>Title</th>
+                                <th style={{ padding: '0.75rem', textAlign: 'left' }}>Severity</th>
+                                <th style={{ padding: '0.75rem', textAlign: 'left' }}>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {paginatedIncidents.map(incident => (
-                                <tr key={incident.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                                    <td style={{ padding: '1rem' }}>{incident.title}</td>
-                                    <td style={{ padding: '1rem' }}>{incident.severity}</td>
-                                    <td style={{ padding: '1rem' }}>{incident.status}</td>
-                                    <td style={{ padding: '1rem' }}>
-                                        {(role === 'CITY_ADMINISTRATOR' || role === 'TRAFFIC_CONTROLLER') && (
-                                            <button onClick={() => { setEditingIncident(incident); setShowForm(true); }} style={{ marginRight: '0.5rem', cursor: 'pointer' }}>Edit</button>
-                                        )}
-                                        {role === 'CITY_ADMINISTRATOR' && (
-                                            <button onClick={() => handleDelete(incident.id)} style={{ color: 'red', cursor: 'pointer' }}>Delete</button>
-                                        )}
+                            {paginated.map(inc => (
+                                <tr key={inc.id} style={{ borderBottom: '1px solid #e2e8f0' }}>
+                                    <td style={{ padding: '0.75rem' }}>{inc.title}</td>
+                                    <td style={{ padding: '0.75rem' }}>{inc.severity}</td>
+                                    <td style={{ padding: '0.75rem', display: 'flex', gap: '0.5rem' }}>
+                                        {canManage && <button onClick={() => { setEditRecord(inc); setShowForm(true); }}>Edit</button>}
+                                        {canDelete && <button onClick={() => handleDelete(inc.id)} style={{ color: 'red' }}>Delete</button>}
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                    <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'center' }}>
-                        <Pagination 
-                            totalItems={filteredIncidents.length} 
-                            itemsPerPage={itemsPerPage} 
-                            currentPage={currentPage} 
-                            onPageChange={setCurrentPage} 
-                        />
-                    </div>
+                    <Pagination totalItems={filtered.length} itemsPerPage={itemsPerPage} currentPage={currentPage} onPageChange={setCurrentPage} />
                 </>
             )}
 
             {showForm && (
                 <TrafficIncidentForm 
-                    mode={editingIncident ? 'edit' : 'create'} 
-                    initialData={editingIncident} 
+                    incident={editRecord} 
                     onClose={() => setShowForm(false)} 
+                    onSuccess={handleFormSuccess} 
                 />
             )}
         </div>
     );
 };
-
 export default TrafficIncidentList;

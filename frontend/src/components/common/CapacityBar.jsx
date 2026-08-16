@@ -1,23 +1,15 @@
 import React from 'react';
 
 const CapacityBar = ({ current, total }) => {
-    let percentage = 0;
-    if (total && total > 0) {
-        percentage = (current / total) * 100;
-    }
+    const validTotal = (total && total > 0) ? total : 1; // Prevent NaN / Infinity
+    const percentage = Math.min(Math.max((current / validTotal) * 100, 0), 100);
     
-    // safe cap to 100%
-    percentage = Math.min(percentage, 100);
-
     let bgColor = '#22c55e'; // Green
-    if (percentage >= 70 && percentage < 90) {
-        bgColor = '#f59e0b'; // Amber
-    } else if (percentage >= 90) {
-        bgColor = '#ef4444'; // Red
-    }
+    if (percentage >= 90) bgColor = '#ef4444'; // Red
+    else if (percentage >= 70) bgColor = '#f59e0b'; // Amber
 
     return (
-        <div style={{ width: '100%', backgroundColor: '#e5e7eb', borderRadius: '4px', height: '10px', overflow: 'hidden' }}>
+        <div style={{ width: '100%', backgroundColor: '#e2e8f0', borderRadius: '4px', height: '8px', overflow: 'hidden' }}>
             <div style={{ width: `${percentage}%`, backgroundColor: bgColor, height: '100%', transition: 'width 0.3s ease' }}></div>
         </div>
     );
