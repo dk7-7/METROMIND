@@ -18,18 +18,6 @@ export const fetchAll = createAsyncThunk(
   }
 );
 
-export const createOutage = createAsyncThunk(
-  "utilityOutage/createOutage",
-  async (data, thunkAPI) => {
-    try {
-      const response = await utilityOutageService.create(data);
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(extractError(error, "Overlapping outage registered"));
-    }
-  }
-);
-
 const utilityOutageSlice = createSlice({
   name: "utilityOutage",
   initialState: { items: [], loading: false, error: null, successMessage: null },
@@ -50,12 +38,6 @@ const utilityOutageSlice = createSlice({
       })
       .addCase(fetchAll.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
-      })
-      .addCase(createOutage.fulfilled, (state) => {
-        state.successMessage = "UtilityOutage registered successfully.";
-      })
-      .addCase(createOutage.rejected, (state, action) => {
         state.error = action.payload;
       });
   },
