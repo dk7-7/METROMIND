@@ -19,7 +19,7 @@ const Dashboard = () => {
                 // We'll mock it if no specific endpoint is provided, 
                 // but let's try a common pattern or aggregate.
                 // Spec says: Dashboard DTO fields from the client API: totalIncidents activeOutages congestedZones criticalAlerts
-                const res = await api.get('/dashboard');
+                const res = await api.get('/dashboard/stats');
                 if (res.data) {
                     setStats(res.data);
                 }

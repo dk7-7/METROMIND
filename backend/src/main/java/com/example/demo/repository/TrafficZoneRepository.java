@@ -12,7 +12,7 @@ public interface TrafficZoneRepository extends JpaRepository<TrafficZone, Long> 
 
 List<TrafficZone> findByDistrict(String district);
 
-@Query("SELECT z FROM TrafficZone z WHERE z.currentCongestionLevel = 'HIGH' OR z.currentCongestionLevel = 'CRITICAL'")
+@Query("SELECT z FROM TrafficZone z WHERE z.currentCongestionLevel IN (com.example.demo.enums.CongestionLevel.HIGH, com.example.demo.enums.CongestionLevel.CRITICAL)")
 List<TrafficZone> findHighlyCongestedZones();
 
 @Query("SELECT z FROM TrafficZone z WHERE z.currentCongestionLevel = :level")
