@@ -12,18 +12,28 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@RequiredArgsConstructor 
+@RequiredArgsConstructor
 public class AuthController {
 
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> login(@RequestBody AuthRequestDto dto) {
-        return ResponseEntity.ok(authService.login(dto));
+    public ResponseEntity<AuthResponseDto> login(
+            @Valid @RequestBody AuthRequestDto dto) {
+
+        AuthResponseDto response = authService.login(dto);
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponseDto> register(@Valid @RequestBody RegisterDto dto) {
-        return ResponseEntity.status(HttpStatus.OK).body(authService.register(dto));
+    public ResponseEntity<AuthResponseDto> register(
+            @Valid @RequestBody RegisterDto dto) {
+
+        AuthResponseDto response = authService.register(dto);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(response);
     }
 }
