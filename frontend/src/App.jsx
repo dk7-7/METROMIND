@@ -25,71 +25,13 @@ const Home = () => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute allowedRoles={["CITY_ADMINISTRATOR"]}>
-              <Dashboard />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/incidents"
-          element={
-            <ProtectedRoute>
-              <TrafficIncidentList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/zones"
-          element={
-            <ProtectedRoute>
-              <TrafficZoneList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/grids"
-          element={
-            <ProtectedRoute>
-              <UtilityGridList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/outages"
-          element={
-            <ProtectedRoute>
-              <UtilityOutageList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/alerts"
-          element={
-            <ProtectedRoute>
-              <AlertNotificationList />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/observations"
-          element={
-            <ProtectedRoute>
-              <FieldObservationList />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+  <>
+  <div>
+    <h1>
+      Hello World
+    </h1>
+  </div>
+  </> 
   );
 }
 
