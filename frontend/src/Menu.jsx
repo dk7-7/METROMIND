@@ -1,9 +1,9 @@
 import React from 'react'
 import { BrowserRouter , Route , Routes , Link} from 'react-router-dom' 
-import Profile from '../Pages/Profile'
-import Home from '../Pages/Home'
-import Cart from '../Pages/Cart'
-import About from '../Pages/About'
+// import Profile from '../Pages/Profile'
+// import Home from '../Pages/Home'
+// import Cart from '../Pages/Cart'
+// import About from '../Pages/About'
 import './menu.css'
 const Menu = () => {
   return (
@@ -24,7 +24,7 @@ const Menu = () => {
           
         <Route element={<Home/>} path='/home'></Route>
         <Route element={<Home/>} path='/home'></Route>
-        <Route element={<Profile/>} path='/profile'></Route>
+        <Route path='/profile'></Route>
         <Route element={<Cart/>} path='/cart'></Route>
         <Route element={<About/>} path='/about'></Route>
         </Routes>
