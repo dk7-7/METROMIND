@@ -16,7 +16,7 @@ const Menu = () => {
             <Link className='link' to='/home'>Home</Link>
             <Link className='link' to='/cart'>Cart</Link>
             <Link className='link'  to='/profile'>Profile</Link>
-            <Link className='link' to='/login'>About</Link>
+            <Link className='link' to='/login'>Login</Link>
         </div>
         
         </div>
