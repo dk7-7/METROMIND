@@ -109,11 +109,13 @@ const UtilityOutageList = () => {
         />
       )}
 
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+      {loading && items.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '1rem', color: '#64748b' }}>
           Loading utility outages...
         </div>
-      ) : items.length === 0 ? (
+      )}
+
+      {items.length === 0 ? (
         <EmptyState message="No utility outages found." />
       ) : (
         <>
