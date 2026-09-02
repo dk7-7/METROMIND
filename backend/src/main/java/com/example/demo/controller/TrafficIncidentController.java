@@ -20,7 +20,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/incidents")
 @RequiredArgsConstructor
-@CrossOrigin
+@CrossOrigin(origins = {
+    "http://localhost:3000",
+    "http://localhost:5173"
+})
 public class TrafficIncidentController {
 
     private final TrafficIncidentService trafficIncidentService;

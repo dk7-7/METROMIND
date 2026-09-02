@@ -16,6 +16,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/outages")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {
+    "http://localhost:3000",
+    "http://localhost:5173"
+})
 public class UtilityOutageController {
 
     private final UtilityOutageService utilityOutageService;

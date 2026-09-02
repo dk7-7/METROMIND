@@ -9,7 +9,11 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/dashboard")
-@RequiredArgsConstructor 
+@RequiredArgsConstructor
+@CrossOrigin(origins = {
+    "http://localhost:3000",
+    "http://localhost:5173"
+})
 public class DashboardController {
 
     private final AnalyticsService analyticsService;
