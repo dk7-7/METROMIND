@@ -102,11 +102,13 @@ const UtilityGridList = () => {
         />
       )}
 
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
+      {loading && items.length === 0 && (
+        <div style={{ textAlign: 'center', padding: '1rem', color: '#64748b' }}>
           Loading utility grids...
         </div>
-      ) : items.length === 0 ? (
+      )}
+
+      {items.length === 0 ? (
         <EmptyState message="No utility grids monitored." />
       ) : (
         <>

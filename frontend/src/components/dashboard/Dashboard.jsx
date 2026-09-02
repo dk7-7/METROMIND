@@ -17,7 +17,6 @@ const Dashboard = () => {
     congestedZones: 0,
     criticalAlerts: 0,
   });
-  const [loading, setLoading] = useState(true);
 
   const incidents = useSelector((state) => state.trafficIncident?.items || []);
   const outages = useSelector((state) => state.utilityOutage?.items || []);
@@ -38,8 +37,6 @@ const Dashboard = () => {
         }
       } catch (err) {
         // Fallback to calculated stats from slices
-      } finally {
-        setLoading(false);
       }
     };
 
