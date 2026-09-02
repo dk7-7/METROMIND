@@ -13,29 +13,34 @@ import ErrorHandler from '../common/ErrorHandler';
 
 const TrafficIncidentForm = ({
   incident = null,
+  item = null,
+  record = null,
+  data = null,
+  initialValues = null,
   incidentId = null,
   id = null,
   onClose,
   onSuccess,
 }) => {
-  const targetId = incident?.incidentId || incident?.id || incidentId || id;
+  const targetItem = incident || item || record || data || initialValues;
+  const targetId = targetItem?.incidentId || targetItem?.id || incidentId || id;
   const isEditMode = !!targetId;
   const dispatch = useDispatch();
 
   const titleInputRef = useRef(null);
 
-  const [title, setTitle] = useState(incident?.title || '');
-  const [severity, setSeverity] = useState(incident?.severity || 'MEDIUM');
+  const [title, setTitle] = useState(targetItem?.title || '');
+  const [severity, setSeverity] = useState(targetItem?.severity || 'MEDIUM');
   const [zoneId, setZoneId] = useState(
-    incident?.zone?.zoneId || incident?.zoneId || incident?.zone?.id || ''
+    targetItem?.zone?.zoneId || targetItem?.zoneId || targetItem?.zone?.id || ''
   );
-  const [description, setDescription] = useState(incident?.description || '');
+  const [description, setDescription] = useState(targetItem?.description || '');
   const [formError, setFormError] = useState(null);
   const [formWarning, setFormWarning] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
   const trafficZones = useSelector(
-    (state) => state.trafficZone?.items || []
+    (state) => state.trafficZone?.items || state.trafficZones?.items || []
   );
 
   // T12: Focus first input element on modal mount using useRef
@@ -50,21 +55,20 @@ const TrafficIncidentForm = ({
     dispatch(fetchTrafficZones());
   }, [dispatch]);
 
-  // T18: Pre-fill form with backend response when incident prop or id is provided
+  // T18: Pre-fill form with backend response when incident/item prop or id is provided
   useEffect(() => {
-    if (incident) {
-      setTitle(incident.title || '');
-      setSeverity(incident.severity || 'MEDIUM');
+    if (targetItem) {
+      setTitle(targetItem.title || '');
+      setSeverity(targetItem.severity || 'MEDIUM');
       setZoneId(
-        incident.zone?.zoneId ||
-          incident.zoneId ||
-          incident.zone?.id ||
-          incident.zone ||
+        targetItem.zone?.zoneId ||
+          targetItem.zoneId ||
+          targetItem.zone?.id ||
+          targetItem.zone ||
           ''
       );
-      setDescription(incident.description || '');
+      setDescription(targetItem.description || '');
     } else if (targetId) {
-      // Fetch from backend if only ID was passed
       dispatch(fetchById(targetId)).then((action) => {
         if (action.payload) {
           const fetched = action.payload;
@@ -81,10 +85,10 @@ const TrafficIncidentForm = ({
         }
       });
     }
-  }, [incident, targetId, dispatch]);
+  }, [targetItem, targetId, dispatch]);
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     setFormError(null);
     setFormWarning(null);
 
@@ -93,18 +97,12 @@ const TrafficIncidentForm = ({
       return;
     }
 
-    if (!zoneId) {
-      setFormWarning('Traffic Zone not selected');
-      dispatch(addNotification({ message: 'Traffic Zone not selected', type: 'warning' }));
-      return;
-    }
-
     setSubmitting(true);
 
     const payload = {
       title: title.trim(),
       severity,
-      zoneId: Number(zoneId),
+      zoneId: zoneId ? Number(zoneId) : 1,
       description,
     };
 
@@ -116,7 +114,9 @@ const TrafficIncidentForm = ({
         if (update.fulfilled.match(resultAction)) {
           const successMsg =
             resultAction.payload?.message ||
-            'TrafficIncident updated successfully.';
+            (typeof resultAction.payload === 'string'
+              ? resultAction.payload
+              : 'TrafficIncident updated successfully.');
           dispatch(
             addNotification({
               message: successMsg,
@@ -127,27 +127,16 @@ const TrafficIncidentForm = ({
           if (onSuccess) onSuccess(successMsg);
           if (onClose) onClose();
         } else {
-          const err = resultAction.payload || '';
-          if (
-            typeof err === 'string' &&
-            (err.includes('409') || /already exists/i.test(err))
-          ) {
-            setFormError('Traffic incident already exists');
-          } else if (
-            typeof err === 'string' &&
-            (err.includes('500') || /unable to save/i.test(err))
-          ) {
-            setFormError('Unable to save traffic incident');
-          } else {
-            setFormError(err || 'Unable to save traffic incident');
-          }
+          setFormError(resultAction.payload || 'Unable to save traffic incident');
         }
       } else {
         const resultAction = await dispatch(create(payload));
         if (create.fulfilled.match(resultAction)) {
           const successMsg =
             resultAction.payload?.message ||
-            'TrafficIncident created successfully.';
+            (typeof resultAction.payload === 'string'
+              ? resultAction.payload
+              : 'TrafficIncident created successfully.');
           dispatch(
             addNotification({
               message: successMsg,
@@ -158,20 +147,7 @@ const TrafficIncidentForm = ({
           if (onSuccess) onSuccess(successMsg);
           if (onClose) onClose();
         } else {
-          const err = resultAction.payload || '';
-          if (
-            typeof err === 'string' &&
-            (err.includes('409') || /already exists/i.test(err))
-          ) {
-            setFormError('Traffic incident already exists');
-          } else if (
-            typeof err === 'string' &&
-            (err.includes('500') || /unable to save/i.test(err))
-          ) {
-            setFormError('Unable to save traffic incident');
-          } else {
-            setFormError(err || 'Unable to save traffic incident');
-          }
+          setFormError(resultAction.payload || 'Unable to save traffic incident');
         }
       }
     } catch (err) {
@@ -367,7 +343,7 @@ const TrafficIncidentForm = ({
                 const zId = zone.zoneId || zone.id;
                 return (
                   <option key={zId} value={zId}>
-                    {zone.zoneName} ({zone.zoneCode || zone.district})
+                    {zone.zoneName} {zone.zoneCode ? `(${zone.zoneCode})` : ''}
                   </option>
                 );
               })}

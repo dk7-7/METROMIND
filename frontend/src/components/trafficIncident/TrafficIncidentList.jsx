@@ -7,13 +7,14 @@ import Pagination from '../common/Pagination';
 import EmptyState from '../common/EmptyState';
 import SearchFilterBar from '../common/SearchFilterBar';
 import Alert from '../common/Alert';
+import ErrorHandler from '../common/ErrorHandler';
 
 const TrafficIncidentList = () => {
   const dispatch = useDispatch();
-  const { items = [], loading } = useSelector(
-    (state) => state.trafficIncident || {}
+  const { items = [], loading, error } = useSelector(
+    (state) => state.trafficIncident || state.trafficIncidents || {}
   );
-  const { user } = useSelector((state) => state.auth || {});
+  const { user, role: directRole } = useSelector((state) => state.auth || {});
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -22,7 +23,7 @@ const TrafficIncidentList = () => {
   const [editingIncident, setEditingIncident] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  const role = user?.role || localStorage.getItem('role') || '';
+  const role = user?.role || directRole || localStorage.getItem('role') || '';
   const canAddRecord =
     role === 'CITY_ADMINISTRATOR' || role === 'TRAFFIC_CONTROLLER';
   const canDelete =
@@ -41,7 +42,9 @@ const TrafficIncidentList = () => {
       if (deleteRecord.fulfilled.match(resultAction)) {
         const msg =
           resultAction.payload?.message ||
-          'TrafficIncident deleted successfully.';
+          (typeof resultAction.payload === 'string'
+            ? resultAction.payload
+            : 'TrafficIncident deleted successfully.');
         setSuccessMessage(msg);
         dispatch(addNotification({ message: msg, type: 'success' }));
         dispatch(fetchAll());
@@ -67,9 +70,10 @@ const TrafficIncidentList = () => {
   };
 
   // Filter & Search
-  const filteredItems = (Array.isArray(items) ? items : []).filter((item) => {
-    const title = item.title || '';
-    const status = item.status || '';
+  const rawItems = Array.isArray(items) ? items : [];
+  const filteredItems = rawItems.filter((item) => {
+    const title = item?.title || '';
+    const status = item?.status || '';
     const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter ? status === statusFilter : true;
     return matchesSearch && matchesStatus;
@@ -116,6 +120,8 @@ const TrafficIncidentList = () => {
         )}
       </div>
 
+      {error && <ErrorHandler error={error} />}
+
       {successMessage && (
         <Alert
           message={successMessage}
@@ -146,14 +152,14 @@ const TrafficIncidentList = () => {
         ]}
       />
 
-      {loading && filteredItems.length === 0 && (
+      {loading && filteredItems.length === 0 && !error && (
         <div style={{ textAlign: 'center', padding: '1rem', color: '#64748b' }}>
           Loading traffic incidents...
         </div>
       )}
 
       {filteredItems.length === 0 ? (
-        <EmptyState message="No incidents found." />
+        !loading && !error && <EmptyState message="No incidents found." />
       ) : (
         <>
           <div style={{ overflowX: 'auto', backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
@@ -263,6 +269,7 @@ const TrafficIncidentList = () => {
       {isModalOpen && (
         <TrafficIncidentForm
           incident={editingIncident}
+          item={editingIncident}
           onClose={handleCloseModal}
           onSuccess={(msg) => {
             setSuccessMessage(msg);

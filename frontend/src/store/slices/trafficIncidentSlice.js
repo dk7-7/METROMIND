@@ -41,23 +41,12 @@ export const create = createAsyncThunk(
       const res = await trafficIncidentService.create(data);
       return {
         ...(typeof res === 'object' ? res : {}),
-        message: res?.message || 'TrafficIncident created successfully.',
+        message:
+          (typeof res === 'string' ? res : null) ||
+          res?.message ||
+          'TrafficIncident created successfully.',
       };
     } catch (error) {
-      if (error.response?.status === 409) {
-        return rejectWithValue(
-          error.response.data?.message ||
-            error.response.data?.error ||
-            'Traffic incident already exists'
-        );
-      }
-      if (error.response?.status === 500) {
-        return rejectWithValue(
-          error.response.data?.message ||
-            error.response.data?.error ||
-            'Unable to save traffic incident'
-        );
-      }
       const message =
         error.response?.data?.message ||
         error.response?.data?.error ||
@@ -76,23 +65,12 @@ export const update = createAsyncThunk(
       return {
         id,
         ...(typeof res === 'object' ? res : {}),
-        message: res?.message || 'TrafficIncident updated successfully.',
+        message:
+          (typeof res === 'string' ? res : null) ||
+          res?.message ||
+          'TrafficIncident updated successfully.',
       };
     } catch (error) {
-      if (error.response?.status === 409) {
-        return rejectWithValue(
-          error.response.data?.message ||
-            error.response.data?.error ||
-            'Traffic incident already exists'
-        );
-      }
-      if (error.response?.status === 500) {
-        return rejectWithValue(
-          error.response.data?.message ||
-            error.response.data?.error ||
-            'Unable to save traffic incident'
-        );
-      }
       const message =
         error.response?.data?.message ||
         error.response?.data?.error ||
@@ -109,6 +87,7 @@ export const deleteRecord = createAsyncThunk(
     try {
       const res = await trafficIncidentService.deleteRecord(id);
       const message =
+        (typeof res === 'string' ? res : null) ||
         (typeof res === 'object' && (res?.message || res?.data?.message)) ||
         'TrafficIncident deleted successfully.';
       return { id, message };
@@ -165,6 +144,7 @@ const trafficIncidentSlice = createSlice({
       .addCase(fetchAll.fulfilled, (state, action) => {
         state.loading = false;
         state.items = Array.isArray(action.payload) ? action.payload : [];
+        state.error = null;
       })
       .addCase(fetchAll.rejected, (state, action) => {
         state.loading = false;
@@ -178,6 +158,7 @@ const trafficIncidentSlice = createSlice({
       .addCase(fetchById.fulfilled, (state, action) => {
         state.loading = false;
         state.selectedItem = action.payload;
+        state.error = null;
       })
       .addCase(fetchById.rejected, (state, action) => {
         state.loading = false;
@@ -190,6 +171,7 @@ const trafficIncidentSlice = createSlice({
       })
       .addCase(create.fulfilled, (state) => {
         state.loading = false;
+        state.error = null;
       })
       .addCase(create.rejected, (state, action) => {
         state.loading = false;
@@ -202,6 +184,7 @@ const trafficIncidentSlice = createSlice({
       })
       .addCase(update.fulfilled, (state) => {
         state.loading = false;
+        state.error = null;
       })
       .addCase(update.rejected, (state, action) => {
         state.loading = false;
@@ -214,6 +197,7 @@ const trafficIncidentSlice = createSlice({
       })
       .addCase(deleteRecord.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = null;
         const targetId = action.payload?.id ?? action.payload;
         state.items = state.items.filter(
           (item) => (item.incidentId || item.id) !== targetId
