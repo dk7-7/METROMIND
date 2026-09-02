@@ -5,7 +5,8 @@ export const fetchAll = createAsyncThunk(
   'trafficIncident/fetchAll',
   async (_, { rejectWithValue }) => {
     try {
-      return await trafficIncidentService.getAll();
+      const data = await trafficIncidentService.getAll();
+      return Array.isArray(data) ? data : data?.data || data?.incidents || [];
     } catch (error) {
       const message =
         error.response?.data?.message ||
@@ -37,13 +38,25 @@ export const create = createAsyncThunk(
   'trafficIncident/create',
   async (data, { rejectWithValue }) => {
     try {
-      return await trafficIncidentService.create(data);
+      const res = await trafficIncidentService.create(data);
+      return {
+        ...(typeof res === 'object' ? res : {}),
+        message: res?.message || 'TrafficIncident created successfully.',
+      };
     } catch (error) {
       if (error.response?.status === 409) {
-        return rejectWithValue(error.response.data?.message || error.response.data?.error || 'Traffic incident already exists');
+        return rejectWithValue(
+          error.response.data?.message ||
+            error.response.data?.error ||
+            'Traffic incident already exists'
+        );
       }
       if (error.response?.status === 500) {
-        return rejectWithValue(error.response.data?.message || error.response.data?.error || 'Unable to save traffic incident');
+        return rejectWithValue(
+          error.response.data?.message ||
+            error.response.data?.error ||
+            'Unable to save traffic incident'
+        );
       }
       const message =
         error.response?.data?.message ||
@@ -59,13 +72,26 @@ export const update = createAsyncThunk(
   'trafficIncident/update',
   async ({ id, data }, { rejectWithValue }) => {
     try {
-      return await trafficIncidentService.update(id, data);
+      const res = await trafficIncidentService.update(id, data);
+      return {
+        id,
+        ...(typeof res === 'object' ? res : {}),
+        message: res?.message || 'TrafficIncident updated successfully.',
+      };
     } catch (error) {
       if (error.response?.status === 409) {
-        return rejectWithValue(error.response.data?.message || error.response.data?.error || 'Traffic incident already exists');
+        return rejectWithValue(
+          error.response.data?.message ||
+            error.response.data?.error ||
+            'Traffic incident already exists'
+        );
       }
       if (error.response?.status === 500) {
-        return rejectWithValue(error.response.data?.message || error.response.data?.error || 'Unable to save traffic incident');
+        return rejectWithValue(
+          error.response.data?.message ||
+            error.response.data?.error ||
+            'Unable to save traffic incident'
+        );
       }
       const message =
         error.response?.data?.message ||
@@ -81,8 +107,11 @@ export const deleteRecord = createAsyncThunk(
   'trafficIncident/deleteRecord',
   async (id, { rejectWithValue }) => {
     try {
-      await trafficIncidentService.deleteRecord(id);
-      return id;
+      const res = await trafficIncidentService.deleteRecord(id);
+      const message =
+        (typeof res === 'object' && (res?.message || res?.data?.message)) ||
+        'TrafficIncident deleted successfully.';
+      return { id, message };
     } catch (error) {
       const message =
         error.response?.data?.message ||
@@ -185,8 +214,9 @@ const trafficIncidentSlice = createSlice({
       })
       .addCase(deleteRecord.fulfilled, (state, action) => {
         state.loading = false;
+        const targetId = action.payload?.id ?? action.payload;
         state.items = state.items.filter(
-          (item) => (item.incidentId || item.id) !== action.payload
+          (item) => (item.incidentId || item.id) !== targetId
         );
       })
       .addCase(deleteRecord.rejected, (state, action) => {

@@ -1,17 +1,23 @@
 import React from 'react';
 
-const ErrorHandler = ({ error }) => {
-  if (!error) return null;
+const ErrorHandler = ({ error, message, errorMessage, err }) => {
+  const errorObj = error || message || errorMessage || err;
+  if (!errorObj) return null;
 
-  const errorMessage =
-    typeof error === 'string'
-      ? error
-      : error?.message || error?.error || 'An error occurred';
+  const errorText =
+    typeof errorObj === 'string'
+      ? errorObj
+      : errorObj?.response?.data?.message ||
+        errorObj?.response?.data?.error ||
+        errorObj?.message ||
+        errorObj?.error ||
+        'An error occurred';
 
   return (
     <div
-      className="error-handler error-alert"
+      className="error-handler error-alert alert-error"
       data-testid="error-handler"
+      role="alert"
       style={{
         padding: '0.75rem 1rem',
         backgroundColor: '#fee2e2',
@@ -22,7 +28,7 @@ const ErrorHandler = ({ error }) => {
         fontSize: '0.9rem',
       }}
     >
-      {errorMessage}
+      {errorText}
     </div>
   );
 };
