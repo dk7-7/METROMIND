@@ -247,26 +247,7 @@ const TrafficIncidentForm = ({
           </button>
         </div>
 
-        {formError && (
-          <>
-            <div
-              className="error-alert alert-error"
-              role="alert"
-              style={{
-                padding: '0.625rem 0.875rem',
-                backgroundColor: '#fee2e2',
-                color: '#b91c1c',
-                borderRadius: '6px',
-                border: '1px solid #fca5a5',
-                marginBottom: '1rem',
-                fontSize: '0.875rem',
-              }}
-            >
-              {formError}
-            </div>
-            <ErrorHandler error={formError} />
-          </>
-        )}
+        {formError && <ErrorHandler error={formError} />}
 
         {formWarning && (
           <Alert
