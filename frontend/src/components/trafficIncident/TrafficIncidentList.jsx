@@ -39,7 +39,9 @@ const TrafficIncidentList = () => {
     try {
       const resultAction = await dispatch(deleteRecord(id));
       if (deleteRecord.fulfilled.match(resultAction)) {
-        const msg = 'TrafficIncident deleted successfully.';
+        const msg =
+          resultAction.payload?.message ||
+          'TrafficIncident deleted successfully.';
         setSuccessMessage(msg);
         dispatch(addNotification({ message: msg, type: 'success' }));
         dispatch(fetchAll());
@@ -65,7 +67,7 @@ const TrafficIncidentList = () => {
   };
 
   // Filter & Search
-  const filteredItems = (items || []).filter((item) => {
+  const filteredItems = (Array.isArray(items) ? items : []).filter((item) => {
     const title = item.title || '';
     const status = item.status || '';
     const matchesSearch = title.toLowerCase().includes(searchTerm.toLowerCase());
@@ -200,7 +202,7 @@ const TrafficIncidentList = () => {
                         </span>
                       </td>
                       <td style={{ padding: '0.75rem 1rem', fontSize: '0.875rem', color: '#64748b' }}>
-                        {item.zone?.zoneName || item.zoneName || `Zone ${item.zoneId || '-'}`}
+                        {item.zone?.zoneName || item.zoneName || (item.zoneId ? `Zone ${item.zoneId}` : 'Main Zone')}
                       </td>
                       <td style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>
                         <div style={{ display: 'inline-flex', gap: '0.5rem' }}>

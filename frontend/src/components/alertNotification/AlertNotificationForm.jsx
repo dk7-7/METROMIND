@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { create, fetchAll } from '../../store/slices/alertNotificationSlice';
 import { addNotification } from '../../store/slices/alertNotificationSlice';
+import ErrorHandler from '../common/ErrorHandler';
 
 const AlertNotificationForm = ({ onClose, onSuccess }) => {
   const dispatch = useDispatch();
+  const firstInputRef = useRef(null);
 
   const [targetRole, setTargetRole] = useState('CITY_ADMINISTRATOR');
   const [message, setMessage] = useState('');
   const [severity, setSeverity] = useState('LOW');
   const [formError, setFormError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -101,22 +109,7 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
           </button>
         </div>
 
-        {formError && (
-          <div
-            className="error-alert"
-            style={{
-              padding: '0.625rem 0.875rem',
-              backgroundColor: '#fee2e2',
-              color: '#b91c1c',
-              borderRadius: '6px',
-              border: '1px solid #fca5a5',
-              marginBottom: '1rem',
-              fontSize: '0.875rem',
-            }}
-          >
-            {formError}
-          </div>
-        )}
+        {formError && <ErrorHandler error={formError} />}
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1rem' }}>
@@ -127,6 +120,7 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
               Target Role
             </label>
             <select
+              ref={firstInputRef}
               id="targetRole"
               name="targetRole"
               value={targetRole}

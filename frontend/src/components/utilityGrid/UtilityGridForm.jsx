@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { create, update, fetchAll } from '../../store/slices/utilityGridSlice';
 import { addNotification } from '../../store/slices/alertNotificationSlice';
+import ErrorHandler from '../common/ErrorHandler';
 
 const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
   const isEditMode = !!grid;
   const dispatch = useDispatch();
+  const firstInputRef = useRef(null);
 
   const [gridName, setGridName] = useState(grid?.gridName || '');
   const [gridType, setGridType] = useState(grid?.gridType || 'POWER');
@@ -14,6 +16,12 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
   const [currentLoad, setCurrentLoad] = useState(grid?.currentLoad || 0);
   const [formError, setFormError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     if (grid) {
@@ -128,22 +136,7 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
           </button>
         </div>
 
-        {formError && (
-          <div
-            className="error-alert"
-            style={{
-              padding: '0.625rem 0.875rem',
-              backgroundColor: '#fee2e2',
-              color: '#b91c1c',
-              borderRadius: '6px',
-              border: '1px solid #fca5a5',
-              marginBottom: '1rem',
-              fontSize: '0.875rem',
-            }}
-          >
-            {formError}
-          </div>
-        )}
+        {formError && <ErrorHandler error={formError} />}
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1rem' }}>
@@ -154,6 +147,7 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
               Grid Name
             </label>
             <input
+              ref={firstInputRef}
               id="gridName"
               name="gridName"
               type="text"

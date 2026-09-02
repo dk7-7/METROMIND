@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { create, update, fetchAll as fetchOutages } from '../../store/slices/utilityOutageSlice';
 import { fetchAll as fetchGrids } from '../../store/slices/utilityGridSlice';
 import { addNotification } from '../../store/slices/alertNotificationSlice';
+import ErrorHandler from '../common/ErrorHandler';
 
 const UtilityOutageForm = ({ outage = null, onClose, onSuccess }) => {
   const isEditMode = !!outage;
   const dispatch = useDispatch();
+  const firstInputRef = useRef(null);
 
   const [outageType, setOutageType] = useState(outage?.outageType || 'UNPLANNED');
   const [affectedArea, setAffectedArea] = useState(outage?.affectedArea || '');
@@ -19,6 +21,12 @@ const UtilityOutageForm = ({ outage = null, onClose, onSuccess }) => {
   const [submitting, setSubmitting] = useState(false);
 
   const grids = useSelector((state) => state.utilityGrid?.items || []);
+
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     dispatch(fetchGrids());
@@ -139,22 +147,7 @@ const UtilityOutageForm = ({ outage = null, onClose, onSuccess }) => {
           </button>
         </div>
 
-        {formError && (
-          <div
-            className="error-alert"
-            style={{
-              padding: '0.625rem 0.875rem',
-              backgroundColor: '#fee2e2',
-              color: '#b91c1c',
-              borderRadius: '6px',
-              border: '1px solid #fca5a5',
-              marginBottom: '1rem',
-              fontSize: '0.875rem',
-            }}
-          >
-            {formError}
-          </div>
-        )}
+        {formError && <ErrorHandler error={formError} />}
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1rem' }}>
@@ -165,6 +158,7 @@ const UtilityOutageForm = ({ outage = null, onClose, onSuccess }) => {
               Outage Type
             </label>
             <select
+              ref={firstInputRef}
               id="outageType"
               name="outageType"
               value={outageType}

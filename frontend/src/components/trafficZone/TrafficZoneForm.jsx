@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { create, update, fetchAll } from '../../store/slices/trafficZoneSlice';
 import { addNotification } from '../../store/slices/alertNotificationSlice';
+import ErrorHandler from '../common/ErrorHandler';
 
 const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
   const isEditMode = !!zone;
   const dispatch = useDispatch();
+  const firstInputRef = useRef(null);
 
   const [zoneName, setZoneName] = useState(zone?.zoneName || '');
   const [zoneCode, setZoneCode] = useState(zone?.zoneCode || '');
@@ -18,6 +20,12 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
   );
   const [formError, setFormError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (firstInputRef.current) {
+      firstInputRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     if (zone) {
@@ -132,22 +140,7 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
           </button>
         </div>
 
-        {formError && (
-          <div
-            className="error-alert"
-            style={{
-              padding: '0.625rem 0.875rem',
-              backgroundColor: '#fee2e2',
-              color: '#b91c1c',
-              borderRadius: '6px',
-              border: '1px solid #fca5a5',
-              marginBottom: '1rem',
-              fontSize: '0.875rem',
-            }}
-          >
-            {formError}
-          </div>
-        )}
+        {formError && <ErrorHandler error={formError} />}
 
         <form onSubmit={handleSubmit}>
           <div style={{ marginBottom: '1rem' }}>
@@ -158,6 +151,7 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
               Zone Name
             </label>
             <input
+              ref={firstInputRef}
               id="zoneName"
               name="zoneName"
               type="text"
