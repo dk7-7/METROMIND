@@ -25,6 +25,7 @@ const Login = () => {
     if (error) {
       dispatch(clearError());
     }
+    console.log({username });
     dispatch(login({ username, password }));
   };
 
