@@ -55,20 +55,8 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
     <div className="modal-overlay form-overlay">
       <div className="modal-content form-modal">
         <div className="modal-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-            <div
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'rgba(239, 68, 68, 0.15)',
-                border: '1px solid rgba(239, 68, 68, 0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--danger-text)',
-              }}
-            >
+          <div className="modal-header-icon-title">
+            <div className="modal-icon-badge alert-badge">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
                 <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
@@ -78,7 +66,7 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
               <h2 className="modal-title">
                 Broadcast Operational Alert
               </h2>
-              <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              <p className="modal-subtitle">
                 Dispatch critical notifications to specific municipal roles
               </p>
             </div>
@@ -86,7 +74,7 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
 
           <button
             type="button"
-            className="btn-close"
+            className="btn-close close-btn"
             onClick={onClose}
             aria-label="Close"
           >
@@ -98,8 +86,8 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
           {formError && <ErrorHandler error={formError} />}
 
           <form onSubmit={handleSubmit}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
-              <div className="form-group" style={{ margin: 0 }}>
+            <div className="form-row-2">
+              <div className="form-group">
                 <label htmlFor="targetRole">
                   Target Role
                 </label>
@@ -117,7 +105,7 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
                 </select>
               </div>
 
-              <div className="form-group" style={{ margin: 0 }}>
+              <div className="form-group">
                 <label htmlFor="severity">
                   Severity
                 </label>
@@ -135,9 +123,9 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
               </div>
             </div>
 
-            <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+            <div className="form-group">
               <label htmlFor="message">
-                Alert Message <span style={{ color: 'var(--danger-text)' }}>*</span>
+                Alert Message <span className="required-star">*</span>
               </label>
               <textarea
                 id="message"
@@ -150,16 +138,7 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
               />
             </div>
 
-            <div
-              className="modal-actions"
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                gap: '0.75rem',
-                borderTop: '1px solid var(--border-subtle)',
-                paddingTop: '1.25rem',
-              }}
-            >
+            <div className="modal-actions">
               <button
                 type="button"
                 className="btn-secondary"
