@@ -35,11 +35,13 @@ const OfficialRegistry = () => {
         className="registry-tabs"
         style={{
           display: 'flex',
-          gap: '0.4rem',
-          padding: '0.4rem',
-          borderRadius: '10px',
+          gap: '0.45rem',
+          padding: '0.5rem',
+          borderRadius: '14px',
           border: '1px solid var(--border-subtle)',
-          marginBottom: '1.75rem',
+          backgroundColor: 'var(--bg-surface)',
+          boxShadow: 'var(--clay-card-shadow)',
+          marginBottom: '2rem',
           overflowX: 'auto',
         }}
       >
@@ -53,18 +55,19 @@ const OfficialRegistry = () => {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '0.45rem',
-                padding: '0.6rem 1.15rem',
-                border: 'none',
-                borderRadius: '6px',
-                backgroundColor: isActive ? '#2563eb' : 'transparent',
-                color: isActive ? '#ffffff' : 'var(--text-muted)',
-                fontWeight: isActive ? 600 : 500,
+                gap: '0.5rem',
+                padding: '0.65rem 1.25rem',
+                border: isActive ? '1px solid rgba(37, 99, 235, 0.3)' : '1px solid transparent',
+                borderRadius: '10px',
+                backgroundColor: isActive ? 'var(--brand-primary)' : 'transparent',
+                color: isActive ? '#ffffff' : 'var(--text-secondary)',
+                fontWeight: isActive ? 700 : 500,
                 fontSize: '0.875rem',
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
-                transition: 'all 0.15s ease',
-                boxShadow: isActive ? '0 1px 3px rgba(37, 99, 235, 0.3)' : 'none',
+                transition: 'all var(--transition-fast)',
+                boxShadow: isActive ? 'var(--clay-btn-primary-shadow)' : 'none',
+                transform: isActive ? 'translateY(-1px)' : 'none',
               }}
             >
               <span>{tab.icon}</span>

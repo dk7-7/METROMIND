@@ -28,27 +28,24 @@ const IncidentStatusDonut = ({ incidents = [], statusDistribution }) => {
       <div
         className="incident-status-donut card-command"
         style={{
-          backgroundColor: '#ffffff',
-          borderRadius: '12px',
+          borderRadius: '16px',
           padding: '1.5rem',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#0f172a' }}>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 750, color: 'var(--text-main)' }}>
             Incident Status Distribution
           </h3>
-          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b', backgroundColor: '#f1f5f9', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', backgroundColor: 'var(--bg-subtle)', border: '1px solid var(--border-subtle)', padding: '0.2rem 0.5rem', borderRadius: '6px' }}>
             LIVE
           </span>
         </div>
         <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem', opacity: 0.6 }}>📊</div>
-          <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.875rem' }}>No incident status data available.</p>
+          <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '0.875rem' }}>No incident status data available.</p>
         </div>
       </div>
     );
@@ -63,14 +60,13 @@ const IncidentStatusDonut = ({ incidents = [], statusDistribution }) => {
     <div
       className="incident-status-donut card-command"
       style={{
-        borderRadius: '12px',
+        borderRadius: '16px',
         padding: '1.5rem',
-        border: '1px solid var(--border-subtle)',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
         <div>
-          <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 700, color: 'var(--text-main)' }}>
+          <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 750, color: 'var(--text-main)' }}>
             Incident Status Distribution
           </h3>
           <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.775rem', color: 'var(--text-muted)' }}>
@@ -81,11 +77,12 @@ const IncidentStatusDonut = ({ incidents = [], statusDistribution }) => {
           style={{
             fontSize: '0.75rem',
             fontWeight: 700,
-            color: '#2563eb',
-            backgroundColor: 'rgba(37, 99, 235, 0.12)',
+            color: 'var(--brand-primary)',
+            backgroundColor: 'var(--primary-50, rgba(37, 99, 235, 0.12))',
             border: '1px solid rgba(37, 99, 235, 0.25)',
-            padding: '0.2rem 0.6rem',
+            padding: '0.2rem 0.65rem',
             borderRadius: '9999px',
+            boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.5)',
           }}
         >
           {total} Active
@@ -154,10 +151,11 @@ const IncidentStatusDonut = ({ incidents = [], statusDistribution }) => {
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   fontSize: '0.825rem',
-                  padding: '0.35rem 0.6rem',
-                  borderRadius: '6px',
+                  padding: '0.4rem 0.75rem',
+                  borderRadius: '8px',
                   backgroundColor: 'var(--bg-subtle)',
                   border: '1px solid var(--border-subtle)',
+                  boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.5)',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
@@ -167,14 +165,14 @@ const IncidentStatusDonut = ({ incidents = [], statusDistribution }) => {
                       height: '8px',
                       borderRadius: '50%',
                       backgroundColor: STATUS_COLORS[status] || '#94a3b8',
-                      boxShadow: `0 0 4px ${STATUS_COLORS[status] || '#94a3b8'}`,
+                      boxShadow: `0 0 6px ${STATUS_COLORS[status] || '#94a3b8'}`,
                     }}
                   />
                   <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>{status}</span>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <span style={{ fontWeight: 700, color: 'var(--text-main)' }}>{count}</span>
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', width: '28px', textAlign: 'right' }}>
+                  <span style={{ fontWeight: 700, color: 'var(--text-main)', fontVariantNumeric: 'tabular-nums' }}>{count}</span>
+                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', width: '32px', textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}>
                     {percent}%
                   </span>
                 </div>

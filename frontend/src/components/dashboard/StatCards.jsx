@@ -65,30 +65,33 @@ const StatCards = (props) => {
           key={idx}
           className="stat-card"
           style={{
-            borderRadius: '12px',
-            padding: '1.35rem 1.5rem',
-            border: '1px solid var(--border-subtle)',
+            borderRadius: '16px',
+            padding: '1.4rem 1.5rem',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             position: 'relative',
             overflow: 'hidden',
+            minHeight: '124px',
           }}
         >
           {/* Top accent bar */}
           <div
+            className="stat-card-accent-bar"
             style={{
               position: 'absolute',
               top: 0,
               left: 0,
               right: 0,
-              height: '3px',
+              height: '3.5px',
               backgroundColor: card.accentColor,
+              boxShadow: `0 1px 6px ${card.accentColor}88`,
             }}
           />
 
           <div>
             <p
+              className="stat-card-label"
               style={{
                 margin: 0,
                 fontSize: '0.8125rem',
@@ -102,6 +105,7 @@ const StatCards = (props) => {
               {card.title}
             </p>
             <h3
+              className="stat-card-value"
               style={{
                 margin: 0,
                 fontSize: '2.1rem',
@@ -115,6 +119,7 @@ const StatCards = (props) => {
               {card.value}
             </h3>
             <p
+              className="stat-card-sub"
               style={{
                 margin: '0.45rem 0 0 0',
                 fontSize: '0.775rem',
@@ -127,6 +132,7 @@ const StatCards = (props) => {
           </div>
 
           <div
+            className="stat-card-icon-box"
             style={{
               width: '52px',
               height: '52px',

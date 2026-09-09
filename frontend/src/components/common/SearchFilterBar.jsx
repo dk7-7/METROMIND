@@ -39,9 +39,8 @@ const SearchFilterBar = ({
         marginBottom: '1.25rem',
         flexWrap: 'wrap',
         alignItems: 'center',
-        padding: '0.85rem 1.15rem',
-        borderRadius: '10px',
-        border: '1px solid var(--border-subtle)',
+        padding: '0.95rem 1.15rem',
+        borderRadius: '16px',
       }}
     >
       <div style={{ flex: '1 1 260px', position: 'relative' }}>
@@ -66,9 +65,8 @@ const SearchFilterBar = ({
           onChange={handleSearchChange}
           style={{
             width: '100%',
-            padding: '0.55rem 0.85rem 0.55rem 2.25rem',
-            border: '1px solid var(--border-default)',
-            borderRadius: '6px',
+            padding: '0.625rem 0.95rem 0.625rem 2.35rem',
+            borderRadius: '10px',
             fontSize: '0.9rem',
             boxSizing: 'border-box',
           }}
@@ -83,9 +81,8 @@ const SearchFilterBar = ({
           onChange={handleFilterChange}
           style={{
             width: '100%',
-            padding: '0.55rem 0.85rem',
-            border: '1px solid var(--border-default)',
-            borderRadius: '6px',
+            padding: '0.625rem 0.95rem',
+            borderRadius: '10px',
             fontSize: '0.9rem',
             cursor: 'pointer',
             fontWeight: 500,
