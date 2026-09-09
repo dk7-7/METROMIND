@@ -43,7 +43,7 @@ const TrafficIncidentForm = ({
     (state) => state.trafficZone?.items || state.trafficZones?.items || []
   );
 
-  // T12: Focus first input element on modal mount using useRef
+  // Focus first input element on modal mount using useRef
   useEffect(() => {
     if (titleInputRef.current) {
       titleInputRef.current.focus();
@@ -55,7 +55,7 @@ const TrafficIncidentForm = ({
     dispatch(fetchTrafficZones());
   }, [dispatch]);
 
-  // T18: Pre-fill form with backend response when incident/item prop or id is provided
+  // Pre-fill form with backend response when incident/item prop or id is provided
   useEffect(() => {
     if (targetItem) {
       setTitle(targetItem.title || '');
@@ -159,55 +159,65 @@ const TrafficIncidentForm = ({
 
   return (
     <div
-      className="modal-overlay"
+      className="modal-overlay form-overlay"
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: 'rgba(15, 23, 42, 0.65)',
+        backdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(4px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 1000,
+        padding: '1rem',
       }}
     >
       <div
-        className="modal-content"
+        className="modal-content form-modal"
         style={{
           backgroundColor: '#ffffff',
-          borderRadius: '8px',
-          width: '90%',
-          maxWidth: '500px',
-          padding: '1.75rem',
-          boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)',
+          borderRadius: '12px',
+          width: '100%',
+          maxWidth: '520px',
+          padding: '1.75rem 2rem',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
           position: 'relative',
         }}
       >
         <div
+          className="modal-header"
           style={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             marginBottom: '1.25rem',
             borderBottom: '1px solid #e2e8f0',
-            paddingBottom: '0.75rem',
+            paddingBottom: '0.85rem',
           }}
         >
-          <h2
-            style={{
-              margin: 0,
-              fontSize: '1.25rem',
-              fontWeight: 600,
-              color: '#1e293b',
-            }}
-          >
-            {isEditMode ? 'Edit Traffic Incident' : 'Report New Incident'}
-          </h2>
+          <div>
+            <h2
+              className="modal-title"
+              style={{
+                margin: 0,
+                fontSize: '1.25rem',
+                fontWeight: 700,
+                color: '#0f172a',
+              }}
+            >
+              {isEditMode ? 'Edit Traffic Incident' : 'Report New Incident'}
+            </h2>
+            <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+              {isEditMode ? `Updating incident record #${targetId}` : 'Submit municipal emergency or roadway alert'}
+            </p>
+          </div>
           <button
             type="button"
-            className="btn-close"
+            className="btn-close close-btn"
             onClick={onClose}
             aria-label="Close"
             style={{
@@ -217,9 +227,11 @@ const TrafficIncidentForm = ({
               fontWeight: 'bold',
               cursor: 'pointer',
               color: '#64748b',
+              padding: '4px 8px',
+              borderRadius: '4px',
             }}
           >
-            X
+            ×
           </button>
         </div>
 
@@ -235,7 +247,7 @@ const TrafficIncidentForm = ({
         )}
 
         <form onSubmit={handleSubmit}>
-          <div style={{ marginBottom: '1rem' }}>
+          <div className="form-group" style={{ marginBottom: '1.15rem' }}>
             <label
               htmlFor="title"
               style={{
@@ -246,7 +258,7 @@ const TrafficIncidentForm = ({
                 color: '#334155',
               }}
             >
-              Title
+              Incident Title <span style={{ color: '#ef4444' }}>*</span>
             </label>
             <input
               ref={titleInputRef}
@@ -263,7 +275,7 @@ const TrafficIncidentForm = ({
               required
               style={{
                 width: '100%',
-                padding: '0.5rem 0.75rem',
+                padding: '0.6rem 0.85rem',
                 borderRadius: '6px',
                 border: '1px solid #cbd5e1',
                 fontSize: '0.9rem',
@@ -272,85 +284,87 @@ const TrafficIncidentForm = ({
             />
           </div>
 
-          <div style={{ marginBottom: '1rem' }}>
-            <label
-              htmlFor="severity"
-              style={{
-                display: 'block',
-                marginBottom: '0.4rem',
-                fontWeight: 600,
-                fontSize: '0.875rem',
-                color: '#334155',
-              }}
-            >
-              Severity
-            </label>
-            <select
-              id="severity"
-              name="severity"
-              value={severity}
-              onChange={(e) => setSeverity(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.5rem 0.75rem',
-                borderRadius: '6px',
-                border: '1px solid #cbd5e1',
-                fontSize: '0.9rem',
-                backgroundColor: '#ffffff',
-                boxSizing: 'border-box',
-              }}
-            >
-              <option value="LOW">LOW</option>
-              <option value="MEDIUM">MEDIUM</option>
-              <option value="HIGH">HIGH</option>
-              <option value="CRITICAL">CRITICAL</option>
-            </select>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.15rem' }}>
+            <div className="form-group" style={{ margin: 0 }}>
+              <label
+                htmlFor="severity"
+                style={{
+                  display: 'block',
+                  marginBottom: '0.4rem',
+                  fontWeight: 600,
+                  fontSize: '0.875rem',
+                  color: '#334155',
+                }}
+              >
+                Severity
+              </label>
+              <select
+                id="severity"
+                name="severity"
+                value={severity}
+                onChange={(e) => setSeverity(e.target.value)}
+                style={{
+                  width: '100%',
+                  padding: '0.6rem 0.85rem',
+                  borderRadius: '6px',
+                  border: '1px solid #cbd5e1',
+                  fontSize: '0.9rem',
+                  backgroundColor: '#ffffff',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <option value="LOW">LOW</option>
+                <option value="MEDIUM">MEDIUM</option>
+                <option value="HIGH">HIGH</option>
+                <option value="CRITICAL">CRITICAL</option>
+              </select>
+            </div>
+
+            <div className="form-group" style={{ margin: 0 }}>
+              <label
+                htmlFor="trafficZone"
+                style={{
+                  display: 'block',
+                  marginBottom: '0.4rem',
+                  fontWeight: 600,
+                  fontSize: '0.875rem',
+                  color: '#334155',
+                }}
+              >
+                Traffic Zone
+              </label>
+              <select
+                id="trafficZone"
+                name="trafficZone"
+                value={zoneId}
+                onChange={(e) => {
+                  setZoneId(e.target.value);
+                  if (formWarning) setFormWarning(null);
+                }}
+                style={{
+                  width: '100%',
+                  padding: '0.6rem 0.85rem',
+                  borderRadius: '6px',
+                  border: '1px solid #cbd5e1',
+                  fontSize: '0.9rem',
+                  backgroundColor: '#ffffff',
+                  boxSizing: 'border-box',
+                }}
+              >
+                <option value="">Select a Traffic Zone</option>
+                {trafficZones.map((zone) => {
+                  const zId = zone.zoneId || zone.id;
+                  return (
+                    <option key={zId} value={zId}>
+                      {zone.zoneName} {zone.zoneCode ? `(${zone.zoneCode})` : ''}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
           </div>
 
-          <div style={{ marginBottom: '1rem' }}>
-            <label
-              htmlFor="trafficZone"
-              style={{
-                display: 'block',
-                marginBottom: '0.4rem',
-                fontWeight: 600,
-                fontSize: '0.875rem',
-                color: '#334155',
-              }}
-            >
-              Traffic Zone
-            </label>
-            <select
-              id="trafficZone"
-              name="trafficZone"
-              value={zoneId}
-              onChange={(e) => {
-                setZoneId(e.target.value);
-                if (formWarning) setFormWarning(null);
-              }}
-              style={{
-                width: '100%',
-                padding: '0.5rem 0.75rem',
-                borderRadius: '6px',
-                border: '1px solid #cbd5e1',
-                fontSize: '0.9rem',
-                backgroundColor: '#ffffff',
-                boxSizing: 'border-box',
-              }}
-            >
-              <option value="">Select a Traffic Zone</option>
-              {trafficZones.map((zone) => {
-                const zId = zone.zoneId || zone.id;
-                return (
-                  <option key={zId} value={zId}>
-                    {zone.zoneName} {zone.zoneCode ? `(${zone.zoneCode})` : ''}
-                  </option>
-                );
-              })}
-            </select>
-          </div>
-
-          <div style={{ marginBottom: '1.25rem' }}>
+          <div className="form-group" style={{ marginBottom: '1.5rem' }}>
             <label
               htmlFor="description"
               style={{
@@ -361,18 +375,18 @@ const TrafficIncidentForm = ({
                 color: '#334155',
               }}
             >
-              Description
+              Description & Field Details
             </label>
             <textarea
               id="description"
               name="description"
               rows={3}
-              placeholder="Provide additional details..."
+              placeholder="Provide operational context, emergency response units dispatched, lane closures, etc."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               style={{
                 width: '100%',
-                padding: '0.5rem 0.75rem',
+                padding: '0.6rem 0.85rem',
                 borderRadius: '6px',
                 border: '1px solid #cbd5e1',
                 fontSize: '0.9rem',
@@ -382,43 +396,28 @@ const TrafficIncidentForm = ({
           </div>
 
           <div
+            className="modal-actions"
             style={{
               display: 'flex',
               justifyContent: 'flex-end',
               gap: '0.75rem',
+              borderTop: '1px solid #e2e8f0',
+              paddingTop: '1rem',
             }}
           >
             <button
               type="button"
+              className="btn-secondary"
               onClick={onClose}
-              style={{
-                padding: '0.5rem 1rem',
-                borderRadius: '6px',
-                border: '1px solid #cbd5e1',
-                backgroundColor: '#f8fafc',
-                color: '#475569',
-                cursor: 'pointer',
-                fontWeight: 500,
-              }}
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="btn-submit"
+              className="btn-submit btn-primary"
               disabled={submitting || !title.trim()}
-              style={{
-                padding: '0.5rem 1.25rem',
-                borderRadius: '6px',
-                border: 'none',
-                backgroundColor:
-                  submitting || !title.trim() ? '#94a3b8' : '#2563eb',
-                color: '#ffffff',
-                cursor: submitting || !title.trim() ? 'not-allowed' : 'pointer',
-                fontWeight: 600,
-              }}
             >
-              {isEditMode ? 'Save Changes' : 'Report Incident'}
+              {submitting ? 'Processing...' : isEditMode ? 'Save Changes' : 'Report Incident'}
             </button>
           </div>
         </form>

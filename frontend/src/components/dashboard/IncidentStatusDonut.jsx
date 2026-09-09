@@ -2,9 +2,9 @@ import React from 'react';
 
 const STATUS_COLORS = {
   REPORTED: '#3b82f6',
-  DISPATCHED: '#eab308',
+  DISPATCHED: '#f59e0b',
   INVESTIGATING: '#8b5cf6',
-  RESOLVED: '#22c55e',
+  RESOLVED: '#10b981',
   CLOSED: '#64748b',
 };
 
@@ -26,19 +26,30 @@ const IncidentStatusDonut = ({ incidents = [], statusDistribution }) => {
   if (total === 0) {
     return (
       <div
-        className="incident-status-donut"
+        className="incident-status-donut card-command"
         style={{
           backgroundColor: '#ffffff',
-          borderRadius: '8px',
+          borderRadius: '12px',
           padding: '1.5rem',
           border: '1px solid #e2e8f0',
-          textAlign: 'center',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
         }}
       >
-        <h3 style={{ margin: '0 0 1rem 0', fontSize: '1.1rem', color: '#1e293b' }}>
-          Incident Status Distribution
-        </h3>
-        <p style={{ color: '#94a3b8', margin: '2rem 0' }}>No incident status data available.</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#0f172a' }}>
+            Incident Status Distribution
+          </h3>
+          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b', backgroundColor: '#f1f5f9', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+            LIVE
+          </span>
+        </div>
+        <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
+          <div style={{ fontSize: '2rem', marginBottom: '0.5rem', opacity: 0.6 }}>📊</div>
+          <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.875rem' }}>No incident status data available.</p>
+        </div>
       </div>
     );
   }
@@ -50,28 +61,49 @@ const IncidentStatusDonut = ({ incidents = [], statusDistribution }) => {
 
   return (
     <div
-      className="incident-status-donut"
+      className="incident-status-donut card-command"
       style={{
         backgroundColor: '#ffffff',
-        borderRadius: '8px',
+        borderRadius: '12px',
         padding: '1.5rem',
         border: '1px solid #e2e8f0',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
       }}
     >
-      <h3 style={{ margin: '0 0 1.25rem 0', fontSize: '1.1rem', color: '#1e293b' }}>
-        Incident Status Distribution
-      </h3>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+        <div>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#0f172a' }}>
+            Incident Status Distribution
+          </h3>
+          <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.775rem', color: '#64748b' }}>
+            Telemetry by resolution workflow stage
+          </p>
+        </div>
+        <span
+          style={{
+            fontSize: '0.75rem',
+            fontWeight: 700,
+            color: '#2563eb',
+            backgroundColor: '#eff6ff',
+            border: '1px solid #bfdbfe',
+            padding: '0.2rem 0.6rem',
+            borderRadius: '9999px',
+          }}
+        >
+          {total} Active
+        </span>
+      </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2rem', flexWrap: 'wrap' }}>
-        <div style={{ position: 'relative', width: '130px', height: '130px' }}>
-          <svg viewBox="0 0 100 100" width="130" height="130" style={{ transform: 'rotate(-90deg)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-around', gap: '1.5rem', flexWrap: 'wrap', padding: '0.5rem 0' }}>
+        <div style={{ position: 'relative', width: '140px', height: '140px', flexShrink: 0 }}>
+          <svg viewBox="0 0 100 100" width="140" height="140" style={{ transform: 'rotate(-90deg)', filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.06))' }}>
             <circle
               cx="50"
               cy="50"
               r={radius}
               fill="transparent"
               stroke="#f1f5f9"
-              strokeWidth="14"
+              strokeWidth="12"
             />
             {entries.map(([status, count]) => {
               const percent = count / total;
@@ -87,9 +119,10 @@ const IncidentStatusDonut = ({ incidents = [], statusDistribution }) => {
                   r={radius}
                   fill="transparent"
                   stroke={STATUS_COLORS[status] || '#94a3b8'}
-                  strokeWidth="14"
+                  strokeWidth="12"
                   strokeDasharray={strokeDasharray}
                   strokeDashoffset={strokeDashoffset}
+                  strokeLinecap="round"
                 />
               );
             })}
@@ -103,28 +136,53 @@ const IncidentStatusDonut = ({ incidents = [], statusDistribution }) => {
               textAlign: 'center',
             }}
           >
-            <span style={{ fontSize: '1.25rem', fontWeight: 700, color: '#1e293b' }}>{total}</span>
-            <span style={{ display: 'block', fontSize: '0.65rem', color: '#64748b' }}>TOTAL</span>
+            <span style={{ fontSize: '1.5rem', fontWeight: 800, color: '#0f172a', lineHeight: 1, display: 'block', fontVariantNumeric: 'tabular-nums' }}>
+              {total}
+            </span>
+            <span style={{ display: 'block', fontSize: '0.65rem', color: '#64748b', fontWeight: 700, letterSpacing: '0.05em', marginTop: '2px' }}>
+              TOTAL
+            </span>
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '140px' }}>
-          {entries.map(([status, count]) => (
-            <div key={status} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.85rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <span
-                  style={{
-                    width: '10px',
-                    height: '10px',
-                    borderRadius: '50%',
-                    backgroundColor: STATUS_COLORS[status] || '#94a3b8',
-                  }}
-                />
-                <span style={{ color: '#475569' }}>{status}</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1, minWidth: '160px' }}>
+          {entries.map(([status, count]) => {
+            const percent = ((count / total) * 100).toFixed(0);
+            return (
+              <div
+                key={status}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  fontSize: '0.825rem',
+                  padding: '0.35rem 0.6rem',
+                  borderRadius: '6px',
+                  backgroundColor: '#f8fafc',
+                  border: '1px solid #f1f5f9',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span
+                    style={{
+                      width: '8px',
+                      height: '8px',
+                      borderRadius: '50%',
+                      backgroundColor: STATUS_COLORS[status] || '#94a3b8',
+                      boxShadow: `0 0 4px ${STATUS_COLORS[status] || '#94a3b8'}`,
+                    }}
+                  />
+                  <span style={{ color: '#334155', fontWeight: 600 }}>{status}</span>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <span style={{ fontWeight: 700, color: '#0f172a' }}>{count}</span>
+                  <span style={{ fontSize: '0.75rem', color: '#94a3b8', width: '28px', textAlign: 'right' }}>
+                    {percent}%
+                  </span>
+                </div>
               </div>
-              <span style={{ fontWeight: 600, color: '#1e293b' }}>{count}</span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

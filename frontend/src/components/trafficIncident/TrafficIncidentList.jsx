@@ -86,36 +86,90 @@ const TrafficIncidentList = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
+  const getSeverityBadge = (severity) => {
+    switch (severity) {
+      case 'CRITICAL':
+        return {
+          bg: '#fef2f2',
+          border: '#fecaca',
+          text: '#b91c1c',
+          dot: '#ef4444',
+        };
+      case 'HIGH':
+        return {
+          bg: '#fff7ed',
+          border: '#fed7aa',
+          text: '#c2410c',
+          dot: '#f97316',
+        };
+      case 'MEDIUM':
+        return {
+          bg: '#fffbeb',
+          border: '#fde68a',
+          text: '#b45309',
+          dot: '#f59e0b',
+        };
+      case 'LOW':
+      default:
+        return {
+          bg: '#ecfdf5',
+          border: '#a7f3d0',
+          text: '#047857',
+          dot: '#10b981',
+        };
+    }
+  };
+
+  const getStatusBadge = (status = 'REPORTED') => {
+    switch (status) {
+      case 'RESOLVED':
+        return { bg: '#ecfdf5', border: '#a7f3d0', text: '#047857' };
+      case 'INVESTIGATING':
+        return { bg: '#f5f3ff', border: '#ddd6fe', text: '#6d28d9' };
+      case 'DISPATCHED':
+        return { bg: '#fffbeb', border: '#fde68a', text: '#b45309' };
+      case 'CLOSED':
+        return { bg: '#f1f5f9', border: '#e2e8f0', text: '#475569' };
+      case 'REPORTED':
+      default:
+        return { bg: '#eff6ff', border: '#bfdbfe', text: '#1d4ed8' };
+    }
+  };
+
   return (
-    <div className="incident-list-container" style={{ padding: '2rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1.5rem',
-        }}
-      >
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#1e293b', margin: 0 }}>
-          Traffic Incidents
-        </h1>
+    <div className="incident-list-container" style={{ padding: '2rem 1.5rem 3rem 1.5rem', maxWidth: '1240px', margin: '0 auto' }}>
+      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '1rem' }}>
+        <div className="page-title-group">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <h1 className="page-title" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.02em' }}>
+              Traffic Incidents
+            </h1>
+            <span
+              style={{
+                padding: '0.2rem 0.65rem',
+                borderRadius: '9999px',
+                backgroundColor: '#eff6ff',
+                color: '#2563eb',
+                fontSize: '0.775rem',
+                fontWeight: 700,
+                border: '1px solid #bfdbfe',
+              }}
+            >
+              {rawItems.length} Records
+            </span>
+          </div>
+          <p className="page-subtitle" style={{ color: '#64748b', margin: '0.25rem 0 0 0', fontSize: '0.9rem' }}>
+            Live traffic incident log, emergency dispatch status, and severity dispatch records
+          </p>
+        </div>
 
         {canAddRecord && (
           <button
             type="button"
-            className="btn-add-record"
+            className="btn-add-record btn-primary"
             onClick={handleAdd}
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: '#2563eb',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '6px',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
           >
-            + Add Record
+            <span>+</span> Report Incident
           </button>
         )}
       </div>
@@ -153,8 +207,9 @@ const TrafficIncidentList = () => {
       />
 
       {loading && filteredItems.length === 0 && !error && (
-        <div style={{ textAlign: 'center', padding: '1rem', color: '#64748b' }}>
-          Loading traffic incidents...
+        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: '#64748b' }}>
+          <div className="skeleton" style={{ height: '48px', marginBottom: '0.5rem', width: '100%' }} />
+          <div className="skeleton" style={{ height: '200px', width: '100%' }} />
         </div>
       )}
 
@@ -162,69 +217,90 @@ const TrafficIncidentList = () => {
         !loading && !error && <EmptyState message="No incidents found." />
       ) : (
         <>
-          <div style={{ overflowX: 'auto', backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+          <div className="table-card" style={{ overflowX: 'auto', backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+            <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, textAlign: 'left' }}>
               <thead>
                 <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem' }}>ID</th>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem' }}>Title</th>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem' }}>Severity</th>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem' }}>Status</th>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem' }}>Zone</th>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem', textAlign: 'right' }}>Actions</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>ID</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Title</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Severity</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Status</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Zone</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em', textAlign: 'right' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((item) => {
                   const id = item.incidentId || item.id;
+                  const sevStyle = getSeverityBadge(item.severity);
+                  const statStyle = getStatusBadge(item.status);
+                  const zoneLabel = item.zone?.zoneName || item.zoneName || (item.zoneId ? `Zone ${item.zoneId}` : 'Main Zone');
+
                   return (
                     <tr key={id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                      <td style={{ padding: '0.75rem 1rem', fontSize: '0.875rem', color: '#64748b' }}>#{id}</td>
-                      <td style={{ padding: '0.75rem 1rem', fontSize: '0.9rem', fontWeight: 600, color: '#1e293b' }}>
-                        {item.title}
+                      <td style={{ padding: '0.85rem 1.15rem', fontSize: '0.85rem', color: '#64748b', fontWeight: 600 }}>
+                        <span style={{ fontFamily: 'monospace', backgroundColor: '#f1f5f9', padding: '0.15rem 0.4rem', borderRadius: '4px' }}>
+                          #{id}
+                        </span>
                       </td>
-                      <td style={{ padding: '0.75rem 1rem', fontSize: '0.85rem' }}>
+                      <td style={{ padding: '0.85rem 1.15rem' }}>
+                        <span style={{ fontSize: '0.925rem', fontWeight: 600, color: '#0f172a', display: 'block' }}>
+                          {item.title}
+                        </span>
+                        {item.description && (
+                          <span style={{ fontSize: '0.775rem', color: '#64748b', display: 'block', marginTop: '2px', maxWidth: '380px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {item.description}
+                          </span>
+                        )}
+                      </td>
+                      <td style={{ padding: '0.85rem 1.15rem' }}>
                         <span
+                          className="status-badge"
                           style={{
-                            padding: '0.25rem 0.5rem',
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.4rem',
+                            padding: '0.25rem 0.65rem',
                             borderRadius: '9999px',
-                            fontWeight: 600,
-                            backgroundColor:
-                              item.severity === 'CRITICAL' ? '#fee2e2' :
-                              item.severity === 'HIGH' ? '#ffedd5' :
-                              item.severity === 'MEDIUM' ? '#fef3c7' : '#dcfce7',
-                            color:
-                              item.severity === 'CRITICAL' ? '#b91c1c' :
-                              item.severity === 'HIGH' ? '#c2410c' :
-                              item.severity === 'MEDIUM' ? '#b45309' : '#15803d',
+                            fontWeight: 700,
+                            fontSize: '0.75rem',
+                            backgroundColor: sevStyle.bg,
+                            color: sevStyle.text,
+                            border: `1px solid ${sevStyle.border}`,
                           }}
                         >
+                          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: sevStyle.dot }} />
                           {item.severity}
                         </span>
                       </td>
-                      <td style={{ padding: '0.75rem 1rem', fontSize: '0.85rem' }}>
-                        <span style={{ fontWeight: 500, color: '#475569' }}>
+                      <td style={{ padding: '0.85rem 1.15rem' }}>
+                        <span
+                          style={{
+                            padding: '0.25rem 0.6rem',
+                            borderRadius: '6px',
+                            fontWeight: 600,
+                            fontSize: '0.775rem',
+                            backgroundColor: statStyle.bg,
+                            color: statStyle.text,
+                            border: `1px solid ${statStyle.border}`,
+                          }}
+                        >
                           {item.status || 'REPORTED'}
                         </span>
                       </td>
-                      <td style={{ padding: '0.75rem 1rem', fontSize: '0.875rem', color: '#64748b' }}>
-                        {item.zone?.zoneName || item.zoneName || (item.zoneId ? `Zone ${item.zoneId}` : 'Main Zone')}
+                      <td style={{ padding: '0.85rem 1.15rem', fontSize: '0.875rem', color: '#475569' }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                          <span>📍</span> {zoneLabel}
+                        </span>
                       </td>
-                      <td style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>
-                        <div style={{ display: 'inline-flex', gap: '0.5rem' }}>
+                      <td style={{ padding: '0.85rem 1.15rem', textAlign: 'right' }}>
+                        <div style={{ display: 'inline-flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
                           {canAddRecord && (
                             <button
                               type="button"
+                              className="btn-action-edit"
                               onClick={() => handleEdit(item)}
-                              style={{
-                                padding: '0.25rem 0.6rem',
-                                fontSize: '0.8rem',
-                                border: '1px solid #cbd5e1',
-                                borderRadius: '4px',
-                                backgroundColor: '#ffffff',
-                                color: '#334155',
-                                cursor: 'pointer',
-                              }}
+                              aria-label={`Edit incident ${id}`}
                             >
                               Edit
                             </button>
@@ -234,16 +310,7 @@ const TrafficIncidentList = () => {
                               type="button"
                               className="btn-delete"
                               onClick={() => handleDelete(id)}
-                              style={{
-                                padding: '0.25rem 0.6rem',
-                                fontSize: '0.8rem',
-                                border: '1px solid #fca5a5',
-                                borderRadius: '4px',
-                                backgroundColor: '#fee2e2',
-                                color: '#b91c1c',
-                                cursor: 'pointer',
-                                fontWeight: 600,
-                              }}
+                              aria-label={`Delete incident ${id}`}
                             >
                               Delete
                             </button>

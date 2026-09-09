@@ -12,38 +12,50 @@ const StatCards = (props) => {
       title: 'Total Incidents',
       value: totalIncidents,
       color: '#2563eb',
+      accentColor: '#3b82f6',
       bgColor: '#eff6ff',
+      borderColor: '#bfdbfe',
       icon: '🚨',
+      subtext: 'Active traffic & utility alerts',
     },
     {
       title: 'Active Outages',
       value: activeOutages,
       color: '#ea580c',
+      accentColor: '#f97316',
       bgColor: '#fff7ed',
+      borderColor: '#fed7aa',
       icon: '⚡',
+      subtext: 'Grids undergoing restoration',
     },
     {
       title: 'Critical Alerts',
       value: criticalAlerts,
       color: '#dc2626',
+      accentColor: '#ef4444',
       bgColor: '#fef2f2',
+      borderColor: '#fecaca',
       icon: '⚠️',
+      subtext: 'High priority broadcasts',
     },
     {
       title: 'Congested Zones',
       value: congestedZones,
       color: '#d97706',
+      accentColor: '#f59e0b',
       bgColor: '#fffbeb',
+      borderColor: '#fde68a',
       icon: '🚦',
+      subtext: 'High/severe traffic volume',
     },
   ];
 
   return (
     <div
-      className="stat-cards-grid"
+      className="stat-cards stat-cards-grid"
       style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
         gap: '1.25rem',
         marginBottom: '2rem',
       }}
@@ -54,23 +66,39 @@ const StatCards = (props) => {
           className="stat-card"
           style={{
             backgroundColor: '#ffffff',
-            borderRadius: '8px',
-            padding: '1.25rem',
+            borderRadius: '12px',
+            padding: '1.35rem 1.5rem',
             border: '1px solid #e2e8f0',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
+            position: 'relative',
+            overflow: 'hidden',
           }}
         >
+          {/* Top accent bar */}
+          <div
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '3px',
+              backgroundColor: card.accentColor,
+            }}
+          />
+
           <div>
             <p
               style={{
                 margin: 0,
-                fontSize: '0.875rem',
-                fontWeight: 600,
+                fontSize: '0.8125rem',
+                fontWeight: 700,
                 color: '#64748b',
-                marginBottom: '0.35rem',
+                marginBottom: '0.45rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.04em',
               }}
             >
               {card.title}
@@ -78,24 +106,40 @@ const StatCards = (props) => {
             <h3
               style={{
                 margin: 0,
-                fontSize: '1.75rem',
-                fontWeight: 700,
-                color: '#1e293b',
+                fontSize: '2.1rem',
+                fontWeight: 800,
+                color: '#0f172a',
+                lineHeight: 1,
+                fontVariantNumeric: 'tabular-nums',
+                letterSpacing: '-0.02em',
               }}
             >
               {card.value}
             </h3>
+            <p
+              style={{
+                margin: '0.45rem 0 0 0',
+                fontSize: '0.775rem',
+                color: '#94a3b8',
+                fontWeight: 500,
+              }}
+            >
+              {card.subtext}
+            </p>
           </div>
+
           <div
             style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: '8px',
+              width: '52px',
+              height: '52px',
+              borderRadius: '12px',
               backgroundColor: card.bgColor,
+              border: `1px solid ${card.borderColor}`,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: '1.5rem',
+              fontSize: '1.6rem',
+              flexShrink: 0,
             }}
           >
             {card.icon}

@@ -67,14 +67,59 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="dashboard-container" style={{ padding: '2rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '1.75rem' }}>
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#1e293b', margin: '0 0 0.5rem 0' }}>
-          Smart City Operations Dashboard
-        </h1>
-        <p style={{ color: '#64748b', margin: 0, fontSize: '0.95rem' }}>
-          Real-time situational awareness and infrastructure telemetry
-        </p>
+    <div className="dashboard-container" style={{ padding: '2rem 1.5rem 3rem 1.5rem', maxWidth: '1240px', margin: '0 auto' }}>
+      {/* Executive Command Header */}
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          marginBottom: '2rem',
+          flexWrap: 'wrap',
+          gap: '1rem',
+        }}
+      >
+        <div className="page-title-group">
+          <h1 className="page-title" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', margin: '0 0 0.4rem 0', letterSpacing: '-0.02em' }}>
+            Smart City Operations Dashboard
+          </h1>
+          <p className="page-subtitle" style={{ color: '#64748b', margin: 0, fontSize: '0.925rem' }}>
+            Real-time municipal situational awareness, infrastructure monitoring & active incidents
+          </p>
+        </div>
+
+        {/* Operational Status Pill */}
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            padding: '0.5rem 1rem',
+            borderRadius: '8px',
+            backgroundColor: '#ffffff',
+            border: '1px solid #e2e8f0',
+            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
+          }}
+        >
+          <span
+            style={{
+              width: '8px',
+              height: '8px',
+              borderRadius: '50%',
+              backgroundColor: '#10b981',
+              boxShadow: '0 0 8px #10b981',
+              display: 'inline-block',
+            }}
+          />
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <span style={{ fontSize: '0.725rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+              Command Center Status
+            </span>
+            <span style={{ fontSize: '0.825rem', fontWeight: 700, color: '#0f172a' }}>
+              Live Telemetry Connected
+            </span>
+          </div>
+        </div>
       </div>
 
       <StatCards
@@ -87,7 +132,7 @@ const Dashboard = () => {
       <div
         style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
           gap: '1.5rem',
         }}
       >
