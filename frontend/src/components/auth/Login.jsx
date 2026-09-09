@@ -25,145 +25,205 @@ const Login = () => {
     if (error) {
       dispatch(clearError());
     }
-    console.log({username });
+    console.log({ username });
     dispatch(login({ username, password }));
   };
 
   return (
     <div
-      className="auth-container"
       style={{
-        maxWidth: '400px',
-        margin: '4rem auto',
-        padding: '2rem',
-        borderRadius: '8px',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-        backgroundColor: '#ffffff',
+        minHeight: 'calc(100vh - 80px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '2rem 1rem',
       }}
     >
-      <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
-        <h2 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#1e293b' }}>
-          MetroMind
-        </h2>
-        <p style={{ color: '#64748b', fontSize: '0.9rem' }}>
-          Sign in to your smart-city operations console
-        </p>
-      </div>
-
-      {error && (
-        <div
-          className="error-alert"
-          style={{
-            padding: '0.75rem 1rem',
-            backgroundColor: '#fee2e2',
-            color: '#b91c1c',
-            borderRadius: '6px',
-            border: '1px solid #fca5a5',
-            marginBottom: '1rem',
-            fontSize: '0.9rem',
-          }}
-        >
-          {typeof error === 'string' ? error : error.message || 'Authentication failed'}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1.25rem' }}>
-          <label
-            htmlFor="username"
+      <div
+        className="auth-container animate-fade-in"
+        style={{
+          maxWidth: '440px',
+          width: '100%',
+          padding: '2.25rem',
+          borderRadius: '16px',
+          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08)',
+          backgroundColor: '#0f172a',
+          border: '1px solid rgba(255, 255, 255, 0.1)',
+        }}
+      >
+        {/* Brand Header */}
+        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div
             style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: 600,
-              fontSize: '0.9rem',
-              color: '#334155',
+              width: '56px',
+              height: '56px',
+              margin: '0 auto 1rem',
+              borderRadius: '14px',
+              background: 'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              boxShadow: '0 8px 24px rgba(37, 99, 235, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#ffffff',
             }}
           >
-            Username
-          </label>
-          <input
-            id="username"
-            name="username"
-            type="text"
-            placeholder="Enter username"
-            value={username}
-            onChange={(e) => {
-              if (error) dispatch(clearError());
-              setUsername(e.target.value);
-            }}
-            required
-            style={{
-              width: '100%',
-              padding: '0.625rem 0.75rem',
-              borderRadius: '6px',
-              border: '1px solid #cbd5e1',
-              fontSize: '0.95rem',
-              boxSizing: 'border-box',
-            }}
-          />
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z" />
+              <polyline points="9 12 11 14 15 10" />
+            </svg>
+          </div>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#f8fafc', margin: '0 0 0.35rem 0', letterSpacing: '-0.02em' }}>
+            Metro<span style={{ color: '#38bdf8' }}>Mind</span>
+          </h2>
+          <p style={{ color: '#94a3b8', fontSize: '0.875rem', margin: 0 }}>
+            Municipal Operations & Utility Command Center
+          </p>
         </div>
 
-        <div style={{ marginBottom: '1.5rem' }}>
-          <label
-            htmlFor="password"
+        {error && (
+          <div
+            className="error-alert"
             style={{
-              display: 'block',
-              marginBottom: '0.5rem',
-              fontWeight: 600,
-              fontSize: '0.9rem',
-              color: '#334155',
+              padding: '0.75rem 1rem',
+              backgroundColor: 'rgba(239, 68, 68, 0.12)',
+              color: '#fca5a5',
+              borderRadius: '8px',
+              border: '1px solid rgba(239, 68, 68, 0.3)',
+              marginBottom: '1.25rem',
+              fontSize: '0.875rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
             }}
           >
-            Password
-          </label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            placeholder="Enter password"
-            value={password}
-            onChange={(e) => {
-              if (error) dispatch(clearError());
-              setPassword(e.target.value);
-            }}
-            required
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span>{typeof error === 'string' ? error : error.message || 'Authentication failed'}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: '1.25rem' }}>
+            <label
+              htmlFor="username"
+              style={{
+                display: 'block',
+                marginBottom: '0.4rem',
+                fontWeight: 600,
+                fontSize: '0.8125rem',
+                color: '#cbd5e1',
+              }}
+            >
+              Operator ID / Username
+            </label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Enter username"
+              value={username}
+              onChange={(e) => {
+                if (error) dispatch(clearError());
+                setUsername(e.target.value);
+              }}
+              required
+              style={{
+                width: '100%',
+                padding: '0.6875rem 0.875rem',
+                borderRadius: '8px',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: '#f8fafc',
+                fontSize: '0.875rem',
+                boxSizing: 'border-box',
+                outline: 'none',
+              }}
+            />
+          </div>
+
+          <div style={{ marginBottom: '1.5rem' }}>
+            <label
+              htmlFor="password"
+              style={{
+                display: 'block',
+                marginBottom: '0.4rem',
+                fontWeight: 600,
+                fontSize: '0.8125rem',
+                color: '#cbd5e1',
+              }}
+            >
+              Security Credential
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => {
+                if (error) dispatch(clearError());
+                setPassword(e.target.value);
+              }}
+              required
+              style={{
+                width: '100%',
+                padding: '0.6875rem 0.875rem',
+                borderRadius: '8px',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+                backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                color: '#f8fafc',
+                fontSize: '0.875rem',
+                boxSizing: 'border-box',
+                outline: 'none',
+              }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="btn-submit btn-primary"
+            disabled={loading}
             style={{
               width: '100%',
-              padding: '0.625rem 0.75rem',
-              borderRadius: '6px',
-              border: '1px solid #cbd5e1',
-              fontSize: '0.95rem',
-              boxSizing: 'border-box',
+              padding: '0.75rem',
+              backgroundColor: loading ? '#475569' : '#2563eb',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '8px',
+              fontWeight: 600,
+              fontSize: '0.9375rem',
+              cursor: loading ? 'not-allowed' : 'pointer',
+              transition: 'all 0.15s ease',
+              boxShadow: loading ? 'none' : '0 4px 12px rgba(37, 99, 235, 0.35)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.5rem',
             }}
-          />
+          >
+            {loading ? (
+              <>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="animate-spin">
+                  <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                </svg>
+                Authenticating...
+              </>
+            ) : (
+              'Access Command Console'
+            )}
+          </button>
+        </form>
+
+        <div style={{ marginTop: '1.75rem', textAlign: 'center', fontSize: '0.8125rem' }}>
+          <span style={{ color: '#94a3b8' }}>Authorized personnel without credentials? </span>
+          <Link to="/register" style={{ color: '#38bdf8', fontWeight: 600, textDecoration: 'none' }}>
+            Register access
+          </Link>
         </div>
-
-        <button
-          type="submit"
-          className="btn-submit"
-          disabled={loading}
-          style={{
-            width: '100%',
-            padding: '0.75rem',
-            backgroundColor: loading ? '#94a3b8' : '#2563eb',
-            color: '#ffffff',
-            border: 'none',
-            borderRadius: '6px',
-            fontWeight: 600,
-            fontSize: '1rem',
-            cursor: loading ? 'not-allowed' : 'pointer',
-            transition: 'background-color 0.2s',
-          }}
-        >
-          {loading ? 'Authenticating...' : 'Login'}
-        </button>
-      </form>
-
-      <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.875rem' }}>
-        <span style={{ color: '#64748b' }}>Don't have an account? </span>
-        <Link to="/register" style={{ color: '#2563eb', fontWeight: 600, textDecoration: 'none' }}>
-          Register here
-        </Link>
       </div>
     </div>
   );
