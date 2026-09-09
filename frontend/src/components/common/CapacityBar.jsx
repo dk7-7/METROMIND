@@ -10,56 +10,60 @@ const CapacityBar = ({ current = 0, total = 0, currentLoad, capacityUnits }) => 
   }
 
   // Determine color and status badge based on threshold
-  let barColor = '#10b981'; // < 70% (Optimal)
+  let barColor = 'var(--status-success-solid, #10b981)'; // < 70% (Optimal)
   let statusText = 'NORMAL';
-  let badgeBg = '#ecfdf5';
-  let badgeText = '#047857';
+  let badgeBg = 'var(--status-success-bg, #ecfdf5)';
+  let badgeText = 'var(--status-success-text, #047857)';
+  let badgeBorder = 'var(--status-success-border, #a7f3d0)';
 
   if (percentage >= 90) {
-    barColor = '#ef4444'; // >= 90% (Critical)
+    barColor = 'var(--status-critical-solid, #ef4444)'; // >= 90% (Critical)
     statusText = 'CRITICAL';
-    badgeBg = '#fef2f2';
-    badgeText = '#b91c1c';
+    badgeBg = 'var(--status-critical-bg, #fef2f2)';
+    badgeText = 'var(--status-critical-text, #b91c1c)';
+    badgeBorder = 'var(--status-critical-border, #fecaca)';
   } else if (percentage >= 70) {
-    barColor = '#f59e0b'; // 70-90% (Elevated)
+    barColor = 'var(--status-warning-solid, #f59e0b)'; // 70-90% (Elevated)
     statusText = 'ELEVATED';
-    badgeBg = '#fffbeb';
-    badgeText = '#b45309';
+    badgeBg = 'var(--status-warning-bg, #fffbeb)';
+    badgeText = 'var(--status-warning-text, #b45309)';
+    badgeBorder = 'var(--status-warning-border, #fde68a)';
   }
 
   const clampedWidth = Math.min(Math.max(percentage, 0), 100);
 
   return (
-    <div className="capacity-bar-container" style={{ width: '100%', minWidth: '150px' }}>
+    <div className="capacity-bar-container" style={{ width: '100%', maxWidth: '280px', textAlign: 'left' }}>
       <div
         className="capacity-bar-labels"
         style={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          fontSize: '0.8rem',
-          marginBottom: '5px',
-          color: '#475569',
+          fontSize: '0.8125rem',
+          marginBottom: '6px',
+          color: 'var(--text-secondary)',
         }}
       >
-        <span style={{ fontWeight: 600, color: '#1e293b' }}>
-          {cur.toFixed(1)} <span style={{ color: '#94a3b8', fontWeight: 400 }}>/ {tot.toFixed(1)}</span>
+        <span style={{ fontWeight: 600, color: 'var(--text-main)' }}>
+          {cur.toFixed(1)} <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>/ {tot.toFixed(1)}</span>
         </span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
           <span
             style={{
-              padding: '0.15rem 0.4rem',
+              padding: '0.15rem 0.45rem',
               borderRadius: '4px',
               backgroundColor: badgeBg,
               color: badgeText,
-              fontSize: '0.7rem',
+              border: `1px solid ${badgeBorder}`,
+              fontSize: '0.675rem',
               fontWeight: 700,
-              letterSpacing: '0.02em',
+              letterSpacing: '0.03em',
             }}
           >
             {statusText}
           </span>
-          <span style={{ fontWeight: 700, color: barColor, fontVariantNumeric: 'tabular-nums' }}>
+          <span style={{ fontWeight: 700, color: barColor, fontVariantNumeric: 'tabular-nums', fontSize: '0.775rem' }}>
             {percentage.toFixed(1)}%
           </span>
         </div>
@@ -69,7 +73,7 @@ const CapacityBar = ({ current = 0, total = 0, currentLoad, capacityUnits }) => 
         style={{
           height: '8px',
           width: '100%',
-          backgroundColor: '#e2e8f0',
+          backgroundColor: 'var(--bg-muted, #e2e8f0)',
           borderRadius: '9999px',
           overflow: 'hidden',
           boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.06)',
