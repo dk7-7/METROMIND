@@ -40,7 +40,7 @@ const OfficialRegistry = () => {
           borderRadius: '14px',
           border: '1px solid var(--border-subtle)',
           backgroundColor: 'var(--bg-surface)',
-          boxShadow: 'var(--clay-card-shadow)',
+          boxShadow: 'var(--shadow-card)',
           marginBottom: '2rem',
           overflowX: 'auto',
         }}
@@ -66,7 +66,7 @@ const OfficialRegistry = () => {
                 cursor: 'pointer',
                 whiteSpace: 'nowrap',
                 transition: 'all var(--transition-fast)',
-                boxShadow: isActive ? 'var(--clay-btn-primary-shadow)' : 'none',
+                boxShadow: isActive ? '0 2px 6px rgba(37, 99, 235, 0.25)' : 'none',
                 transform: isActive ? 'translateY(-1px)' : 'none',
               }}
             >
