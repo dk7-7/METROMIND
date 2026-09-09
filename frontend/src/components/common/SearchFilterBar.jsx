@@ -39,11 +39,9 @@ const SearchFilterBar = ({
         marginBottom: '1.25rem',
         flexWrap: 'wrap',
         alignItems: 'center',
-        backgroundColor: '#ffffff',
         padding: '0.85rem 1.15rem',
         borderRadius: '10px',
-        border: '1px solid #e2e8f0',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
+        border: '1px solid var(--border-subtle)',
       }}
     >
       <div style={{ flex: '1 1 260px', position: 'relative' }}>
@@ -53,7 +51,7 @@ const SearchFilterBar = ({
             left: '12px',
             top: '50%',
             transform: 'translateY(-50%)',
-            color: '#94a3b8',
+            color: 'var(--text-muted)',
             fontSize: '0.9rem',
             pointerEvents: 'none',
           }}
@@ -69,12 +67,10 @@ const SearchFilterBar = ({
           style={{
             width: '100%',
             padding: '0.55rem 0.85rem 0.55rem 2.25rem',
-            border: '1px solid #cbd5e1',
+            border: '1px solid var(--border-default)',
             borderRadius: '6px',
             fontSize: '0.9rem',
             boxSizing: 'border-box',
-            backgroundColor: '#ffffff',
-            transition: 'border-color 0.15s, box-shadow 0.15s',
           }}
         />
       </div>
@@ -88,11 +84,9 @@ const SearchFilterBar = ({
           style={{
             width: '100%',
             padding: '0.55rem 0.85rem',
-            border: '1px solid #cbd5e1',
+            border: '1px solid var(--border-default)',
             borderRadius: '6px',
             fontSize: '0.9rem',
-            backgroundColor: '#ffffff',
-            color: '#1e293b',
             cursor: 'pointer',
             fontWeight: 500,
             boxSizing: 'border-box',

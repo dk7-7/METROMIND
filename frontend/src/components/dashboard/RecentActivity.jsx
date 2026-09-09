@@ -6,27 +6,27 @@ const RecentActivity = ({ activities = [] }) => {
       <div
         className="recent-activity-container card-command"
         style={{
-          backgroundColor: '#ffffff',
+          backgroundColor: 'var(--bg-surface)',
           borderRadius: '12px',
           padding: '1.5rem',
-          border: '1px solid #e2e8f0',
-          boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+          border: '1px solid var(--border-subtle)',
+          boxShadow: 'var(--shadow-card)',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#0f172a' }}>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>
             Recent Activity Feed
           </h3>
-          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#64748b', backgroundColor: '#f1f5f9', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', backgroundColor: 'var(--bg-subtle)', border: '1px solid var(--border-subtle)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
             TIMELINE
           </span>
         </div>
         <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
           <div style={{ fontSize: '2rem', marginBottom: '0.5rem', opacity: 0.6 }}>⏱️</div>
-          <p style={{ color: '#94a3b8', margin: 0, fontSize: '0.875rem' }}>
+          <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '0.875rem' }}>
             No recent activity recorded.
           </p>
         </div>
@@ -38,19 +38,19 @@ const RecentActivity = ({ activities = [] }) => {
     <div
       className="recent-activity-container card-command"
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--bg-surface)',
         borderRadius: '12px',
         padding: '1.5rem',
-        border: '1px solid #e2e8f0',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+        border: '1px solid var(--border-subtle)',
+        boxShadow: 'var(--shadow-card)',
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
         <div>
-          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: '#0f172a' }}>
+          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>
             Recent Activity Feed
           </h3>
-          <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.775rem', color: '#64748b' }}>
+          <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.775rem', color: 'var(--text-muted)' }}>
             Real-time municipal events and operational updates
           </p>
         </div>
@@ -58,9 +58,9 @@ const RecentActivity = ({ activities = [] }) => {
           style={{
             fontSize: '0.75rem',
             fontWeight: 700,
-            color: '#10b981',
-            backgroundColor: '#ecfdf5',
-            border: '1px solid #a7f3d0',
+            color: 'var(--success-text)',
+            backgroundColor: 'var(--success-bg)',
+            border: '1px solid var(--success-border)',
             padding: '0.2rem 0.6rem',
             borderRadius: '9999px',
           }}
@@ -79,8 +79,8 @@ const RecentActivity = ({ activities = [] }) => {
               gap: '0.85rem',
               padding: '0.75rem 0.9rem',
               borderRadius: '8px',
-              backgroundColor: '#f8fafc',
-              border: '1px solid #f1f5f9',
+              backgroundColor: 'var(--bg-subtle)',
+              border: '1px solid var(--border-subtle)',
               transition: 'background-color 0.15s ease',
             }}
           >
@@ -89,8 +89,8 @@ const RecentActivity = ({ activities = [] }) => {
                 width: '32px',
                 height: '32px',
                 borderRadius: '8px',
-                backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0',
+                backgroundColor: 'var(--bg-surface)',
+                border: '1px solid var(--border-subtle)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -108,7 +108,7 @@ const RecentActivity = ({ activities = [] }) => {
                     margin: 0,
                     fontSize: '0.875rem',
                     fontWeight: 600,
-                    color: '#0f172a',
+                    color: 'var(--text-main)',
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
@@ -121,9 +121,9 @@ const RecentActivity = ({ activities = [] }) => {
                     style={{
                       fontSize: '0.725rem',
                       fontWeight: 600,
-                      color: '#64748b',
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #e2e8f0',
+                      color: 'var(--text-muted)',
+                      backgroundColor: 'var(--bg-surface)',
+                      border: '1px solid var(--border-subtle)',
                       padding: '0.1rem 0.4rem',
                       borderRadius: '4px',
                       whiteSpace: 'nowrap',
@@ -134,7 +134,7 @@ const RecentActivity = ({ activities = [] }) => {
                 )}
               </div>
               {act.description && (
-                <p style={{ margin: 0, fontSize: '0.8rem', color: '#475569', lineHeight: 1.35 }}>
+                <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.35 }}>
                   {act.description}
                 </p>
               )}

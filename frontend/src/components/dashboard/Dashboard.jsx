@@ -67,38 +67,30 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="dashboard-container" style={{ padding: '2rem 1.5rem 3rem 1.5rem', maxWidth: '1240px', margin: '0 auto' }}>
+    <div className="dashboard-container">
       {/* Executive Command Header */}
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          marginBottom: '2rem',
-          flexWrap: 'wrap',
-          gap: '1rem',
-        }}
-      >
+      <div className="page-header">
         <div className="page-title-group">
-          <h1 className="page-title" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', margin: '0 0 0.4rem 0', letterSpacing: '-0.02em' }}>
+          <h1 className="page-title">
             Smart City Operations Dashboard
           </h1>
-          <p className="page-subtitle" style={{ color: '#64748b', margin: 0, fontSize: '0.925rem' }}>
+          <p className="page-subtitle">
             Real-time municipal situational awareness, infrastructure monitoring & active incidents
           </p>
         </div>
 
         {/* Operational Status Pill */}
         <div
+          className="user-badge-pill"
           style={{
             display: 'flex',
             alignItems: 'center',
             gap: '0.75rem',
             padding: '0.5rem 1rem',
             borderRadius: '8px',
-            backgroundColor: '#ffffff',
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
+            border: '1px solid var(--border-subtle)',
+            minHeight: '44px',
+            boxSizing: 'border-box',
           }}
         >
           <span
@@ -112,10 +104,10 @@ const Dashboard = () => {
             }}
           />
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontSize: '0.725rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
               Command Center Status
             </span>
-            <span style={{ fontSize: '0.825rem', fontWeight: 700, color: '#0f172a' }}>
+            <span style={{ fontSize: '0.825rem', fontWeight: 700, color: 'var(--text-main)' }}>
               Live Telemetry Connected
             </span>
           </div>

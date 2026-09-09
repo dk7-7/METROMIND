@@ -65,11 +65,9 @@ const StatCards = (props) => {
           key={idx}
           className="stat-card"
           style={{
-            backgroundColor: '#ffffff',
             borderRadius: '12px',
             padding: '1.35rem 1.5rem',
-            border: '1px solid #e2e8f0',
-            boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+            border: '1px solid var(--border-subtle)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
@@ -95,7 +93,7 @@ const StatCards = (props) => {
                 margin: 0,
                 fontSize: '0.8125rem',
                 fontWeight: 700,
-                color: '#64748b',
+                color: 'var(--text-muted)',
                 marginBottom: '0.45rem',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em',
@@ -108,7 +106,7 @@ const StatCards = (props) => {
                 margin: 0,
                 fontSize: '2.1rem',
                 fontWeight: 800,
-                color: '#0f172a',
+                color: 'var(--text-main)',
                 lineHeight: 1,
                 fontVariantNumeric: 'tabular-nums',
                 letterSpacing: '-0.02em',
@@ -120,7 +118,7 @@ const StatCards = (props) => {
               style={{
                 margin: '0.45rem 0 0 0',
                 fontSize: '0.775rem',
-                color: '#94a3b8',
+                color: 'var(--text-muted)',
                 fontWeight: 500,
               }}
             >

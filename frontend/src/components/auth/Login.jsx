@@ -46,9 +46,9 @@ const Login = () => {
           width: '100%',
           padding: '2.25rem',
           borderRadius: '16px',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.08)',
-          backgroundColor: '#0f172a',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
+          boxShadow: 'var(--shadow-card)',
+          backgroundColor: 'var(--bg-surface)',
+          border: '1px solid var(--border-subtle)',
         }}
       >
         {/* Brand Header */}
@@ -73,10 +73,10 @@ const Login = () => {
               <polyline points="9 12 11 14 15 10" />
             </svg>
           </div>
-          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#f8fafc', margin: '0 0 0.35rem 0', letterSpacing: '-0.02em' }}>
-            Metro<span style={{ color: '#38bdf8' }}>Mind</span>
+          <h2 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', margin: '0 0 0.35rem 0', letterSpacing: '-0.02em' }}>
+            Metro<span style={{ color: 'var(--brand-primary)' }}>Mind</span>
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '0.875rem', margin: 0 }}>
+          <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', margin: 0 }}>
             Municipal Operations & Utility Command Center
           </p>
         </div>
@@ -86,10 +86,10 @@ const Login = () => {
             className="error-alert"
             style={{
               padding: '0.75rem 1rem',
-              backgroundColor: 'rgba(239, 68, 68, 0.12)',
-              color: '#fca5a5',
+              backgroundColor: 'var(--danger-bg)',
+              color: 'var(--danger-text)',
               borderRadius: '8px',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
+              border: '1px solid var(--danger-border)',
               marginBottom: '1.25rem',
               fontSize: '0.875rem',
               display: 'flex',
@@ -115,7 +115,7 @@ const Login = () => {
                 marginBottom: '0.4rem',
                 fontWeight: 600,
                 fontSize: '0.8125rem',
-                color: '#cbd5e1',
+                color: 'var(--text-secondary)',
               }}
             >
               Operator ID / Username
@@ -135,9 +135,9 @@ const Login = () => {
                 width: '100%',
                 padding: '0.6875rem 0.875rem',
                 borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                color: '#f8fafc',
+                border: '1px solid var(--border-default)',
+                backgroundColor: 'var(--bg-subtle)',
+                color: 'var(--text-main)',
                 fontSize: '0.875rem',
                 boxSizing: 'border-box',
                 outline: 'none',
@@ -153,7 +153,7 @@ const Login = () => {
                 marginBottom: '0.4rem',
                 fontWeight: 600,
                 fontSize: '0.8125rem',
-                color: '#cbd5e1',
+                color: 'var(--text-secondary)',
               }}
             >
               Security Credential
@@ -173,9 +173,9 @@ const Login = () => {
                 width: '100%',
                 padding: '0.6875rem 0.875rem',
                 borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.12)',
-                backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                color: '#f8fafc',
+                border: '1px solid var(--border-default)',
+                backgroundColor: 'var(--bg-subtle)',
+                color: 'var(--text-main)',
                 fontSize: '0.875rem',
                 boxSizing: 'border-box',
                 outline: 'none',
@@ -190,7 +190,7 @@ const Login = () => {
             style={{
               width: '100%',
               padding: '0.75rem',
-              backgroundColor: loading ? '#475569' : '#2563eb',
+              backgroundColor: loading ? 'var(--text-muted)' : 'var(--brand-primary)',
               color: '#ffffff',
               border: 'none',
               borderRadius: '8px',
@@ -203,6 +203,7 @@ const Login = () => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '0.5rem',
+              minHeight: '44px',
             }}
           >
             {loading ? (
@@ -219,8 +220,8 @@ const Login = () => {
         </form>
 
         <div style={{ marginTop: '1.75rem', textAlign: 'center', fontSize: '0.8125rem' }}>
-          <span style={{ color: '#94a3b8' }}>Authorized personnel without credentials? </span>
-          <Link to="/register" style={{ color: '#38bdf8', fontWeight: 600, textDecoration: 'none' }}>
+          <span style={{ color: 'var(--text-muted)' }}>Authorized personnel without credentials? </span>
+          <Link to="/register" style={{ color: 'var(--brand-primary)', fontWeight: 600, textDecoration: 'none' }}>
             Register access
           </Link>
         </div>

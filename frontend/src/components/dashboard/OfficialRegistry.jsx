@@ -19,13 +19,13 @@ const OfficialRegistry = () => {
   ];
 
   return (
-    <div className="official-registry-container" style={{ padding: '2rem 1.5rem 3rem 1.5rem', maxWidth: '1240px', margin: '0 auto' }}>
-      <div style={{ marginBottom: '1.75rem' }}>
+    <div className="official-registry-container">
+      <div className="page-header">
         <div className="page-title-group">
-          <h1 className="page-title" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', margin: '0 0 0.4rem 0', letterSpacing: '-0.02em' }}>
-            Official Municipal Registry
+          <h1 className="page-title">
+            <span>🏛️</span> Official Municipal Registry
           </h1>
-          <p className="page-subtitle" style={{ color: '#64748b', margin: 0, fontSize: '0.925rem' }}>
+          <p className="page-subtitle">
             Central municipal master registry, asset administration, and system-wide data records
           </p>
         </div>
@@ -36,13 +36,11 @@ const OfficialRegistry = () => {
         style={{
           display: 'flex',
           gap: '0.4rem',
-          backgroundColor: '#ffffff',
           padding: '0.4rem',
           borderRadius: '10px',
-          border: '1px solid #e2e8f0',
+          border: '1px solid var(--border-subtle)',
           marginBottom: '1.75rem',
           overflowX: 'auto',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
         }}
       >
         {tabs.map((tab) => {
@@ -60,7 +58,7 @@ const OfficialRegistry = () => {
                 border: 'none',
                 borderRadius: '6px',
                 backgroundColor: isActive ? '#2563eb' : 'transparent',
-                color: isActive ? '#ffffff' : '#64748b',
+                color: isActive ? '#ffffff' : 'var(--text-muted)',
                 fontWeight: isActive ? 600 : 500,
                 fontSize: '0.875rem',
                 cursor: 'pointer',
