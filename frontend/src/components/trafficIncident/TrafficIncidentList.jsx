@@ -137,28 +137,28 @@ const TrafficIncidentList = () => {
   };
 
   return (
-    <div className="incident-list-container" style={{ padding: '2rem 1.5rem 3rem 1.5rem', maxWidth: '1240px', margin: '0 auto' }}>
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '1rem' }}>
+    <div className="incident-list-container">
+      <div className="page-header">
         <div className="page-title-group">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-            <h1 className="page-title" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.02em' }}>
+            <h1 className="page-title">
               Traffic Incidents
             </h1>
             <span
               style={{
                 padding: '0.2rem 0.65rem',
                 borderRadius: '9999px',
-                backgroundColor: '#eff6ff',
+                backgroundColor: 'rgba(37, 99, 235, 0.12)',
                 color: '#2563eb',
                 fontSize: '0.775rem',
                 fontWeight: 700,
-                border: '1px solid #bfdbfe',
+                border: '1px solid rgba(37, 99, 235, 0.25)',
               }}
             >
               {rawItems.length} Records
             </span>
           </div>
-          <p className="page-subtitle" style={{ color: '#64748b', margin: '0.25rem 0 0 0', fontSize: '0.9rem' }}>
+          <p className="page-subtitle">
             Live traffic incident log, emergency dispatch status, and severity dispatch records
           </p>
         </div>
@@ -207,7 +207,7 @@ const TrafficIncidentList = () => {
       />
 
       {loading && filteredItems.length === 0 && !error && (
-        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: '#64748b' }}>
+        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
           <div className="skeleton" style={{ height: '48px', marginBottom: '0.5rem', width: '100%' }} />
           <div className="skeleton" style={{ height: '200px', width: '100%' }} />
         </div>
@@ -217,16 +217,16 @@ const TrafficIncidentList = () => {
         !loading && !error && <EmptyState message="No incidents found." />
       ) : (
         <>
-          <div className="table-card" style={{ overflowX: 'auto', backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
-            <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, textAlign: 'left' }}>
+          <div className="table-card">
+            <table>
               <thead>
-                <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>ID</th>
-                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Title</th>
-                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Severity</th>
-                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Status</th>
-                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Zone</th>
-                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em', textAlign: 'right' }}>Actions</th>
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Severity</th>
+                  <th>Status</th>
+                  <th>Zone</th>
+                  <th style={{ textAlign: 'right' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -237,18 +237,18 @@ const TrafficIncidentList = () => {
                   const zoneLabel = item.zone?.zoneName || item.zoneName || (item.zoneId ? `Zone ${item.zoneId}` : 'Main Zone');
 
                   return (
-                    <tr key={id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                      <td style={{ padding: '0.85rem 1.15rem', fontSize: '0.85rem', color: '#64748b', fontWeight: 600 }}>
-                        <span style={{ fontFamily: 'monospace', backgroundColor: '#f1f5f9', padding: '0.15rem 0.4rem', borderRadius: '4px' }}>
+                    <tr key={id}>
+                      <td style={{ fontWeight: 600 }}>
+                        <span style={{ fontFamily: 'monospace', padding: '0.15rem 0.4rem', borderRadius: '4px', backgroundColor: 'var(--bg-subtle)', border: '1px solid var(--border-subtle)' }}>
                           #{id}
                         </span>
                       </td>
-                      <td style={{ padding: '0.85rem 1.15rem' }}>
-                        <span style={{ fontSize: '0.925rem', fontWeight: 600, color: '#0f172a', display: 'block' }}>
+                      <td>
+                        <span style={{ fontSize: '0.925rem', fontWeight: 600, display: 'block' }}>
                           {item.title}
                         </span>
                         {item.description && (
-                          <span style={{ fontSize: '0.775rem', color: '#64748b', display: 'block', marginTop: '2px', maxWidth: '380px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          <span style={{ fontSize: '0.775rem', color: 'var(--text-muted)', display: 'block', marginTop: '2px', maxWidth: '380px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                             {item.description}
                           </span>
                         )}

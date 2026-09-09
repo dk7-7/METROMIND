@@ -39,37 +39,17 @@ const Navbar = () => {
     return false;
   };
 
-  const getLinkStyle = (path) => {
-    const active = isActive(path);
-    return {
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '0.4rem',
-      padding: '0.45rem 0.85rem',
-      borderRadius: '6px',
-      fontSize: '0.875rem',
-      fontWeight: active ? 600 : 500,
-      color: active ? '#ffffff' : '#94a3b8',
-      backgroundColor: active ? 'rgba(59, 130, 246, 0.18)' : 'transparent',
-      border: active ? '1px solid rgba(59, 130, 246, 0.4)' : '1px solid transparent',
-      textDecoration: 'none',
-      transition: 'all 0.15s ease-in-out',
-    };
-  };
-
   return (
     <header style={{ position: 'sticky', top: 0, zIndex: 100, width: '100%' }}>
       {/* Top Telemetry Ticker Strip */}
       <div
+        className="telemetry-strip"
         style={{
-          backgroundColor: '#090e17',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
-          padding: '0.25rem 1.5rem',
+          padding: '0.3rem 1.5rem',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           fontSize: '0.725rem',
-          color: '#64748b',
         }}
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
@@ -86,11 +66,11 @@ const Navbar = () => {
             />
             LIVE TELEMETRY ACTIVE
           </span>
-          <span style={{ color: '#475569' }}>|</span>
-          <span style={{ color: '#94a3b8' }}>MUNICIPAL SENSOR GRID ONLINE</span>
+          <span className="ticker-divider" style={{ opacity: 0.4 }}>|</span>
+          <span className="ticker-text" style={{ fontWeight: 500 }}>MUNICIPAL SENSOR GRID ONLINE</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <span style={{ color: '#64748b' }}>SECURE OPERATIONS PORTAL</span>
+          <span className="ticker-text" style={{ fontWeight: 500 }}>SECURE OPERATIONS PORTAL</span>
           <ThemeToggle />
         </div>
       </div>
@@ -103,11 +83,7 @@ const Navbar = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          padding: '0.7rem 1.5rem',
-          backgroundColor: '#0f172a',
-          borderBottom: '1px solid #1e293b',
-          color: '#ffffff',
-          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.25)',
+          padding: '0.75rem 1.5rem',
           flexWrap: 'wrap',
           gap: '1rem',
         }}
@@ -143,36 +119,45 @@ const Navbar = () => {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span
+                className="brand-title"
                 style={{
-                  fontSize: '1.2rem',
+                  fontSize: '1.1875rem', /* 19px */
                   fontWeight: 800,
-                  color: '#ffffff',
-                  letterSpacing: '0.3px',
+                  letterSpacing: '-0.01em',
                   lineHeight: 1.1,
                 }}
               >
                 MetroMind
               </span>
-              <span style={{ fontSize: '0.65rem', color: '#38bdf8', fontWeight: 600, letterSpacing: '0.5px' }}>
-                SMART CITY COMMAND
+              <span
+                className="brand-subtitle"
+                style={{
+                  fontSize: '0.65rem',
+                  color: '#0284c7',
+                  fontWeight: 700,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                }}
+              >
+                Smart City Command
               </span>
             </div>
           </Link>
 
           {isAuthenticated && (
-            <div className="nav-links navbar-links" style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div className="nav-links navbar-links" style={{ display: 'flex', gap: '0.35rem', alignItems: 'center', flexWrap: 'wrap' }}>
               {role === 'CITY_ADMINISTRATOR' && (
                 <>
-                  <Link to="/incidents" style={getLinkStyle('/incidents')}>
+                  <Link to="/incidents" className={`nav-link ${isActive('/incidents') ? 'active' : ''}`}>
                     <span>🚨</span> Incidents
                   </Link>
-                  <Link to="/utility-grids" style={getLinkStyle('/utility-grids')}>
+                  <Link to="/utility-grids" className={`nav-link ${isActive('/utility-grids') ? 'active' : ''}`}>
                     <span>⚡</span> Utility Grids
                   </Link>
-                  <Link to="/dashboard" style={getLinkStyle('/dashboard')}>
+                  <Link to="/dashboard" className={`nav-link ${isActive('/dashboard') ? 'active' : ''}`}>
                     <span>📊</span> Dashboard
                   </Link>
-                  <Link to="/official-registry" style={getLinkStyle('/official-registry')}>
+                  <Link to="/official-registry" className={`nav-link ${isActive('/official-registry') ? 'active' : ''}`}>
                     <span>🏛️</span> Official Registry
                   </Link>
                 </>
@@ -180,10 +165,10 @@ const Navbar = () => {
 
               {role === 'TRAFFIC_CONTROLLER' && (
                 <>
-                  <Link to="/incidents" style={getLinkStyle('/incidents')}>
+                  <Link to="/incidents" className={`nav-link ${isActive('/incidents') ? 'active' : ''}`}>
                     <span>🚨</span> Incidents
                   </Link>
-                  <Link to="/traffic-zones" style={getLinkStyle('/traffic-zones')}>
+                  <Link to="/traffic-zones" className={`nav-link ${isActive('/traffic-zones') ? 'active' : ''}`}>
                     <span>🚦</span> Traffic Zones
                   </Link>
                 </>
@@ -191,10 +176,10 @@ const Navbar = () => {
 
               {role === 'UTILITY_SUPERVISOR' && (
                 <>
-                  <Link to="/utility-grids" style={getLinkStyle('/utility-grids')}>
+                  <Link to="/utility-grids" className={`nav-link ${isActive('/utility-grids') ? 'active' : ''}`}>
                     <span>⚡</span> Utility Grids
                   </Link>
-                  <Link to="/outages" style={getLinkStyle('/outages')}>
+                  <Link to="/outages" className={`nav-link ${isActive('/outages') ? 'active' : ''}`}>
                     <span>🔌</span> Outages
                   </Link>
                 </>
@@ -202,10 +187,10 @@ const Navbar = () => {
 
               {role === 'FIELD_TECHNICIAN' && (
                 <>
-                  <Link to="/incidents" style={getLinkStyle('/incidents')}>
+                  <Link to="/incidents" className={`nav-link ${isActive('/incidents') ? 'active' : ''}`}>
                     <span>🚨</span> Incidents
                   </Link>
-                  <Link to="/observations" style={getLinkStyle('/observations')}>
+                  <Link to="/observations" className={`nav-link ${isActive('/observations') ? 'active' : ''}`}>
                     <span>📋</span> Observations
                   </Link>
                 </>
@@ -215,38 +200,28 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-auth" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
-          <ThemeToggle />
           {!isAuthenticated ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
               <Link
                 to="/login"
+                className="btn-secondary"
                 style={{
-                  color: '#e2e8f0',
                   textDecoration: 'none',
                   fontSize: '0.875rem',
                   fontWeight: 500,
                   padding: '0.45rem 0.9rem',
-                  borderRadius: '6px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  transition: 'all 0.15s ease',
                 }}
               >
                 Login
               </Link>
               <Link
                 to="/register"
+                className="btn-primary"
                 style={{
-                  background: 'linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)',
-                  color: '#ffffff',
                   textDecoration: 'none',
                   fontSize: '0.875rem',
                   fontWeight: 600,
                   padding: '0.45rem 0.95rem',
-                  borderRadius: '6px',
-                  border: '1px solid #3b82f6',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.2)',
-                  transition: 'all 0.15s ease',
                 }}
               >
                 Register
@@ -256,14 +231,14 @@ const Navbar = () => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
               {/* User Identity Pill */}
               <div
+                className="user-badge-pill"
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: '0.65rem',
                   padding: '0.3rem 0.75rem',
                   borderRadius: '8px',
-                  backgroundColor: 'rgba(30, 41, 59, 0.7)',
-                  border: '1px solid #334155',
+                  border: '1px solid var(--border-subtle)',
                 }}
               >
                 <div
@@ -283,7 +258,7 @@ const Navbar = () => {
                   {username.charAt(0).toUpperCase()}
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontSize: '0.825rem', fontWeight: 600, color: '#f8fafc', lineHeight: 1.2 }}>
+                  <span className="user-name" style={{ fontSize: '0.825rem', fontWeight: 600, lineHeight: 1.2 }}>
                     {username}
                   </span>
                   <span
