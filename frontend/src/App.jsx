@@ -49,7 +49,7 @@ const HomeView = () => {
 
 function App() {
   return (
-    <div className="app-container" style={{ minHeight: '100vh', backgroundColor: '#090e17', color: '#f8fafc' }}>
+    <div className="app-container">
       <Navbar />
       <NotificationStack />
       <main className="main-content">
