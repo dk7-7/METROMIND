@@ -253,7 +253,7 @@ const TrafficIncidentList = () => {
                           </span>
                         )}
                       </td>
-                      <td style={{ padding: '0.85rem 1.15rem' }}>
+                      <td>
                         <span
                           className="status-badge"
                           style={{
@@ -273,7 +273,7 @@ const TrafficIncidentList = () => {
                           {item.severity}
                         </span>
                       </td>
-                      <td style={{ padding: '0.85rem 1.15rem' }}>
+                      <td>
                         <span
                           style={{
                             padding: '0.25rem 0.6rem',
@@ -288,12 +288,12 @@ const TrafficIncidentList = () => {
                           {item.status || 'REPORTED'}
                         </span>
                       </td>
-                      <td style={{ padding: '0.85rem 1.15rem', fontSize: '0.875rem', color: '#475569' }}>
+                      <td style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
                         <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
                           <span>📍</span> {zoneLabel}
                         </span>
                       </td>
-                      <td style={{ padding: '0.85rem 1.15rem', textAlign: 'right' }}>
+                      <td style={{ textAlign: 'right' }}>
                         <div style={{ display: 'inline-flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
                           {canAddRecord && (
                             <button

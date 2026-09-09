@@ -4,7 +4,7 @@ const ThemeToggle = () => {
   const [theme, setTheme] = useState(() => {
     const saved = localStorage.getItem('metromind_theme');
     if (saved) return saved;
-    return 'dark'; // Default to dark command center theme
+    return 'light'; // Default to clean light mode
   });
 
   useEffect(() => {
