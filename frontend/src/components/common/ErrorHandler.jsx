@@ -19,16 +19,37 @@ const ErrorHandler = ({ error, message, errorMessage, err }) => {
       data-testid="error-handler"
       role="alert"
       style={{
-        padding: '0.75rem 1rem',
-        backgroundColor: '#fee2e2',
-        color: '#b91c1c',
-        borderRadius: '6px',
-        border: '1px solid #fca5a5',
-        marginBottom: '1rem',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '0.75rem',
+        padding: '0.85rem 1.15rem',
+        backgroundColor: '#fef2f2',
+        color: '#991b1b',
+        borderRadius: '8px',
+        border: '1px solid #fecaca',
+        marginBottom: '1.25rem',
         fontSize: '0.9rem',
+        boxShadow: '0 1px 3px rgba(239, 68, 68, 0.1)',
       }}
     >
-      {errorText}
+      <span
+        style={{
+          width: '22px',
+          height: '22px',
+          borderRadius: '50%',
+          backgroundColor: '#ef4444',
+          color: '#ffffff',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: '0.8rem',
+          fontWeight: 700,
+          flexShrink: 0,
+        }}
+      >
+        !
+      </span>
+      <span style={{ fontWeight: 500 }}>{errorText}</span>
     </div>
   );
 };

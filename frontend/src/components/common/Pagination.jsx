@@ -10,6 +10,9 @@ const Pagination = ({
   const totalPages = Math.max(1, Math.ceil((totalItems || 0) / effectiveItemsPerPage));
   const page = Math.max(1, Math.min(currentPage || 1, totalPages));
 
+  const startRecord = totalItems === 0 ? 0 : (page - 1) * effectiveItemsPerPage + 1;
+  const endRecord = Math.min(page * effectiveItemsPerPage, totalItems);
+
   const handlePrev = () => {
     if (page > 1 && onPageChange) {
       onPageChange(page - 1);
@@ -24,36 +27,85 @@ const Pagination = ({
 
   return (
     <div
-      className="pagination-container"
+      className="pagination-container pagination"
       style={{
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginTop: '1rem',
-        padding: '0.5rem 0',
+        marginTop: '1.25rem',
+        padding: '0.75rem 0',
+        borderTop: '1px solid #e2e8f0',
+        flexWrap: 'wrap',
+        gap: '0.75rem',
       }}
     >
-      <button
-        type="button"
-        className="btn-pagination btn-prev"
-        onClick={handlePrev}
-        disabled={page <= 1}
-      >
-        Previous
-      </button>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+        <span className="pagination-info" style={{ fontSize: '0.875rem', color: '#64748b' }}>
+          Showing <strong style={{ color: '#1e293b' }}>{startRecord}–{endRecord}</strong> of <strong style={{ color: '#1e293b' }}>{totalItems}</strong> entries
+        </span>
+        <span
+          style={{
+            padding: '0.15rem 0.5rem',
+            borderRadius: '9999px',
+            backgroundColor: '#f1f5f9',
+            fontSize: '0.75rem',
+            color: '#475569',
+            fontWeight: 600,
+          }}
+        >
+          Page {page} of {totalPages}
+        </span>
+      </div>
 
-      <span className="pagination-info" style={{ fontSize: '0.9rem', color: '#475569' }}>
-        Page {page} of {totalPages}
-      </span>
+      <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+        <button
+          type="button"
+          className="btn-pagination btn-prev"
+          onClick={handlePrev}
+          disabled={page <= 1}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.35rem',
+            padding: '0.45rem 0.9rem',
+            border: '1px solid #cbd5e1',
+            backgroundColor: page <= 1 ? '#f8fafc' : '#ffffff',
+            color: page <= 1 ? '#94a3b8' : '#334155',
+            borderRadius: '6px',
+            fontSize: '0.85rem',
+            fontWeight: 600,
+            cursor: page <= 1 ? 'not-allowed' : 'pointer',
+            boxShadow: page <= 1 ? 'none' : '0 1px 2px rgba(0,0,0,0.05)',
+            transition: 'all 0.15s ease',
+          }}
+        >
+          <span>←</span> Previous
+        </button>
 
-      <button
-        type="button"
-        className="btn-pagination btn-next"
-        onClick={handleNext}
-        disabled={page >= totalPages}
-      >
-        Next
-      </button>
+        <button
+          type="button"
+          className="btn-pagination btn-next"
+          onClick={handleNext}
+          disabled={page >= totalPages}
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.35rem',
+            padding: '0.45rem 0.9rem',
+            border: '1px solid #cbd5e1',
+            backgroundColor: page >= totalPages ? '#f8fafc' : '#ffffff',
+            color: page >= totalPages ? '#94a3b8' : '#334155',
+            borderRadius: '6px',
+            fontSize: '0.85rem',
+            fontWeight: 600,
+            cursor: page >= totalPages ? 'not-allowed' : 'pointer',
+            boxShadow: page >= totalPages ? 'none' : '0 1px 2px rgba(0,0,0,0.05)',
+            transition: 'all 0.15s ease',
+          }}
+        >
+          Next <span>→</span>
+        </button>
+      </div>
     </div>
   );
 };
