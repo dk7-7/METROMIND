@@ -11,7 +11,6 @@ const Alert = ({
   useEffect(() => {
     if (!message) return;
     setVisible(true);
-
     if (duration > 0) {
       const timer = setTimeout(() => {
         setVisible(false);
@@ -24,96 +23,38 @@ const Alert = ({
 
   if (!visible || !message) return null;
 
-  const typeConfig = {
-    success: {
-      bg: '#ecfdf5',
-      text: '#065f46',
-      border: '#a7f3d0',
-      icon: '✓',
-      iconBg: '#10b981',
-    },
-    error: {
-      bg: '#fef2f2',
-      text: '#991b1b',
-      border: '#fecaca',
-      icon: '✕',
-      iconBg: '#ef4444',
-    },
-    warning: {
-      bg: '#fffbeb',
-      text: '#92400e',
-      border: '#fde68a',
-      icon: '!',
-      iconBg: '#f59e0b',
-    },
-    info: {
-      bg: '#eff6ff',
-      text: '#1e40af',
-      border: '#bfdbfe',
-      icon: 'i',
-      iconBg: '#3b82f6',
-    },
+  const getIcon = () => {
+    switch (type) {
+      case 'success':
+        return '✓';
+      case 'error':
+        return '✕';
+      case 'warning':
+        return '!';
+      case 'info':
+      default:
+        return 'i';
+    }
   };
-
-  const config = typeConfig[type] || typeConfig.info;
 
   return (
     <div
       className={`alert alert-${type}`}
       data-testid="alert-box"
       role="alert"
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0.9rem 1.25rem',
-        borderRadius: '12px',
-        backgroundColor: config.bg,
-        color: config.text,
-        border: `1px solid ${config.border}`,
-        marginBottom: '1.25rem',
-        fontSize: '0.9rem',
-        boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.6), 0 4px 10px rgba(0, 0, 0, 0.04)',
-      }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-        <span
-          style={{
-            width: '24px',
-            height: '24px',
-            borderRadius: '50%',
-            backgroundColor: config.iconBg,
-            color: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '0.75rem',
-            fontWeight: 800,
-            flexShrink: 0,
-            boxShadow: '0 2px 4px rgba(0,0,0,0.15)',
-          }}
-        >
-          {config.icon}
+      <div className="alert-content">
+        <span className="alert-icon">
+          {getIcon()}
         </span>
-        <span style={{ fontWeight: 600 }}>{message}</span>
+        <span className="alert-message">{message}</span>
       </div>
       <button
         type="button"
+        className="alert-close-btn"
         onClick={() => {
           setVisible(false);
           if (onClose) onClose();
-        }}
-        style={{
-          background: 'transparent',
-          border: 'none',
-          color: config.text,
-          cursor: 'pointer',
-          fontWeight: 'bold',
-          marginLeft: '1rem',
-          fontSize: '1.25rem',
-          padding: '0 4px',
-          opacity: 0.75,
-          transition: 'opacity 0.15s ease',
         }}
         aria-label="Close"
       >

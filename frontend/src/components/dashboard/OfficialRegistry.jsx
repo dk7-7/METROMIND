@@ -31,44 +31,15 @@ const OfficialRegistry = () => {
         </div>
       </div>
 
-      <div
-        className="registry-tabs"
-        style={{
-          display: 'flex',
-          gap: '0.45rem',
-          padding: '0.5rem',
-          borderRadius: '14px',
-          border: '1px solid var(--border-subtle)',
-          backgroundColor: 'var(--bg-surface)',
-          boxShadow: 'var(--shadow-card)',
-          marginBottom: '2rem',
-          overflowX: 'auto',
-        }}
-      >
+      <div className="registry-tabs">
         {tabs.map((tab) => {
           const isActive = activeTab === tab.id;
           return (
             <button
               key={tab.id}
               type="button"
+              className={`registry-tab-btn ${isActive ? 'active' : ''}`}
               onClick={() => setActiveTab(tab.id)}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.65rem 1.25rem',
-                border: isActive ? '1px solid rgba(37, 99, 235, 0.3)' : '1px solid transparent',
-                borderRadius: '10px',
-                backgroundColor: isActive ? 'var(--brand-primary)' : 'transparent',
-                color: isActive ? '#ffffff' : 'var(--text-secondary)',
-                fontWeight: isActive ? 700 : 500,
-                fontSize: '0.875rem',
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                transition: 'all var(--transition-fast)',
-                boxShadow: isActive ? '0 2px 6px rgba(37, 99, 235, 0.25)' : 'none',
-                transform: isActive ? 'translateY(-1px)' : 'none',
-              }}
             >
               <span>{tab.icon}</span>
               <span>{tab.label}</span>

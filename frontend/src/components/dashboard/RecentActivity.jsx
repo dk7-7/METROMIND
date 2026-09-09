@@ -3,30 +3,18 @@ import React from 'react';
 const RecentActivity = ({ activities = [] }) => {
   if (!activities || activities.length === 0) {
     return (
-      <div
-        className="recent-activity-container card-command"
-        style={{
-          backgroundColor: 'var(--bg-surface)',
-          borderRadius: '12px',
-          padding: '1.5rem',
-          border: '1px solid var(--border-subtle)',
-          boxShadow: 'var(--shadow-card)',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>
+      <div className="recent-activity-container card-command">
+        <div className="card-header-row">
+          <h3 className="card-title">
             Recent Activity Feed
           </h3>
-          <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-muted)', backgroundColor: 'var(--bg-subtle)', border: '1px solid var(--border-subtle)', padding: '0.2rem 0.5rem', borderRadius: '4px' }}>
+          <span className="badge-timeline">
             TIMELINE
           </span>
         </div>
-        <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-          <div style={{ fontSize: '2rem', marginBottom: '0.5rem', opacity: 0.6 }}>⏱️</div>
-          <p style={{ color: 'var(--text-muted)', margin: 0, fontSize: '0.875rem' }}>
+        <div className="empty-activity-state">
+          <div className="empty-activity-icon">⏱️</div>
+          <p className="empty-activity-text">
             No recent activity recorded.
           </p>
         </div>
@@ -35,106 +23,43 @@ const RecentActivity = ({ activities = [] }) => {
   }
 
   return (
-    <div
-      className="recent-activity-container card-command"
-      style={{
-        backgroundColor: 'var(--bg-surface)',
-        borderRadius: '12px',
-        padding: '1.5rem',
-        border: '1px solid var(--border-subtle)',
-        boxShadow: 'var(--shadow-card)',
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.25rem' }}>
+    <div className="recent-activity-container card-command">
+      <div className="card-header-row">
         <div>
-          <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'var(--text-main)' }}>
+          <h3 className="card-title">
             Recent Activity Feed
           </h3>
-          <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.775rem', color: 'var(--text-muted)' }}>
+          <p className="card-subtitle">
             Real-time municipal events and operational updates
           </p>
         </div>
-        <span
-          style={{
-            fontSize: '0.75rem',
-            fontWeight: 700,
-            color: 'var(--success-text)',
-            backgroundColor: 'var(--success-bg)',
-            border: '1px solid var(--success-border)',
-            padding: '0.2rem 0.6rem',
-            borderRadius: '9999px',
-          }}
-        >
+        <span className="badge-live-stream">
           ● Live Stream
         </span>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+      <div className="activity-list">
         {activities.map((act, idx) => (
           <div
             key={idx}
-            style={{
-              display: 'flex',
-              alignItems: 'flex-start',
-              gap: '0.85rem',
-              padding: '0.75rem 0.9rem',
-              borderRadius: '8px',
-              backgroundColor: 'var(--bg-subtle)',
-              border: '1px solid var(--border-subtle)',
-              transition: 'background-color 0.15s ease',
-            }}
+            className="activity-item"
           >
-            <div
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                backgroundColor: 'var(--bg-surface)',
-                border: '1px solid var(--border-subtle)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '1rem',
-                flexShrink: 0,
-                boxShadow: '0 1px 2px rgba(0,0,0,0.04)',
-              }}
-            >
+            <div className="activity-icon-box">
               {act.icon || '📌'}
             </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.5rem', marginBottom: '0.2rem' }}>
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: '0.875rem',
-                    fontWeight: 600,
-                    color: 'var(--text-main)',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
+            <div className="activity-details">
+              <div className="activity-title-row">
+                <p className="activity-title">
                   {act.title || act.message || 'System Event'}
                 </p>
                 {act.time && (
-                  <span
-                    style={{
-                      fontSize: '0.725rem',
-                      fontWeight: 600,
-                      color: 'var(--text-muted)',
-                      backgroundColor: 'var(--bg-surface)',
-                      border: '1px solid var(--border-subtle)',
-                      padding: '0.1rem 0.4rem',
-                      borderRadius: '4px',
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
+                  <span className="activity-time">
                     {act.time}
                   </span>
                 )}
               </div>
               {act.description && (
-                <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', lineHeight: 1.35 }}>
+                <p className="activity-description">
                   {act.description}
                 </p>
               )}

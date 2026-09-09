@@ -31,30 +31,9 @@ const SearchFilterBar = ({
   const options = filterOptions && filterOptions.length > 0 ? filterOptions : defaultOptions;
 
   return (
-    <div
-      className="search-filter-bar"
-      style={{
-        display: 'flex',
-        gap: '0.85rem',
-        marginBottom: '1.25rem',
-        flexWrap: 'wrap',
-        alignItems: 'center',
-        padding: '0.95rem 1.15rem',
-        borderRadius: '16px',
-      }}
-    >
-      <div style={{ flex: '1 1 260px', position: 'relative' }}>
-        <span
-          style={{
-            position: 'absolute',
-            left: '12px',
-            top: '50%',
-            transform: 'translateY(-50%)',
-            color: 'var(--text-muted)',
-            fontSize: '0.9rem',
-            pointerEvents: 'none',
-          }}
-        >
+    <div className="search-filter-bar">
+      <div className="search-input-wrapper">
+        <span className="search-icon">
           🔍
         </span>
         <input
@@ -63,31 +42,15 @@ const SearchFilterBar = ({
           placeholder="Search records by title / query..."
           value={searchValue}
           onChange={handleSearchChange}
-          style={{
-            width: '100%',
-            padding: '0.625rem 0.95rem 0.625rem 2.35rem',
-            borderRadius: '10px',
-            fontSize: '0.9rem',
-            boxSizing: 'border-box',
-          }}
         />
       </div>
 
-      <div style={{ minWidth: '180px', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <div className="filter-select-wrapper">
         <select
           className="filter-select"
           aria-label="Filter by status"
           value={filterValue}
           onChange={handleFilterChange}
-          style={{
-            width: '100%',
-            padding: '0.625rem 0.95rem',
-            borderRadius: '10px',
-            fontSize: '0.9rem',
-            cursor: 'pointer',
-            fontWeight: 500,
-            boxSizing: 'border-box',
-          }}
         >
           {options.map((opt, idx) => {
             const val = typeof opt === 'string' ? opt : opt.value;

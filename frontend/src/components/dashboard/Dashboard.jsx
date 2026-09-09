@@ -80,34 +80,13 @@ const Dashboard = () => {
         </div>
 
         {/* Operational Status Pill */}
-        <div
-          className="user-badge-pill"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.75rem',
-            padding: '0.5rem 1rem',
-            borderRadius: '8px',
-            border: '1px solid var(--border-subtle)',
-            minHeight: '44px',
-            boxSizing: 'border-box',
-          }}
-        >
-          <span
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: '#10b981',
-              boxShadow: '0 0 8px #10b981',
-              display: 'inline-block',
-            }}
-          />
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <span style={{ fontSize: '0.7rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+        <div className="user-badge-pill">
+          <span className="telemetry-dot" />
+          <div className="command-status-text">
+            <span className="command-status-label">
               Command Center Status
             </span>
-            <span style={{ fontSize: '0.825rem', fontWeight: 700, color: 'var(--text-main)' }}>
+            <span className="command-status-val">
               Live Telemetry Connected
             </span>
           </div>
@@ -121,13 +100,7 @@ const Dashboard = () => {
         criticalAlerts={computedStats.criticalAlerts}
       />
 
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
-          gap: '1.5rem',
-        }}
-      >
+      <div className="dashboard-grid">
         <IncidentStatusDonut incidents={incidents} />
         <RecentActivity activities={recentActivities} />
       </div>
