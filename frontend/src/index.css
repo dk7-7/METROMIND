@@ -985,3 +985,155 @@ textarea:disabled {
   0% { background-position: 200% 0; }
   100% { background-position: -200% 0; }
 }
+
+/* ==========================================================================
+   THEME STYLES - LIGHT & DARK THEME ADAPTATION
+   ========================================================================== */
+
+/* Dark Mode Theme Rules (Default) */
+[data-theme="dark"],
+body.theme-dark {
+  --bg-app: #090e17;
+  --bg-surface: #0f172a;
+  --bg-surface-elevated: #1e293b;
+  --bg-subtle: rgba(255, 255, 255, 0.04);
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-default: rgba(255, 255, 255, 0.12);
+  --text-main: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+}
+
+[data-theme="dark"] .app-container,
+body.theme-dark .app-container {
+  background-color: #090e17 !important;
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .skeleton,
+body.theme-dark .skeleton {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.04) 75%);
+  background-size: 200% 100%;
+}
+
+/* Light Mode Theme Rules */
+[data-theme="light"],
+body.theme-light {
+  --bg-app: #f1f5f9;
+  --bg-surface: #ffffff;
+  --bg-surface-elevated: #f8fafc;
+  --bg-subtle: #f8fafc;
+  --border-subtle: #e2e8f0;
+  --border-default: #cbd5e1;
+  --text-main: #0f172a;
+  --text-secondary: #334155;
+  --text-muted: #64748b;
+}
+
+[data-theme="light"] .app-container,
+body.theme-light .app-container {
+  background-color: #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] header > div:first-child,
+body.theme-light header > div:first-child {
+  background-color: #e2e8f0 !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+  color: #475569 !important;
+}
+
+[data-theme="light"] .navbar,
+body.theme-light .navbar {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid #cbd5e1 !important;
+  color: #0f172a !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] .navbar a,
+body.theme-light .navbar a {
+  color: #475569;
+}
+
+[data-theme="light"] .navbar .brand span:first-child,
+body.theme-light .navbar .brand span:first-child {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] .card-command,
+[data-theme="light"] .table-card,
+body.theme-light .card-command,
+body.theme-light .table-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="light"] h1,
+[data-theme="light"] h2,
+[data-theme="light"] h3,
+body.theme-light h1,
+body.theme-light h2,
+body.theme-light h3 {
+  color: #0f172a !important;
+}
+
+[data-theme="light"] thead tr,
+body.theme-light thead tr {
+  background-color: #f8fafc !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+
+[data-theme="light"] th,
+body.theme-light th {
+  color: #475569 !important;
+  background-color: #f8fafc !important;
+}
+
+[data-theme="light"] td,
+body.theme-light td {
+  color: #1e293b !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+[data-theme="light"] tbody tr:hover,
+body.theme-light tbody tr:hover {
+  background-color: #f8fafc !important;
+}
+
+[data-theme="light"] .modal-content,
+body.theme-light .modal-content {
+  background-color: #ffffff !important;
+  border: 1px solid #cbd5e1 !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
+
+[data-theme="light"] input,
+[data-theme="light"] select,
+[data-theme="light"] textarea,
+body.theme-light input,
+body.theme-light select,
+body.theme-light textarea {
+  background-color: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+
+[data-theme="light"] input:focus,
+[data-theme="light"] select:focus,
+[data-theme="light"] textarea:focus,
+body.theme-light input:focus,
+body.theme-light select:focus,
+body.theme-light textarea:focus {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
+}
+
+[data-theme="light"] .auth-container,
+body.theme-light .auth-container {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1) !important;
+}
+

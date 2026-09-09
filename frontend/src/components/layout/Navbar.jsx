@@ -2,6 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { logout } from '../../store/slices/authSlice';
+import ThemeToggle from '../common/ThemeToggle';
 
 const ROLE_BADGE_CONFIG = {
   CITY_ADMINISTRATOR: { label: 'CITY ADMIN', bg: 'rgba(59, 130, 246, 0.18)', border: '#3b82f6', text: '#93c5fd' },
@@ -88,8 +89,9 @@ const Navbar = () => {
           <span style={{ color: '#475569' }}>|</span>
           <span style={{ color: '#94a3b8' }}>MUNICIPAL SENSOR GRID ONLINE</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
           <span style={{ color: '#64748b' }}>SECURE OPERATIONS PORTAL</span>
+          <ThemeToggle />
         </div>
       </div>
 
@@ -213,6 +215,7 @@ const Navbar = () => {
         </div>
 
         <div className="navbar-auth" style={{ display: 'flex', alignItems: 'center', gap: '0.85rem' }}>
+          <ThemeToggle />
           {!isAuthenticated ? (
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
               <Link
