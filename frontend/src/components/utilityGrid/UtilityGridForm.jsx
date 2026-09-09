@@ -82,20 +82,8 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
     <div className="modal-overlay form-overlay">
       <div className="modal-content form-modal">
         <div className="modal-header">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-            <div
-              style={{
-                width: '32px',
-                height: '32px',
-                borderRadius: '8px',
-                background: 'rgba(6, 182, 212, 0.15)',
-                border: '1px solid rgba(6, 182, 212, 0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--accent-cyan)',
-              }}
-            >
+          <div className="modal-header-icon-title">
+            <div className="modal-icon-badge">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
               </svg>
@@ -104,7 +92,7 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
               <h2 className="modal-title">
                 {isEditMode ? 'Modify Utility Grid' : 'Register Utility Grid'}
               </h2>
-              <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              <p className="modal-subtitle">
                 {isEditMode ? `Updating grid record #${grid.gridId || grid.id}` : 'Provision and configure infrastructure capacity'}
               </p>
             </div>
@@ -112,7 +100,7 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
 
           <button
             type="button"
-            className="btn-close"
+            className="btn-close close-btn"
             onClick={onClose}
             aria-label="Close"
           >
@@ -126,7 +114,7 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label htmlFor="gridName">
-                Grid Name <span style={{ color: 'var(--danger-text)' }}>*</span>
+                Grid Name <span className="required-star">*</span>
               </label>
               <input
                 ref={firstInputRef}
@@ -140,8 +128,8 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
               />
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
-              <div className="form-group" style={{ margin: 0 }}>
+            <div className="form-row-2">
+              <div className="form-group">
                 <label htmlFor="gridType">
                   Grid Type
                 </label>
@@ -157,9 +145,9 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
                 </select>
               </div>
 
-              <div className="form-group" style={{ margin: 0 }}>
+              <div className="form-group">
                 <label htmlFor="district">
-                  District <span style={{ color: 'var(--danger-text)' }}>*</span>
+                  District <span className="required-star">*</span>
                 </label>
                 <input
                   id="district"
@@ -173,10 +161,10 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-              <div className="form-group" style={{ margin: 0 }}>
+            <div className="form-row-2">
+              <div className="form-group">
                 <label htmlFor="capacityUnits">
-                  Capacity Units <span style={{ color: 'var(--danger-text)' }}>*</span>
+                  Capacity Units <span className="required-star">*</span>
                 </label>
                 <input
                   id="capacityUnits"
@@ -190,7 +178,7 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
                 />
               </div>
 
-              <div className="form-group" style={{ margin: 0 }}>
+              <div className="form-group">
                 <label htmlFor="currentLoad">
                   Current Load (Units)
                 </label>
@@ -206,16 +194,7 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
               </div>
             </div>
 
-            <div
-              className="modal-actions"
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                gap: '0.75rem',
-                borderTop: '1px solid var(--border-subtle)',
-                paddingTop: '1.25rem',
-              }}
-            >
+            <div className="modal-actions">
               <button
                 type="button"
                 className="btn-secondary"

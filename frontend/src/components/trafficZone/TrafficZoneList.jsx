@@ -56,39 +56,15 @@ const TrafficZoneList = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
 
-  const getCongestionBadge = (level) => {
-    switch (level) {
-      case 'SEVERE':
-        return { bg: '#fef2f2', border: '#fecaca', text: '#b91c1c', dot: '#ef4444' };
-      case 'HIGH':
-        return { bg: '#fff7ed', border: '#fed7aa', text: '#c2410c', dot: '#f97316' };
-      case 'MODERATE':
-        return { bg: '#fffbeb', border: '#fde68a', text: '#b45309', dot: '#f59e0b' };
-      case 'LOW':
-      default:
-        return { bg: '#ecfdf5', border: '#a7f3d0', text: '#047857', dot: '#10b981' };
-    }
-  };
-
   return (
     <div className="zone-list-container">
       <div className="page-header">
         <div className="page-title-group">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <div className="page-title-row">
             <h1 className="page-title">
               Traffic Zones
             </h1>
-            <span
-              style={{
-                padding: '0.2rem 0.65rem',
-                borderRadius: '9999px',
-                backgroundColor: 'rgba(37, 99, 235, 0.12)',
-                color: '#2563eb',
-                fontSize: '0.775rem',
-                fontWeight: 700,
-                border: '1px solid rgba(37, 99, 235, 0.25)',
-              }}
-            >
+            <span className="badge-record-count">
               {items.length} Zones
             </span>
           </div>
@@ -118,9 +94,9 @@ const TrafficZoneList = () => {
       )}
 
       {loading && items.length === 0 ? (
-        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
-          <div className="skeleton" style={{ height: '48px', marginBottom: '0.5rem', width: '100%' }} />
-          <div className="skeleton" style={{ height: '200px', width: '100%' }} />
+        <div className="loading-state">
+          <div className="skeleton" />
+          <div className="skeleton" />
         </div>
       ) : items.length === 0 ? (
         <EmptyState message="No traffic zones found." />
@@ -135,65 +111,42 @@ const TrafficZoneList = () => {
                   <th>District</th>
                   <th>Congestion</th>
                   <th>Cycle (sec)</th>
-                  <th style={{ textAlign: 'right' }}>Actions</th>
+                  <th className="th-actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((zone) => {
                   const id = zone.zoneId || zone.id;
-                  const congStyle = getCongestionBadge(zone.currentCongestionLevel);
+                  const congLevel = (zone.currentCongestionLevel || 'low').toLowerCase();
 
                   return (
                     <tr key={id}>
-                      <td style={{ fontSize: '0.925rem', fontWeight: 600 }}>
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <td className="td-zone-name">
+                        <span className="zone-icon-title">
                           <span>🚦</span> {zone.zoneName}
                         </span>
                       </td>
-                      <td style={{ fontSize: '0.85rem' }}>
-                        <code
-                          style={{
-                            padding: '0.2rem 0.5rem',
-                            borderRadius: '4px',
-                            backgroundColor: 'var(--bg-subtle)',
-                            color: 'var(--text-main)',
-                            fontWeight: 600,
-                            border: '1px solid var(--border-subtle)',
-                          }}
-                        >
+                      <td>
+                        <code className="zone-code-badge">
                           {zone.zoneCode}
                         </code>
                       </td>
-                      <td style={{ color: 'var(--text-secondary)' }}>
+                      <td className="td-district">
                         {zone.district}
                       </td>
-                      <td style={{ padding: '0.85rem 1.15rem' }}>
-                        <span
-                          className="status-badge"
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.4rem',
-                            padding: '0.25rem 0.65rem',
-                            borderRadius: '9999px',
-                            fontWeight: 700,
-                            fontSize: '0.75rem',
-                            backgroundColor: congStyle.bg,
-                            color: congStyle.text,
-                            border: `1px solid ${congStyle.border}`,
-                          }}
-                        >
-                          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: congStyle.dot }} />
+                      <td>
+                        <span className={`status-badge congestion-${congLevel}`}>
+                          <span className="status-dot" />
                           {zone.currentCongestionLevel || 'LOW'}
                         </span>
                       </td>
-                      <td style={{ padding: '0.85rem 1.15rem', fontSize: '0.875rem', color: '#334155', fontWeight: 600 }}>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                      <td className="td-cycle">
+                        <span className="cycle-badge">
                           <span>⏱️</span> {zone.signalCycleSeconds}s
                         </span>
                       </td>
-                      <td style={{ padding: '0.85rem 1.15rem', textAlign: 'right' }}>
-                        <div style={{ display: 'inline-flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                      <td className="td-actions">
+                        <div className="action-button-group">
                           {canEdit && (
                             <button
                               type="button"

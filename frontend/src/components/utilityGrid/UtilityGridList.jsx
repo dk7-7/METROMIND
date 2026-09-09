@@ -8,48 +8,28 @@ import Pagination from '../common/Pagination';
 import EmptyState from '../common/EmptyState';
 import Alert from '../common/Alert';
 
-const getGridTypeStyle = (type) => {
+const getGridIcon = (type) => {
   switch (type?.toUpperCase()) {
     case 'POWER':
-      return {
-        bg: 'rgba(245, 158, 11, 0.12)',
-        color: '#f59e0b',
-        border: 'rgba(245, 158, 11, 0.3)',
-        icon: (
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-          </svg>
-        ),
-      };
+      return (
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+        </svg>
+      );
     case 'WATER':
-      return {
-        bg: 'rgba(6, 182, 212, 0.12)',
-        color: '#06b6d4',
-        border: 'rgba(6, 182, 212, 0.3)',
-        icon: (
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-          </svg>
-        ),
-      };
+      return (
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
+        </svg>
+      );
     case 'GAS':
-      return {
-        bg: 'rgba(16, 185, 129, 0.12)',
-        color: '#10b981',
-        border: 'rgba(16, 185, 129, 0.3)',
-        icon: (
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-          </svg>
-        ),
-      };
+      return (
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
+        </svg>
+      );
     default:
-      return {
-        bg: 'rgba(100, 116, 139, 0.12)',
-        color: '#94a3b8',
-        border: 'rgba(100, 116, 139, 0.3)',
-        icon: null,
-      };
+      return null;
   }
 };
 
@@ -109,21 +89,11 @@ const UtilityGridList = () => {
       {/* Header section */}
       <div className="page-header">
         <div className="page-title-group">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+          <div className="page-title-row">
             <h1 className="page-title">
               <span>⚡</span> Utility Grids
             </h1>
-            <span
-              style={{
-                padding: '0.2rem 0.65rem',
-                borderRadius: '9999px',
-                backgroundColor: 'rgba(37, 99, 235, 0.12)',
-                color: '#2563eb',
-                fontSize: '0.775rem',
-                fontWeight: 700,
-                border: '1px solid rgba(37, 99, 235, 0.25)',
-              }}
-            >
+            <span className="badge-record-count">
               {items.length} Grids
             </span>
           </div>
@@ -153,69 +123,46 @@ const UtilityGridList = () => {
       )}
 
       {loading && items.length === 0 ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', padding: '1rem 0' }}>
-          {[1, 2, 3, 4].map((n) => (
-            <div key={n} className="skeleton" style={{ height: '56px', borderRadius: '8px' }} />
-          ))}
+        <div className="loading-state">
+          <div className="skeleton" />
+          <div className="skeleton" />
         </div>
       ) : items.length === 0 ? (
         <EmptyState message="No utility grids monitored." />
       ) : (
         <div className="table-card">
-          <div style={{ overflowX: 'auto' }}>
+          <div className="table-responsive">
             <table>
               <thead>
                 <tr>
                   <th>Grid Name</th>
                   <th>Grid Type</th>
                   <th>District</th>
-                  <th style={{ minWidth: '220px' }}>Capacity & Load</th>
-                  <th style={{ textAlign: 'right' }}>Actions</th>
+                  <th className="th-capacity">Capacity & Load</th>
+                  <th className="th-actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((grid) => {
                   const id = grid.gridId || grid.id;
-                  const typeStyle = getGridTypeStyle(grid.gridType);
+                  const typeName = (grid.gridType || 'other').toLowerCase();
+
                   return (
                     <tr key={id}>
-                      <td style={{ fontSize: '0.925rem', fontWeight: 600 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
-                          <span
-                            style={{
-                              display: 'inline-block',
-                              width: '8px',
-                              height: '8px',
-                              borderRadius: '50%',
-                              backgroundColor: typeStyle.color,
-                              boxShadow: `0 0 6px ${typeStyle.color}`,
-                            }}
-                          />
+                      <td className="td-grid-name">
+                        <div className="grid-name-wrapper">
+                          <span className={`grid-status-dot grid-type-dot-${typeName}`} />
                           <span>{grid.gridName}</span>
                         </div>
                       </td>
-                      <td style={{ fontSize: '0.8125rem' }}>
-                        <span
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.35rem',
-                            padding: '0.25rem 0.625rem',
-                            borderRadius: '6px',
-                            backgroundColor: typeStyle.bg,
-                            color: typeStyle.color,
-                            border: `1px solid ${typeStyle.border}`,
-                            fontWeight: 600,
-                            fontSize: '0.75rem',
-                            letterSpacing: '0.02em',
-                          }}
-                        >
-                          {typeStyle.icon}
+                      <td>
+                        <span className={`badge-grid-type grid-type-${typeName}`}>
+                          {getGridIcon(grid.gridType)}
                           {grid.gridType}
                         </span>
                       </td>
-                      <td style={{ color: 'var(--text-secondary)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                      <td className="td-district">
+                        <div className="district-wrapper">
                           <span>📍</span>
                           <span>{grid.district}</span>
                         </div>
@@ -226,8 +173,8 @@ const UtilityGridList = () => {
                           total={grid.capacityUnits || 100}
                         />
                       </td>
-                      <td style={{ textAlign: 'right' }}>
-                        <div style={{ display: 'inline-flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                      <td className="td-actions">
+                        <div className="action-button-group">
                           {canEdit && (
                             <button
                               type="button"

@@ -83,60 +83,14 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
   };
 
   return (
-    <div
-      className="modal-overlay form-overlay"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(15, 23, 42, 0.65)',
-        backdropFilter: 'blur(4px)',
-        WebkitBackdropFilter: 'blur(4px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-        padding: '1rem',
-      }}
-    >
-      <div
-        className="modal-content form-modal"
-        style={{
-          backgroundColor: '#ffffff',
-          borderRadius: '12px',
-          width: '100%',
-          maxWidth: '520px',
-          padding: '1.75rem 2rem',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          position: 'relative',
-        }}
-      >
-        <div
-          className="modal-header"
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '1.5rem',
-            borderBottom: '1px solid var(--border-subtle)',
-            paddingBottom: '1rem',
-          }}
-        >
-          <div>
-            <h2
-              className="modal-title"
-              style={{
-                margin: 0,
-                fontSize: '1.25rem',
-                fontWeight: 750,
-                color: 'var(--text-main)',
-              }}
-            >
+    <div className="modal-overlay form-overlay">
+      <div className="modal-content form-modal">
+        <div className="modal-header">
+          <div className="modal-title-group">
+            <h2 className="modal-title">
               {isEditMode ? 'Edit Traffic Zone' : 'Register New Traffic Zone'}
             </h2>
-            <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+            <p className="modal-subtitle">
               {isEditMode ? `Updating zone record #${zone?.zoneId || zone?.id}` : 'Establish municipal monitoring zone and signal timing'}
             </p>
           </div>
@@ -153,12 +107,9 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
         {formError && <ErrorHandler error={formError} />}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group" style={{ marginBottom: '1.25rem' }}>
-            <label
-              htmlFor="zoneName"
-              style={{ display: 'block', marginBottom: '0.45rem', fontWeight: 600, fontSize: '0.835rem', color: 'var(--text-secondary)' }}
-            >
-              Zone Name <span style={{ color: 'var(--danger-text)' }}>*</span>
+          <div className="form-group">
+            <label htmlFor="zoneName">
+              Zone Name <span className="required-star">*</span>
             </label>
             <input
               ref={firstInputRef}
@@ -172,13 +123,10 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
-            <div className="form-group" style={{ margin: 0 }}>
-              <label
-                htmlFor="zoneCode"
-                style={{ display: 'block', marginBottom: '0.45rem', fontWeight: 600, fontSize: '0.835rem', color: 'var(--text-secondary)' }}
-              >
-                Zone Code <span style={{ color: 'var(--danger-text)' }}>*</span>
+          <div className="form-row-2">
+            <div className="form-group">
+              <label htmlFor="zoneCode">
+                Zone Code <span className="required-star">*</span>
               </label>
               <input
                 id="zoneCode"
@@ -192,11 +140,8 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
               />
             </div>
 
-            <div className="form-group" style={{ margin: 0 }}>
-              <label
-                htmlFor="district"
-                style={{ display: 'block', marginBottom: '0.45rem', fontWeight: 600, fontSize: '0.835rem', color: 'var(--text-secondary)' }}
-              >
+            <div className="form-group">
+              <label htmlFor="district">
                 District
               </label>
               <input
@@ -211,12 +156,9 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-            <div className="form-group" style={{ margin: 0 }}>
-              <label
-                htmlFor="currentCongestionLevel"
-                style={{ display: 'block', marginBottom: '0.45rem', fontWeight: 600, fontSize: '0.835rem', color: 'var(--text-secondary)' }}
-              >
+          <div className="form-row-2">
+            <div className="form-group">
+              <label htmlFor="currentCongestionLevel">
                 Congestion Level
               </label>
               <select
@@ -232,11 +174,8 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
               </select>
             </div>
 
-            <div className="form-group" style={{ margin: 0 }}>
-              <label
-                htmlFor="signalCycleSeconds"
-                style={{ display: 'block', marginBottom: '0.45rem', fontWeight: 600, fontSize: '0.835rem', color: 'var(--text-secondary)' }}
-              >
+            <div className="form-group">
+              <label htmlFor="signalCycleSeconds">
                 Signal Cycle (Seconds)
               </label>
               <input
@@ -252,16 +191,7 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
             </div>
           </div>
 
-          <div
-            className="modal-actions"
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-end',
-              gap: '0.75rem',
-              borderTop: '1px solid var(--border-subtle)',
-              paddingTop: '1.25rem',
-            }}
-          >
+          <div className="modal-actions">
             <button
               type="button"
               className="btn-secondary"

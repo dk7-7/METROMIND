@@ -86,75 +86,15 @@ const TrafficIncidentList = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
 
-  const getSeverityBadge = (severity) => {
-    switch (severity) {
-      case 'CRITICAL':
-        return {
-          bg: '#fef2f2',
-          border: '#fecaca',
-          text: '#b91c1c',
-          dot: '#ef4444',
-        };
-      case 'HIGH':
-        return {
-          bg: '#fff7ed',
-          border: '#fed7aa',
-          text: '#c2410c',
-          dot: '#f97316',
-        };
-      case 'MEDIUM':
-        return {
-          bg: '#fffbeb',
-          border: '#fde68a',
-          text: '#b45309',
-          dot: '#f59e0b',
-        };
-      case 'LOW':
-      default:
-        return {
-          bg: '#ecfdf5',
-          border: '#a7f3d0',
-          text: '#047857',
-          dot: '#10b981',
-        };
-    }
-  };
-
-  const getStatusBadge = (status = 'REPORTED') => {
-    switch (status) {
-      case 'RESOLVED':
-        return { bg: '#ecfdf5', border: '#a7f3d0', text: '#047857' };
-      case 'INVESTIGATING':
-        return { bg: '#f5f3ff', border: '#ddd6fe', text: '#6d28d9' };
-      case 'DISPATCHED':
-        return { bg: '#fffbeb', border: '#fde68a', text: '#b45309' };
-      case 'CLOSED':
-        return { bg: '#f1f5f9', border: '#e2e8f0', text: '#475569' };
-      case 'REPORTED':
-      default:
-        return { bg: '#eff6ff', border: '#bfdbfe', text: '#1d4ed8' };
-    }
-  };
-
   return (
     <div className="incident-list-container">
       <div className="page-header">
         <div className="page-title-group">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+          <div className="page-title-row">
             <h1 className="page-title">
               Traffic Incidents
             </h1>
-            <span
-              style={{
-                padding: '0.2rem 0.65rem',
-                borderRadius: '9999px',
-                backgroundColor: 'rgba(37, 99, 235, 0.12)',
-                color: '#2563eb',
-                fontSize: '0.775rem',
-                fontWeight: 700,
-                border: '1px solid rgba(37, 99, 235, 0.25)',
-              }}
-            >
+            <span className="badge-record-count">
               {rawItems.length} Records
             </span>
           </div>
@@ -207,9 +147,9 @@ const TrafficIncidentList = () => {
       />
 
       {loading && filteredItems.length === 0 && !error && (
-        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
-          <div className="skeleton" style={{ height: '48px', marginBottom: '0.5rem', width: '100%' }} />
-          <div className="skeleton" style={{ height: '200px', width: '100%' }} />
+        <div className="loading-state">
+          <div className="skeleton" />
+          <div className="skeleton" />
         </div>
       )}
 
@@ -226,75 +166,51 @@ const TrafficIncidentList = () => {
                   <th>Severity</th>
                   <th>Status</th>
                   <th>Zone</th>
-                  <th style={{ textAlign: 'right' }}>Actions</th>
+                  <th className="th-actions">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((item) => {
                   const id = item.incidentId || item.id;
-                  const sevStyle = getSeverityBadge(item.severity);
-                  const statStyle = getStatusBadge(item.status);
                   const zoneLabel = item.zone?.zoneName || item.zoneName || (item.zoneId ? `Zone ${item.zoneId}` : 'Main Zone');
+                  const sevClass = `severity-${(item.severity || 'low').toLowerCase()}`;
+                  const statClass = `status-${(item.status || 'reported').toLowerCase()}`;
 
                   return (
                     <tr key={id}>
-                      <td style={{ fontWeight: 600 }}>
-                        <span style={{ fontFamily: 'monospace', padding: '0.15rem 0.4rem', borderRadius: '4px', backgroundColor: 'var(--bg-subtle)', border: '1px solid var(--border-subtle)' }}>
+                      <td className="td-id">
+                        <span className="badge-id">
                           #{id}
                         </span>
                       </td>
-                      <td>
-                        <span style={{ fontSize: '0.925rem', fontWeight: 600, display: 'block' }}>
+                      <td className="td-title-desc">
+                        <span className="record-title">
                           {item.title}
                         </span>
                         {item.description && (
-                          <span style={{ fontSize: '0.775rem', color: 'var(--text-muted)', display: 'block', marginTop: '2px', maxWidth: '380px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          <span className="record-description">
                             {item.description}
                           </span>
                         )}
                       </td>
                       <td>
-                        <span
-                          className="status-badge"
-                          style={{
-                            display: 'inline-flex',
-                            alignItems: 'center',
-                            gap: '0.4rem',
-                            padding: '0.25rem 0.65rem',
-                            borderRadius: '9999px',
-                            fontWeight: 700,
-                            fontSize: '0.75rem',
-                            backgroundColor: sevStyle.bg,
-                            color: sevStyle.text,
-                            border: `1px solid ${sevStyle.border}`,
-                          }}
-                        >
-                          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: sevStyle.dot }} />
+                        <span className={`status-badge ${sevClass}`}>
+                          <span className="status-dot" />
                           {item.severity}
                         </span>
                       </td>
                       <td>
-                        <span
-                          style={{
-                            padding: '0.25rem 0.6rem',
-                            borderRadius: '6px',
-                            fontWeight: 600,
-                            fontSize: '0.775rem',
-                            backgroundColor: statStyle.bg,
-                            color: statStyle.text,
-                            border: `1px solid ${statStyle.border}`,
-                          }}
-                        >
+                        <span className={`badge-status ${statClass}`}>
                           {item.status || 'REPORTED'}
                         </span>
                       </td>
-                      <td style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                      <td className="td-zone">
+                        <span className="zone-label-wrap">
                           <span>📍</span> {zoneLabel}
                         </span>
                       </td>
-                      <td style={{ textAlign: 'right' }}>
-                        <div style={{ display: 'inline-flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
+                      <td className="td-actions">
+                        <div className="action-button-group">
                           {canAddRecord && (
                             <button
                               type="button"
