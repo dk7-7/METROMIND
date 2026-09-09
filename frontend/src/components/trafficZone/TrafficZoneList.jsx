@@ -56,36 +56,54 @@ const TrafficZoneList = () => {
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
 
+  const getCongestionBadge = (level) => {
+    switch (level) {
+      case 'SEVERE':
+        return { bg: '#fef2f2', border: '#fecaca', text: '#b91c1c', dot: '#ef4444' };
+      case 'HIGH':
+        return { bg: '#fff7ed', border: '#fed7aa', text: '#c2410c', dot: '#f97316' };
+      case 'MODERATE':
+        return { bg: '#fffbeb', border: '#fde68a', text: '#b45309', dot: '#f59e0b' };
+      case 'LOW':
+      default:
+        return { bg: '#ecfdf5', border: '#a7f3d0', text: '#047857', dot: '#10b981' };
+    }
+  };
+
   return (
-    <div className="zone-list-container" style={{ padding: '2rem', maxWidth: '1100px', margin: '0 auto' }}>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: '1.5rem',
-        }}
-      >
-        <h1 style={{ fontSize: '1.75rem', fontWeight: 700, color: '#1e293b', margin: 0 }}>
-          Traffic Zones
-        </h1>
+    <div className="zone-list-container" style={{ padding: '2rem 1.5rem 3rem 1.5rem', maxWidth: '1240px', margin: '0 auto' }}>
+      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.75rem', flexWrap: 'wrap', gap: '1rem' }}>
+        <div className="page-title-group">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            <h1 className="page-title" style={{ fontSize: '1.75rem', fontWeight: 800, color: '#0f172a', margin: 0, letterSpacing: '-0.02em' }}>
+              Traffic Zones
+            </h1>
+            <span
+              style={{
+                padding: '0.2rem 0.65rem',
+                borderRadius: '9999px',
+                backgroundColor: '#eff6ff',
+                color: '#2563eb',
+                fontSize: '0.775rem',
+                fontWeight: 700,
+                border: '1px solid #bfdbfe',
+              }}
+            >
+              {items.length} Zones
+            </span>
+          </div>
+          <p className="page-subtitle" style={{ color: '#64748b', margin: '0.25rem 0 0 0', fontSize: '0.9rem' }}>
+            Municipal corridor surveillance, traffic signal cycles, and real-time congestion monitoring
+          </p>
+        </div>
 
         {canAdd && (
           <button
             type="button"
-            className="btn-add-zone"
+            className="btn-add-zone btn-primary"
             onClick={handleAdd}
-            style={{
-              padding: '0.5rem 1rem',
-              backgroundColor: '#2563eb',
-              color: '#ffffff',
-              border: 'none',
-              borderRadius: '6px',
-              fontWeight: 600,
-              cursor: 'pointer',
-            }}
           >
-            + Add Record
+            <span>+</span> Add Traffic Zone
           </button>
         )}
       </div>
@@ -99,77 +117,89 @@ const TrafficZoneList = () => {
         />
       )}
 
-      {loading ? (
-        <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>
-          Loading traffic zones...
+      {loading && items.length === 0 ? (
+        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: '#64748b' }}>
+          <div className="skeleton" style={{ height: '48px', marginBottom: '0.5rem', width: '100%' }} />
+          <div className="skeleton" style={{ height: '200px', width: '100%' }} />
         </div>
       ) : items.length === 0 ? (
         <EmptyState message="No traffic zones found." />
       ) : (
         <>
-          <div style={{ overflowX: 'auto', backgroundColor: '#ffffff', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+          <div className="table-card" style={{ overflowX: 'auto', backgroundColor: '#ffffff', borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+            <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, textAlign: 'left' }}>
               <thead>
                 <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem' }}>Zone Name</th>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem' }}>Zone Code</th>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem' }}>District</th>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem' }}>Congestion</th>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem' }}>Cycle (sec)</th>
-                  <th style={{ padding: '0.75rem 1rem', fontWeight: 600, color: '#475569', fontSize: '0.875rem', textAlign: 'right' }}>Actions</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Zone Name</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Zone Code</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>District</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Congestion</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Cycle (sec)</th>
+                  <th style={{ padding: '0.85rem 1.15rem', fontWeight: 700, color: '#64748b', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.04em', textAlign: 'right' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((zone) => {
                   const id = zone.zoneId || zone.id;
+                  const congStyle = getCongestionBadge(zone.currentCongestionLevel);
+
                   return (
                     <tr key={id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                      <td style={{ padding: '0.75rem 1rem', fontSize: '0.9rem', fontWeight: 600, color: '#1e293b' }}>
-                        {zone.zoneName}
+                      <td style={{ padding: '0.85rem 1.15rem', fontSize: '0.925rem', fontWeight: 600, color: '#0f172a' }}>
+                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                          <span>🚦</span> {zone.zoneName}
+                        </span>
                       </td>
-                      <td style={{ padding: '0.75rem 1rem', fontSize: '0.875rem', color: '#64748b' }}>
-                        <code>{zone.zoneCode}</code>
-                      </td>
-                      <td style={{ padding: '0.75rem 1rem', fontSize: '0.875rem', color: '#475569' }}>
-                        {zone.district}
-                      </td>
-                      <td style={{ padding: '0.75rem 1rem', fontSize: '0.85rem' }}>
-                        <span
+                      <td style={{ padding: '0.85rem 1.15rem', fontSize: '0.85rem' }}>
+                        <code
                           style={{
-                            padding: '0.25rem 0.5rem',
-                            borderRadius: '9999px',
+                            padding: '0.2rem 0.5rem',
+                            borderRadius: '4px',
+                            backgroundColor: '#f1f5f9',
+                            color: '#0f172a',
                             fontWeight: 600,
-                            backgroundColor:
-                              zone.currentCongestionLevel === 'SEVERE' ? '#fee2e2' :
-                              zone.currentCongestionLevel === 'HIGH' ? '#ffedd5' :
-                              zone.currentCongestionLevel === 'MODERATE' ? '#fef3c7' : '#dcfce7',
-                            color:
-                              zone.currentCongestionLevel === 'SEVERE' ? '#b91c1c' :
-                              zone.currentCongestionLevel === 'HIGH' ? '#c2410c' :
-                              zone.currentCongestionLevel === 'MODERATE' ? '#b45309' : '#15803d',
+                            border: '1px solid #e2e8f0',
                           }}
                         >
+                          {zone.zoneCode}
+                        </code>
+                      </td>
+                      <td style={{ padding: '0.85rem 1.15rem', fontSize: '0.875rem', color: '#475569' }}>
+                        {zone.district}
+                      </td>
+                      <td style={{ padding: '0.85rem 1.15rem' }}>
+                        <span
+                          className="status-badge"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.4rem',
+                            padding: '0.25rem 0.65rem',
+                            borderRadius: '9999px',
+                            fontWeight: 700,
+                            fontSize: '0.75rem',
+                            backgroundColor: congStyle.bg,
+                            color: congStyle.text,
+                            border: `1px solid ${congStyle.border}`,
+                          }}
+                        >
+                          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: congStyle.dot }} />
                           {zone.currentCongestionLevel || 'LOW'}
                         </span>
                       </td>
-                      <td style={{ padding: '0.75rem 1rem', fontSize: '0.875rem', color: '#475569' }}>
-                        {zone.signalCycleSeconds}s
+                      <td style={{ padding: '0.85rem 1.15rem', fontSize: '0.875rem', color: '#334155', fontWeight: 600 }}>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                          <span>⏱️</span> {zone.signalCycleSeconds}s
+                        </span>
                       </td>
-                      <td style={{ padding: '0.75rem 1rem', textAlign: 'right' }}>
-                        <div style={{ display: 'inline-flex', gap: '0.5rem' }}>
+                      <td style={{ padding: '0.85rem 1.15rem', textAlign: 'right' }}>
+                        <div style={{ display: 'inline-flex', gap: '0.5rem', justifyContent: 'flex-end' }}>
                           {canEdit && (
                             <button
                               type="button"
+                              className="btn-action-edit"
                               onClick={() => handleEdit(zone)}
-                              style={{
-                                padding: '0.25rem 0.6rem',
-                                fontSize: '0.8rem',
-                                border: '1px solid #cbd5e1',
-                                borderRadius: '4px',
-                                backgroundColor: '#ffffff',
-                                color: '#334155',
-                                cursor: 'pointer',
-                              }}
+                              aria-label={`Edit zone ${zone.zoneName}`}
                             >
                               Edit
                             </button>
@@ -179,16 +209,7 @@ const TrafficZoneList = () => {
                               type="button"
                               className="btn-delete"
                               onClick={() => handleDelete(id)}
-                              style={{
-                                padding: '0.25rem 0.6rem',
-                                fontSize: '0.8rem',
-                                border: '1px solid #fca5a5',
-                                borderRadius: '4px',
-                                backgroundColor: '#fee2e2',
-                                color: '#b91c1c',
-                                cursor: 'pointer',
-                                fontWeight: 600,
-                              }}
+                              aria-label={`Delete zone ${zone.zoneName}`}
                             >
                               Delete
                             </button>
