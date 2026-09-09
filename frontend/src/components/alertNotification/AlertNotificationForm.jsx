@@ -52,57 +52,21 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
   };
 
   return (
-    <div
-      className="modal-overlay"
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: 'rgba(5, 10, 20, 0.75)',
-        backdropFilter: 'blur(6px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: 1000,
-        padding: '1rem',
-      }}
-    >
-      <div
-        className="modal-content animate-fade-in"
-        style={{
-          backgroundColor: '#0f172a',
-          borderRadius: '14px',
-          width: '100%',
-          maxWidth: '520px',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05)',
-          overflow: 'hidden',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '1.25rem 1.5rem',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-            backgroundColor: 'rgba(255, 255, 255, 0.02)',
-          }}
-        >
+    <div className="modal-overlay form-overlay">
+      <div className="modal-content form-modal">
+        <div className="modal-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
             <div
               style={{
-                width: '30px',
-                height: '30px',
+                width: '32px',
+                height: '32px',
                 borderRadius: '8px',
                 background: 'rgba(239, 68, 68, 0.15)',
                 border: '1px solid rgba(239, 68, 68, 0.3)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#ef4444',
+                color: 'var(--danger-text)',
               }}
             >
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -110,9 +74,14 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
                 <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
               </svg>
             </div>
-            <h2 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600, color: '#f8fafc' }}>
-              Broadcast Operational Alert
-            </h2>
+            <div>
+              <h2 className="modal-title">
+                Broadcast Operational Alert
+              </h2>
+              <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                Dispatch critical notifications to specific municipal roles
+              </p>
+            </div>
           </div>
 
           <button
@@ -120,33 +89,18 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
             className="btn-close"
             onClick={onClose}
             aria-label="Close"
-            style={{
-              background: 'transparent',
-              border: 'none',
-              fontSize: '1.125rem',
-              cursor: 'pointer',
-              color: '#94a3b8',
-              padding: '0.35rem',
-              borderRadius: '6px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
           >
             ✕
           </button>
         </div>
 
-        <div style={{ padding: '1.5rem' }}>
+        <div>
           {formError && <ErrorHandler error={formError} />}
 
           <form onSubmit={handleSubmit}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
-              <div>
-                <label
-                  htmlFor="targetRole"
-                  style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600, fontSize: '0.8125rem', color: '#cbd5e1' }}
-                >
+              <div className="form-group" style={{ margin: 0 }}>
+                <label htmlFor="targetRole">
                   Target Role
                 </label>
                 <select
@@ -155,17 +109,6 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
                   name="targetRole"
                   value={targetRole}
                   onChange={(e) => setTargetRole(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.625rem 0.875rem',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    backgroundColor: '#1e293b',
-                    color: '#f8fafc',
-                    fontSize: '0.875rem',
-                    boxSizing: 'border-box',
-                    outline: 'none',
-                  }}
                 >
                   <option value="CITY_ADMINISTRATOR">CITY_ADMINISTRATOR</option>
                   <option value="TRAFFIC_CONTROLLER">TRAFFIC_CONTROLLER</option>
@@ -174,11 +117,8 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
                 </select>
               </div>
 
-              <div>
-                <label
-                  htmlFor="severity"
-                  style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600, fontSize: '0.8125rem', color: '#cbd5e1' }}
-                >
+              <div className="form-group" style={{ margin: 0 }}>
+                <label htmlFor="severity">
                   Severity
                 </label>
                 <select
@@ -186,17 +126,6 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
                   name="severity"
                   value={severity}
                   onChange={(e) => setSeverity(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '0.625rem 0.875rem',
-                    borderRadius: '8px',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    backgroundColor: '#1e293b',
-                    color: '#f8fafc',
-                    fontSize: '0.875rem',
-                    boxSizing: 'border-box',
-                    outline: 'none',
-                  }}
                 >
                   <option value="LOW">LOW</option>
                   <option value="MEDIUM">MEDIUM</option>
@@ -206,12 +135,9 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
               </div>
             </div>
 
-            <div style={{ marginBottom: '1.5rem' }}>
-              <label
-                htmlFor="message"
-                style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600, fontSize: '0.8125rem', color: '#cbd5e1' }}
-              >
-                Alert Message <span style={{ color: '#ef4444' }}>*</span>
+            <div className="form-group" style={{ marginBottom: '1.5rem' }}>
+              <label htmlFor="message">
+                Alert Message <span style={{ color: 'var(--danger-text)' }}>*</span>
               </label>
               <textarea
                 id="message"
@@ -221,36 +147,23 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 required
-                style={{
-                  width: '100%',
-                  padding: '0.625rem 0.875rem',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  color: '#f8fafc',
-                  fontSize: '0.875rem',
-                  boxSizing: 'border-box',
-                  outline: 'none',
-                  resize: 'vertical',
-                }}
               />
             </div>
 
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem' }}>
+            <div
+              className="modal-actions"
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                gap: '0.75rem',
+                borderTop: '1px solid var(--border-subtle)',
+                paddingTop: '1.25rem',
+              }}
+            >
               <button
                 type="button"
+                className="btn-secondary"
                 onClick={onClose}
-                style={{
-                  padding: '0.55rem 1.125rem',
-                  borderRadius: '8px',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.05)',
-                  color: '#cbd5e1',
-                  cursor: 'pointer',
-                  fontWeight: 500,
-                  fontSize: '0.875rem',
-                  transition: 'all 0.15s ease',
-                }}
               >
                 Cancel
               </button>
@@ -258,18 +171,6 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
                 type="submit"
                 className="btn-submit btn-primary"
                 disabled={submitting || !message.trim()}
-                style={{
-                  padding: '0.55rem 1.25rem',
-                  borderRadius: '8px',
-                  border: 'none',
-                  backgroundColor: submitting || !message.trim() ? '#475569' : '#2563eb',
-                  color: '#ffffff',
-                  cursor: submitting || !message.trim() ? 'not-allowed' : 'pointer',
-                  fontWeight: 600,
-                  fontSize: '0.875rem',
-                  boxShadow: submitting || !message.trim() ? 'none' : '0 2px 8px rgba(37, 99, 235, 0.3)',
-                  transition: 'all 0.15s ease',
-                }}
               >
                 {submitting ? 'Broadcasting...' : 'Send Alert'}
               </button>

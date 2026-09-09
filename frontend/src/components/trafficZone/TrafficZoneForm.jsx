@@ -137,7 +137,7 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
               {isEditMode ? 'Edit Traffic Zone' : 'Register New Traffic Zone'}
             </h2>
             <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
-              {isEditMode ? `Updating zone record #${targetId}` : 'Establish municipal monitoring zone and signal timing'}
+              {isEditMode ? `Updating zone record #${zone?.zoneId || zone?.id}` : 'Establish municipal monitoring zone and signal timing'}
             </p>
           </div>
           <button
