@@ -66,21 +66,21 @@ const Alert = ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0.8rem 1.15rem',
-        borderRadius: '8px',
+        padding: '0.9rem 1.25rem',
+        borderRadius: '12px',
         backgroundColor: config.bg,
         color: config.text,
         border: `1px solid ${config.border}`,
-        marginBottom: '1rem',
+        marginBottom: '1.25rem',
         fontSize: '0.9rem',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+        boxShadow: 'inset 0 1px 1px rgba(255, 255, 255, 0.6), 0 4px 10px rgba(0, 0, 0, 0.04)',
       }}
     >
-      <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
         <span
           style={{
-            width: '20px',
-            height: '20px',
+            width: '24px',
+            height: '24px',
             borderRadius: '50%',
             backgroundColor: config.iconBg,
             color: '#ffffff',
@@ -88,13 +88,14 @@ const Alert = ({
             alignItems: 'center',
             justifyContent: 'center',
             fontSize: '0.75rem',
-            fontWeight: 700,
+            fontWeight: 800,
             flexShrink: 0,
+            boxShadow: '0 2px 4px rgba(0,0,0,0.15)',
           }}
         >
           {config.icon}
         </span>
-        <span style={{ fontWeight: 500 }}>{message}</span>
+        <span style={{ fontWeight: 600 }}>{message}</span>
       </div>
       <button
         type="button"
@@ -109,7 +110,7 @@ const Alert = ({
           cursor: 'pointer',
           fontWeight: 'bold',
           marginLeft: '1rem',
-          fontSize: '1.15rem',
+          fontSize: '1.25rem',
           padding: '0 4px',
           opacity: 0.75,
           transition: 'opacity 0.15s ease',

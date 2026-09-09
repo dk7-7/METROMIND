@@ -194,9 +194,9 @@ const TrafficIncidentForm = ({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '1.25rem',
-            borderBottom: '1px solid #e2e8f0',
-            paddingBottom: '0.85rem',
+            marginBottom: '1.5rem',
+            borderBottom: '1px solid var(--border-subtle)',
+            paddingBottom: '1rem',
           }}
         >
           <div>
@@ -205,13 +205,13 @@ const TrafficIncidentForm = ({
               style={{
                 margin: 0,
                 fontSize: '1.25rem',
-                fontWeight: 700,
-                color: '#0f172a',
+                fontWeight: 750,
+                color: 'var(--text-main)',
               }}
             >
               {isEditMode ? 'Edit Traffic Incident' : 'Report New Incident'}
             </h2>
-            <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: '#64748b' }}>
+            <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
               {isEditMode ? `Updating incident record #${targetId}` : 'Submit municipal emergency or roadway alert'}
             </p>
           </div>
@@ -220,16 +220,6 @@ const TrafficIncidentForm = ({
             className="btn-close close-btn"
             onClick={onClose}
             aria-label="Close"
-            style={{
-              background: 'none',
-              border: 'none',
-              fontSize: '1.25rem',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              color: '#64748b',
-              padding: '4px 8px',
-              borderRadius: '4px',
-            }}
           >
             ×
           </button>
@@ -247,18 +237,18 @@ const TrafficIncidentForm = ({
         )}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group" style={{ marginBottom: '1.15rem' }}>
+          <div className="form-group" style={{ marginBottom: '1.25rem' }}>
             <label
               htmlFor="title"
               style={{
                 display: 'block',
-                marginBottom: '0.4rem',
+                marginBottom: '0.45rem',
                 fontWeight: 600,
-                fontSize: '0.875rem',
-                color: '#334155',
+                fontSize: '0.835rem',
+                color: 'var(--text-secondary)',
               }}
             >
-              Incident Title <span style={{ color: '#ef4444' }}>*</span>
+              Incident Title <span style={{ color: 'var(--danger-text)' }}>*</span>
             </label>
             <input
               ref={titleInputRef}
@@ -273,27 +263,19 @@ const TrafficIncidentForm = ({
                 if (formWarning) setFormWarning(null);
               }}
               required
-              style={{
-                width: '100%',
-                padding: '0.6rem 0.85rem',
-                borderRadius: '6px',
-                border: '1px solid #cbd5e1',
-                fontSize: '0.9rem',
-                boxSizing: 'border-box',
-              }}
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.15rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
             <div className="form-group" style={{ margin: 0 }}>
               <label
                 htmlFor="severity"
                 style={{
                   display: 'block',
-                  marginBottom: '0.4rem',
+                  marginBottom: '0.45rem',
                   fontWeight: 600,
-                  fontSize: '0.875rem',
-                  color: '#334155',
+                  fontSize: '0.835rem',
+                  color: 'var(--text-secondary)',
                 }}
               >
                 Severity
@@ -303,15 +285,6 @@ const TrafficIncidentForm = ({
                 name="severity"
                 value={severity}
                 onChange={(e) => setSeverity(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.85rem',
-                  borderRadius: '6px',
-                  border: '1px solid #cbd5e1',
-                  fontSize: '0.9rem',
-                  backgroundColor: '#ffffff',
-                  boxSizing: 'border-box',
-                }}
               >
                 <option value="LOW">LOW</option>
                 <option value="MEDIUM">MEDIUM</option>
@@ -325,10 +298,10 @@ const TrafficIncidentForm = ({
                 htmlFor="trafficZone"
                 style={{
                   display: 'block',
-                  marginBottom: '0.4rem',
+                  marginBottom: '0.45rem',
                   fontWeight: 600,
-                  fontSize: '0.875rem',
-                  color: '#334155',
+                  fontSize: '0.835rem',
+                  color: 'var(--text-secondary)',
                 }}
               >
                 Traffic Zone
@@ -340,15 +313,6 @@ const TrafficIncidentForm = ({
                 onChange={(e) => {
                   setZoneId(e.target.value);
                   if (formWarning) setFormWarning(null);
-                }}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.85rem',
-                  borderRadius: '6px',
-                  border: '1px solid #cbd5e1',
-                  fontSize: '0.9rem',
-                  backgroundColor: '#ffffff',
-                  boxSizing: 'border-box',
                 }}
               >
                 <option value="">Select a Traffic Zone</option>
@@ -369,10 +333,10 @@ const TrafficIncidentForm = ({
               htmlFor="description"
               style={{
                 display: 'block',
-                marginBottom: '0.4rem',
+                marginBottom: '0.45rem',
                 fontWeight: 600,
-                fontSize: '0.875rem',
-                color: '#334155',
+                fontSize: '0.835rem',
+                color: 'var(--text-secondary)',
               }}
             >
               Description & Field Details
@@ -384,14 +348,6 @@ const TrafficIncidentForm = ({
               placeholder="Provide operational context, emergency response units dispatched, lane closures, etc."
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '0.6rem 0.85rem',
-                borderRadius: '6px',
-                border: '1px solid #cbd5e1',
-                fontSize: '0.9rem',
-                boxSizing: 'border-box',
-              }}
             />
           </div>
 
@@ -401,8 +357,8 @@ const TrafficIncidentForm = ({
               display: 'flex',
               justifyContent: 'flex-end',
               gap: '0.75rem',
-              borderTop: '1px solid #e2e8f0',
-              paddingTop: '1rem',
+              borderTop: '1px solid var(--border-subtle)',
+              paddingTop: '1.25rem',
             }}
           >
             <button

@@ -119,20 +119,25 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            marginBottom: '1.25rem',
-            borderBottom: '1px solid #e2e8f0',
-            paddingBottom: '0.85rem',
+            marginBottom: '1.5rem',
+            borderBottom: '1px solid var(--border-subtle)',
+            paddingBottom: '1rem',
           }}
         >
           <div>
             <h2
               className="modal-title"
-              style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, color: '#0f172a' }}
+              style={{
+                margin: 0,
+                fontSize: '1.25rem',
+                fontWeight: 750,
+                color: 'var(--text-main)',
+              }}
             >
-              {isEditMode ? 'Edit Traffic Zone' : 'Add Traffic Zone'}
+              {isEditMode ? 'Edit Traffic Zone' : 'Register New Traffic Zone'}
             </h2>
-            <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: '#64748b' }}>
-              {isEditMode ? `Updating parameters for ${zone.zoneName}` : 'Configure a new traffic monitoring sector'}
+            <p style={{ margin: '0.2rem 0 0 0', fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+              {isEditMode ? `Updating zone record #${targetId}` : 'Establish municipal monitoring zone and signal timing'}
             </p>
           </div>
           <button
@@ -140,16 +145,6 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
             className="btn-close close-btn"
             onClick={onClose}
             aria-label="Close"
-            style={{
-              background: 'none',
-              border: 'none',
-              fontSize: '1.25rem',
-              fontWeight: 'bold',
-              cursor: 'pointer',
-              color: '#64748b',
-              padding: '4px 8px',
-              borderRadius: '4px',
-            }}
           >
             ×
           </button>
@@ -158,12 +153,12 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
         {formError && <ErrorHandler error={formError} />}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-group" style={{ marginBottom: '1.15rem' }}>
+          <div className="form-group" style={{ marginBottom: '1.25rem' }}>
             <label
               htmlFor="zoneName"
-              style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600, fontSize: '0.875rem', color: '#334155' }}
+              style={{ display: 'block', marginBottom: '0.45rem', fontWeight: 600, fontSize: '0.835rem', color: 'var(--text-secondary)' }}
             >
-              Zone Name <span style={{ color: '#ef4444' }}>*</span>
+              Zone Name <span style={{ color: 'var(--danger-text)' }}>*</span>
             </label>
             <input
               ref={firstInputRef}
@@ -174,24 +169,16 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
               value={zoneName}
               onChange={(e) => setZoneName(e.target.value)}
               required
-              style={{
-                width: '100%',
-                padding: '0.6rem 0.85rem',
-                borderRadius: '6px',
-                border: '1px solid #cbd5e1',
-                fontSize: '0.9rem',
-                boxSizing: 'border-box',
-              }}
             />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.15rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.25rem' }}>
             <div className="form-group" style={{ margin: 0 }}>
               <label
                 htmlFor="zoneCode"
-                style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600, fontSize: '0.875rem', color: '#334155' }}
+                style={{ display: 'block', marginBottom: '0.45rem', fontWeight: 600, fontSize: '0.835rem', color: 'var(--text-secondary)' }}
               >
-                Zone Code <span style={{ color: '#ef4444' }}>*</span>
+                Zone Code <span style={{ color: 'var(--danger-text)' }}>*</span>
               </label>
               <input
                 id="zoneCode"
@@ -202,22 +189,13 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
                 onChange={(e) => setZoneCode(e.target.value)}
                 required
                 disabled={isEditMode}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.85rem',
-                  borderRadius: '6px',
-                  border: '1px solid #cbd5e1',
-                  fontSize: '0.9rem',
-                  backgroundColor: isEditMode ? '#f1f5f9' : '#ffffff',
-                  boxSizing: 'border-box',
-                }}
               />
             </div>
 
             <div className="form-group" style={{ margin: 0 }}>
               <label
                 htmlFor="district"
-                style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600, fontSize: '0.875rem', color: '#334155' }}
+                style={{ display: 'block', marginBottom: '0.45rem', fontWeight: 600, fontSize: '0.835rem', color: 'var(--text-secondary)' }}
               >
                 District
               </label>
@@ -229,14 +207,6 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
                 value={district}
                 onChange={(e) => setDistrict(e.target.value)}
                 required
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.85rem',
-                  borderRadius: '6px',
-                  border: '1px solid #cbd5e1',
-                  fontSize: '0.9rem',
-                  boxSizing: 'border-box',
-                }}
               />
             </div>
           </div>
@@ -245,7 +215,7 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
             <div className="form-group" style={{ margin: 0 }}>
               <label
                 htmlFor="currentCongestionLevel"
-                style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600, fontSize: '0.875rem', color: '#334155' }}
+                style={{ display: 'block', marginBottom: '0.45rem', fontWeight: 600, fontSize: '0.835rem', color: 'var(--text-secondary)' }}
               >
                 Congestion Level
               </label>
@@ -254,15 +224,6 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
                 name="currentCongestionLevel"
                 value={currentCongestionLevel}
                 onChange={(e) => setCurrentCongestionLevel(e.target.value)}
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.85rem',
-                  borderRadius: '6px',
-                  border: '1px solid #cbd5e1',
-                  fontSize: '0.9rem',
-                  backgroundColor: '#ffffff',
-                  boxSizing: 'border-box',
-                }}
               >
                 <option value="LOW">LOW</option>
                 <option value="MODERATE">MODERATE</option>
@@ -274,7 +235,7 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
             <div className="form-group" style={{ margin: 0 }}>
               <label
                 htmlFor="signalCycleSeconds"
-                style={{ display: 'block', marginBottom: '0.4rem', fontWeight: 600, fontSize: '0.875rem', color: '#334155' }}
+                style={{ display: 'block', marginBottom: '0.45rem', fontWeight: 600, fontSize: '0.835rem', color: 'var(--text-secondary)' }}
               >
                 Signal Cycle (Seconds)
               </label>
@@ -287,14 +248,6 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
                 value={signalCycleSeconds}
                 onChange={(e) => setSignalCycleSeconds(e.target.value)}
                 required
-                style={{
-                  width: '100%',
-                  padding: '0.6rem 0.85rem',
-                  borderRadius: '6px',
-                  border: '1px solid #cbd5e1',
-                  fontSize: '0.9rem',
-                  boxSizing: 'border-box',
-                }}
               />
             </div>
           </div>
@@ -305,8 +258,8 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
               display: 'flex',
               justifyContent: 'flex-end',
               gap: '0.75rem',
-              borderTop: '1px solid #e2e8f0',
-              paddingTop: '1rem',
+              borderTop: '1px solid var(--border-subtle)',
+              paddingTop: '1.25rem',
             }}
           >
             <button
