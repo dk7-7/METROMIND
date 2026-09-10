@@ -379,54 +379,124 @@ code, pre, .font-mono, td:first-child, .badge-id {
   transform: translateY(0);
 }
 
-/* Theme Toggle Pill Switch */
+/* ==========================================================================
+   THEME TOGGLE ORBITAL CAPSULE (Tactical HUD Switcher)
+   ========================================================================== */
 .theme-toggle-btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: var(--glass-bg-subtle);
+  gap: 9px;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.75) 0%, rgba(10, 18, 36, 0.9) 100%);
   color: var(--text-main);
-  border: 1px solid var(--glass-border-default);
-  padding: 6px 14px;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  padding: 5px 14px 5px 6px;
   font-size: 0.8rem;
-  font-weight: 600;
+  font-weight: 700;
   border-radius: var(--radius-full);
   cursor: pointer;
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow), var(--glass-inner-light);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.12);
   transition: all var(--transition-fast);
-  margin-left: 6px;
+  margin-left: 8px;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Subtle top edge neon reflex */
+.theme-toggle-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), transparent);
+  opacity: 0.7;
+  transition: opacity var(--transition-fast);
 }
 
 .theme-toggle-btn:hover {
-  background: var(--glass-bg-elevated);
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.9) 0%, rgba(14, 30, 58, 0.95) 100%);
   border-color: var(--accent-cyan);
-  box-shadow: 0 0 14px var(--glass-border-glow);
-  transform: translateY(-1px);
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.35), inset 0 0 10px rgba(0, 240, 255, 0.15);
+  transform: translateY(-1px) scale(1.02);
+}
+
+.theme-toggle-btn:hover::before {
+  opacity: 1;
 }
 
 .theme-toggle-btn:active {
-  transform: translateY(0);
+  transform: translateY(0) scale(0.97);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
 }
 
 .theme-toggle-icon {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   line-height: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: transform 0.3s ease;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: rgba(0, 240, 255, 0.12);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow var(--transition-fast), background-color var(--transition-fast);
 }
 
 .theme-toggle-btn:hover .theme-toggle-icon {
-  transform: rotate(20deg);
+  transform: rotate(35deg) scale(1.12);
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.5);
+  background: rgba(0, 240, 255, 0.22);
 }
 
 .theme-toggle-text {
-  font-size: 0.78rem;
-  letter-spacing: 0.04em;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.3);
+  transition: color var(--transition-fast), text-shadow var(--transition-fast);
+}
+
+.theme-toggle-btn:hover .theme-toggle-text {
+  color: #ffffff;
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+}
+
+/* Light theme variant for capsule */
+[data-theme="light"] .theme-toggle-btn {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(240, 246, 255, 0.95) 100%);
+  border-color: rgba(2, 132, 199, 0.35);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+[data-theme="light"] .theme-toggle-btn:hover {
+  background: #ffffff;
+  border-color: #0284c7;
+  box-shadow: 0 0 16px rgba(2, 132, 199, 0.25), inset 0 0 6px rgba(2, 132, 199, 0.1);
+}
+
+[data-theme="light"] .theme-toggle-icon {
+  background: rgba(2, 132, 199, 0.1);
+  border-color: rgba(2, 132, 199, 0.3);
+  box-shadow: 0 0 8px rgba(2, 132, 199, 0.2);
+}
+
+[data-theme="light"] .theme-toggle-text {
+  color: #0369a1;
+  text-shadow: none;
+}
+
+[data-theme="light"] .theme-toggle-btn:hover .theme-toggle-text {
+  color: #0c4a6e;
+  text-shadow: none;
 }
 
 /* ==========================================================================
