@@ -38,9 +38,11 @@ const TrafficIncidentForm = ({
   const [formWarning, setFormWarning] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  const trafficZones = useSelector(
-    (state) => state.trafficZone?.items || state.trafficZones?.items || []
-  );
+  const {
+    items: trafficZones = [],
+    loading: trafficZonesLoading = false,
+    error: trafficZonesError = null,
+  } = useSelector((state) => state.trafficZone || state.trafficZones || {});
 
   useEffect(() => {
     if (titleInputRef.current) {
@@ -87,6 +89,11 @@ const TrafficIncidentForm = ({
     setFormWarning(null);
 
     if (!title.trim()) {
+      return;
+    }
+
+    if (trafficZones.length > 0 && !zoneId) {
+      setFormWarning('Traffic Zone not selected');
       return;
     }
 
@@ -209,12 +216,20 @@ const TrafficIncidentForm = ({
               id="trafficZone"
               name="trafficZone"
               value={zoneId}
+              disabled={trafficZonesLoading && trafficZones.length === 0}
               onChange={(e) => {
                 setZoneId(e.target.value);
                 if (formWarning) setFormWarning(null);
+                if (formError) setFormError(null);
               }}
             >
-              <option value="">Select a Traffic Zone</option>
+              {trafficZonesLoading && trafficZones.length === 0 ? (
+                <option value="">Loading traffic zones...</option>
+              ) : trafficZonesError && trafficZones.length === 0 ? (
+                <option value="">Unable to load traffic zones</option>
+              ) : (
+                <option value="">Select a Traffic Zone</option>
+              )}
               {trafficZones.map((zone) => {
                 const zId = zone.zoneId || zone.id;
                 return (
