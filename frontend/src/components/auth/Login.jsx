@@ -144,6 +144,269 @@ const SmartCityNetworkCanvas = ({ opacity = 1 }) => {
   );
 };
 
+const ROLE_SYSTEMS = [
+  {
+    id: 'CITY_ADMINISTRATOR',
+    title: 'City Administrator',
+    badge: 'CENTRAL COMMAND',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 21h18M3 7v14M21 7v14M6 7V3h12v4M9 11h2v2H9zm0 4h2v2H9zm4-4h2v2h-2zm0 4h2v2h-2z"/>
+      </svg>
+    ),
+    headline: 'Unified Municipal Intelligence',
+    description: 'Enterprise overview of all municipal infrastructure sectors, official registry synchronization, and emergency alert broadcasts.',
+    metrics: [
+      { label: 'System Uptime', value: '99.98%', tag: 'OPTIMAL' },
+      { label: 'Active Sectors', value: '16 / 16', tag: 'SYNCED' },
+      { label: 'Resolution Rate', value: '96.4%', tag: '+4.2%' },
+    ],
+    telemetryCode: 'SECTOR-00 // COMMAND OVERVIEW',
+  },
+  {
+    id: 'TRAFFIC_CONTROLLER',
+    title: 'Traffic Controller',
+    badge: 'ARTERIAL FLOW',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="6" y="2" width="12" height="20" rx="3" />
+        <circle cx="12" cy="6" r="2" />
+        <circle cx="12" cy="12" r="2" />
+        <circle cx="12" cy="18" r="2" />
+      </svg>
+    ),
+    headline: 'Real-Time Traffic & Incident Control',
+    description: 'Autonomous congestion balancing, adaptive signal timing, incident triage, and dynamic smart-corridor rerouting.',
+    metrics: [
+      { label: 'Flow Efficiency', value: '98.2%', tag: 'SMOOTH' },
+      { label: 'Active Zones', value: '24 Zones', tag: 'MONITORED' },
+      { label: 'Signal Sync', value: '100%', tag: '12ms PING' },
+    ],
+    telemetryCode: 'TRAFFIC-SYS // SMART SIGNALS',
+  },
+  {
+    id: 'UTILITY_SUPERVISOR',
+    title: 'Utility Supervisor',
+    badge: 'POWER & GRIDS',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </svg>
+    ),
+    headline: 'Substation Grids & Outage Mitigation',
+    description: 'Smart grid load balancing, automated feeder switches, voltage anomaly alerts, and rapid utility restoration pipelines.',
+    metrics: [
+      { label: 'Grid Voltage', value: '110 kV', tag: 'NORMAL' },
+      { label: 'Active Outages', value: '0 Critical', tag: 'RESOLVED' },
+      { label: 'Renewable Feed', value: '44.6%', tag: '+9.2%' },
+    ],
+    telemetryCode: 'POWER-GRID // SUBSTATION RELAY',
+  },
+  {
+    id: 'FIELD_TECHNICIAN',
+    title: 'Field Technician',
+    badge: 'RAPID RESPONSE',
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <line x1="22" y1="12" x2="18" y2="12" />
+        <line x1="6" y1="12" x2="2" y2="12" />
+        <line x1="12" y1="6" x2="12" y2="2" />
+        <line x1="12" y1="22" x2="12" y2="18" />
+      </svg>
+    ),
+    headline: 'Field Telemetry & Asset Observations',
+    description: 'Geo-tagged field observation logs, IoT sensor diagnostics, on-site hazard verification, and rapid technician dispatch.',
+    metrics: [
+      { label: 'Field Units', value: '18 Active', tag: 'DEPLOYED' },
+      { label: 'Sensor Pings', value: '1,850/s', tag: 'LIVE STREAM' },
+      { label: 'Dispatch Latency', value: '3.8 min', tag: '-1.8m' },
+    ],
+    telemetryCode: 'FIELD-OPS // SENSOR MATRIX',
+  },
+];
+
+const TELEMETRY_TICKER_ITEMS = [
+  { time: '00:44:18', type: 'TRAFFIC', message: 'Adaptive signal cycle synchronized on Downtown Arterial (Zone 04)' },
+  { time: '00:44:12', type: 'GRID', message: 'Substation East feeder #3 voltage stabilized at 110kV nominal' },
+  { time: '00:44:05', type: 'FIELD', message: 'Technician Unit #12 completed observation report for Sector 07' },
+  { time: '00:43:58', type: 'ALERT', message: 'Municipal perimeter telemetry audit completed with zero anomalies' },
+];
+
+/**
+ * Smart City Command Showcase
+ * Bespoke dynamic municipal intelligence showcase reflecting MetroMind's core systems,
+ * live telemetry cards, interactive role switches, and holographic topology radar.
+ */
+const SmartCityCommandShowcase = () => {
+  const [selectedRoleIndex, setSelectedRoleIndex] = useState(0);
+  const [tickerIndex, setTickerIndex] = useState(0);
+
+  // Auto-cycle ticker
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTickerIndex((prev) => (prev + 1) % TELEMETRY_TICKER_ITEMS.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const activeRole = ROLE_SYSTEMS[selectedRoleIndex];
+  const currentTicker = TELEMETRY_TICKER_ITEMS[tickerIndex];
+
+  return (
+    <div className="smart-city-command-showcase">
+      {/* Ambient Cybernetic Glow Backdrop */}
+      <div className="showcase-ambient-glow" aria-hidden="true" />
+
+      {/* 1. Header & Live Platform Status */}
+      <div className="showcase-header">
+        <div className="showcase-brand-tag">
+          <span className="live-radar-ping" />
+          <span className="brand-tag-text">METROMIND // COMMAND MATRIX</span>
+          <span className="tag-divider">•</span>
+          <span className="tag-version">OS v4.2</span>
+        </div>
+        <h1 className="showcase-main-title">
+          Intelligent Municipal Infrastructure Command
+        </h1>
+        <p className="showcase-lead-text">
+          Real-time urban traffic orchestration, smart utility grid balancing, and field asset telemetry unified in a single high-security command center.
+        </p>
+      </div>
+
+      {/* 2. Interactive Role System Selector */}
+      <div className="role-switch-container">
+        <div className="role-switch-label">
+          <span>OPERATIONAL SECTORS:</span>
+        </div>
+        <div className="role-pills-row" role="tablist">
+          {ROLE_SYSTEMS.map((role, idx) => (
+            <button
+              key={role.id}
+              type="button"
+              role="tab"
+              aria-selected={selectedRoleIndex === idx}
+              className={`role-tab-pill ${selectedRoleIndex === idx ? 'pill-active' : ''}`}
+              onClick={() => setSelectedRoleIndex(idx)}
+            >
+              <span className="pill-icon">{role.icon}</span>
+              <span className="pill-text">{role.title}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* 3. Active Sector Telemetry Display Panel */}
+      <div className="sector-telemetry-panel">
+        <div className="telemetry-panel-header">
+          <div className="telemetry-title-group">
+            <span className="telemetry-badge">{activeRole.badge}</span>
+            <h3 className="telemetry-headline">{activeRole.headline}</h3>
+          </div>
+          <span className="telemetry-code font-mono">{activeRole.telemetryCode}</span>
+        </div>
+
+        <p className="telemetry-description">{activeRole.description}</p>
+
+        {/* Live Metrics Grid */}
+        <div className="telemetry-metrics-grid">
+          {activeRole.metrics.map((m, i) => (
+            <div key={i} className="telemetry-metric-card">
+              <span className="metric-label">{m.label}</span>
+              <span className="metric-value font-mono">{m.value}</span>
+              <span className="metric-tag">{m.tag}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. Live Holographic City Topology Vector Radar */}
+      <div className="holographic-topology-card">
+        <div className="topology-header">
+          <div className="topology-indicator">
+            <span className="topology-pulse" />
+            <span>MUNICIPAL SENSOR TOPOLOGY</span>
+          </div>
+          <span className="topology-coordinates font-mono">LAT: 40.7128° N | LON: 74.0060° W</span>
+        </div>
+
+        <div className="topology-vector-wrapper" aria-hidden="true">
+          <svg className="topology-svg" viewBox="0 0 500 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+            {/* Grid Arteries */}
+            <line x1="40" y1="65" x2="160" y2="35" stroke="rgba(0, 240, 255, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+            <line x1="160" y1="35" x2="300" y2="85" stroke="rgba(56, 189, 248, 0.35)" strokeWidth="1.5" />
+            <line x1="300" y1="85" x2="440" y2="45" stroke="rgba(0, 240, 255, 0.25)" strokeWidth="1.5" strokeDasharray="4 4" />
+            <line x1="160" y1="35" x2="250" y2="30" stroke="rgba(99, 102, 241, 0.3)" strokeWidth="1" />
+            <line x1="250" y1="30" x2="440" y2="45" stroke="rgba(99, 102, 241, 0.3)" strokeWidth="1" />
+            <line x1="40" y1="65" x2="300" y2="85" stroke="rgba(0, 240, 255, 0.15)" strokeWidth="1" />
+
+            {/* Pulsing Data Packets */}
+            <circle cx="210" cy="52" r="3" fill="#00f0ff">
+              <animate attributeName="cx" values="160;300;160" dur="4s" repeatCount="indefinite" />
+              <animate attributeName="cy" values="35;85;35" dur="4s" repeatCount="indefinite" />
+            </circle>
+            <circle cx="360" cy="62" r="3" fill="#38bdf8">
+              <animate attributeName="cx" values="300;440;300" dur="3.5s" repeatCount="indefinite" />
+              <animate attributeName="cy" values="85;45;85" dur="3.5s" repeatCount="indefinite" />
+            </circle>
+
+            {/* Topology Nodes */}
+            {/* Node 1: West Corridor */}
+            <g transform="translate(40, 65)">
+              <circle r="12" fill="rgba(0, 240, 255, 0.1)" stroke="rgba(0, 240, 255, 0.4)" strokeWidth="1" />
+              <circle r="4" fill="#00f0ff" />
+              <text x="0" y="24" textAnchor="middle" fill="#94a3b8" fontSize="9" fontFamily="JetBrains Mono">West Corridor</text>
+            </g>
+
+            {/* Node 2: Substation Relay */}
+            <g transform="translate(160, 35)">
+              <circle r="14" fill="rgba(99, 102, 241, 0.15)" stroke="rgba(99, 102, 241, 0.5)" strokeWidth="1" />
+              <circle r="5" fill="#6366f1" />
+              <text x="0" y="-18" textAnchor="middle" fill="#94a3b8" fontSize="9" fontFamily="JetBrains Mono">Grid Substation</text>
+            </g>
+
+            {/* Node 3: Civic Command Hub */}
+            <g transform="translate(250, 30)">
+              <circle r="10" fill="rgba(56, 189, 248, 0.1)" stroke="rgba(56, 189, 248, 0.3)" strokeWidth="1" />
+              <circle r="3.5" fill="#38bdf8" />
+              <text x="0" y="-14" textAnchor="middle" fill="#64748b" fontSize="8" fontFamily="JetBrains Mono">Civic Hub</text>
+            </g>
+
+            {/* Node 4: Downtown Transit Matrix */}
+            <g transform="translate(300, 85)">
+              <circle r="16" fill="rgba(0, 240, 255, 0.2)" stroke="#00f0ff" strokeWidth="1.5" />
+              <circle r="6" fill="#00f0ff" />
+              <text x="0" y="26" textAnchor="middle" fill="#f8fafc" fontSize="10" fontWeight="bold" fontFamily="Orbitron">Downtown Core</text>
+            </g>
+
+            {/* Node 5: North Sensor Grid */}
+            <g transform="translate(440, 45)">
+              <circle r="12" fill="rgba(56, 189, 248, 0.1)" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" />
+              <circle r="4" fill="#38bdf8" />
+              <text x="0" y="24" textAnchor="middle" fill="#94a3b8" fontSize="9" fontFamily="JetBrains Mono">North Grid</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      {/* 5. Live Telemetry Activity Ticker */}
+      <div className="showcase-live-ticker">
+        <div className="ticker-badge">
+          <span className="ticker-dot" />
+          <span>LIVE EVENT STREAM</span>
+        </div>
+        <div className="ticker-content" key={tickerIndex}>
+          <span className="ticker-timestamp font-mono">{currentTicker.time}</span>
+          <span className={`ticker-type-pill type-${currentTicker.type.toLowerCase()}`}>
+            {currentTicker.type}
+          </span>
+          <span className="ticker-message">{currentTicker.message}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -368,20 +631,10 @@ const Login = () => {
         </button>
       )}
 
-      {/* 5. METROMIND SPLIT COMPOSITION: 3D SMART CITY ILLUSTRATION + LIQUID-GLASS LOGIN */}
+      {/* 5. METROMIND SPLIT COMPOSITION: SMART CITY COMMAND SHOWCASE + LIQUID-GLASS LOGIN */}
       <div className={`login-split-container ${isSettled ? 'card-settled' : isRevealing ? 'card-revealing' : isDissolving ? 'card-emerging' : 'card-dormant'}`}>
-        {/* LEFT / CENTER SHOWCASE: 3D SMART CITY INFRASTRUCTURE & THREE ROLES */}
-        <div className="login-visual-showcase">
-          <div className="visual-ambient-backdrop" aria-hidden="true" />
-          <div className="visual-image-frame">
-            <img
-              src={process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/ln_image.png` : '/ln_image.png'}
-              alt="MetroMind Smart City Infrastructure - Field Supervisor, Traffic Controller, Utility Manager"
-              className="smart-city-3d-image"
-              loading="eager"
-            />
-          </div>
-        </div>
+        {/* LEFT / CENTER SHOWCASE: DYNAMIC SMART CITY COMMAND MATRIX */}
+        <SmartCityCommandShowcase />
 
         {/* RIGHT PANEL: REFINED FROSTED-GLASS LOGIN FORM */}
         <div className="login-panel-section">
