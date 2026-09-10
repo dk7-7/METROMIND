@@ -37,8 +37,25 @@ const Login = () => {
   };
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-container">
+    <div className="auth-wrapper login-wrapper">
+      {/* Background Video Layer */}
+      <div className="login-video-backdrop" aria-hidden="true">
+        <video
+          className="login-bg-video"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          tabIndex={-1}
+        >
+          <source src={process.env.PUBLIC_URL + '/login.mp4'} type="video/mp4" />
+        </video>
+        <div className="login-bg-overlay" aria-hidden="true" />
+      </div>
+
+      <div className="auth-container login-card">
         <div className="auth-header">
           <h2 className="auth-title">MetroMind</h2>
           <p className="auth-subtitle">Command Center Login</p>
