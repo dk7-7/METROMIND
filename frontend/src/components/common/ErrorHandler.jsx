@@ -19,9 +19,6 @@ const ErrorHandler = ({ error, message, errorMessage, err }) => {
       data-testid="error-handler"
       role="alert"
     >
-      <span className="error-handler-icon">
-        !
-      </span>
       <span className="error-handler-text">{errorText}</span>
     </div>
   );

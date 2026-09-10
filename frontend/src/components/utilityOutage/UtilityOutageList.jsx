@@ -6,10 +6,11 @@ import UtilityOutageForm from './UtilityOutageForm';
 import Pagination from '../common/Pagination';
 import EmptyState from '../common/EmptyState';
 import Alert from '../common/Alert';
+import ErrorHandler from '../common/ErrorHandler';
 
 const UtilityOutageList = () => {
   const dispatch = useDispatch();
-  const { items = [], loading } = useSelector((state) => state.utilityOutage || {});
+  const { items = [], loading, error } = useSelector((state) => state.utilityOutage || state.utilityOutages || {});
   const { user } = useSelector((state) => state.auth || {});
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -61,59 +62,46 @@ const UtilityOutageList = () => {
 
   // Pagination - 5 items per page
   const itemsPerPage = 5;
-  const totalItems = items.length;
+  const rawItems = Array.isArray(items) ? items : [];
+  const totalItems = rawItems.length;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = rawItems.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="outage-list-container animate-fade-in">
-      {/* Header section */}
+    <div className="outage-list-container">
       <div className="page-header">
-        <div className="page-title-group">
-          <div className="page-title-row">
-            <h1 className="page-title">
-              <span>🔌</span> Utility Outages
-            </h1>
-            <span className="badge-record-count">
-              {items.length} Outages
-            </span>
-          </div>
-          <p className="page-subtitle">
-            Track active service disruptions, dispatch restoration crews, and manage recovery schedules
-          </p>
-        </div>
+        <h1>Utility Outages</h1>
 
         {canAdd && (
           <button
             type="button"
-            className="btn-add-outage btn-primary"
+            className="btn-add-outage"
             onClick={handleAdd}
           >
-            <span>+</span> Add Outage
+            + Add Outage
           </button>
         )}
       </div>
+
+      {error && <ErrorHandler error={error} />}
 
       {successMessage && (
         <Alert
           message={successMessage}
           type="success"
-          duration={4000}
+          duration={3000}
           onClose={() => setSuccessMessage(null)}
         />
       )}
 
-      {loading && items.length === 0 ? (
-        <div className="loading-state">
-          <div className="skeleton" />
-          <div className="skeleton" />
-        </div>
-      ) : items.length === 0 ? (
+      {loading && rawItems.length === 0 && !error ? (
+        <div className="loading-state">Loading...</div>
+      ) : rawItems.length === 0 ? (
         <EmptyState message="No utility outages found." />
       ) : (
-        <div className="table-card">
-          <div className="table-responsive">
+        <>
+          <div className="table-card">
             <table>
               <thead>
                 <tr>
@@ -121,52 +109,23 @@ const UtilityOutageList = () => {
                   <th>Affected Area</th>
                   <th>Severity</th>
                   <th>Status</th>
-                  <th>Restoration Estimate</th>
-                  <th className="th-actions">Actions</th>
+                  <th>Estimated Restoration Time</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((outage) => {
                   const id = outage.outageId || outage.id;
                   const isRestored = outage.status === 'RESTORED';
-                  const sevClass = `severity-${(outage.severity || 'low').toLowerCase()}`;
-                  const statClass = isRestored ? 'status-restored' : 'status-active';
 
                   return (
                     <tr key={id}>
+                      <td>{outage.outageType}</td>
+                      <td>{outage.affectedArea}</td>
+                      <td>{outage.severity || 'MEDIUM'}</td>
+                      <td>{outage.status || 'ACTIVE'}</td>
+                      <td>{outage.estimatedRestorationTime || 'N/A'}</td>
                       <td>
-                        <span className="outage-type-badge">
-                          {outage.outageType}
-                        </span>
-                      </td>
-                      <td className="td-affected-area">
-                        <div className="affected-area-wrapper">
-                          <span>📍</span>
-                          <span>{outage.affectedArea}</span>
-                        </div>
-                      </td>
-                      <td>
-                        <span className={`status-badge ${sevClass}`}>
-                          {outage.severity || 'MEDIUM'}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`outage-status-indicator ${statClass}`}>
-                          <span className="status-dot" />
-                          {outage.status || 'ACTIVE'}
-                        </span>
-                      </td>
-                      <td className="td-restoration-estimate">
-                        {outage.estimatedRestorationTime ? (
-                          <div className="restoration-time-wrapper">
-                            <span>⏱️</span>
-                            <span>{new Date(outage.estimatedRestorationTime).toLocaleString()}</span>
-                          </div>
-                        ) : (
-                          <span className="tbd-text">TBD</span>
-                        )}
-                      </td>
-                      <td className="td-actions">
                         <div className="action-button-group">
                           {!isRestored && canResolve && (
                             <button
@@ -203,13 +162,14 @@ const UtilityOutageList = () => {
               </tbody>
             </table>
           </div>
+
           <Pagination
             totalItems={totalItems}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}
             onPageChange={(page) => setCurrentPage(page)}
           />
-        </div>
+        </>
       )}
 
       {isModalOpen && (

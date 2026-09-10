@@ -4,7 +4,7 @@ import { removeNotification } from '../store/slices/alertNotificationSlice';
 
 const NotificationItem = ({ notification }) => {
   const dispatch = useDispatch();
-  const { id, message, type = 'info', duration = 4000 } = notification;
+  const { id, message, type = 'info', duration = 3000 } = notification;
 
   useEffect(() => {
     if (duration > 0) {
@@ -19,31 +19,12 @@ const NotificationItem = ({ notification }) => {
     dispatch(removeNotification(id));
   };
 
-  const getIcon = () => {
-    switch (type) {
-      case 'success':
-        return '✓';
-      case 'error':
-        return '✕';
-      case 'warning':
-        return '!';
-      case 'info':
-      default:
-        return 'i';
-    }
-  };
-
   return (
     <div
       className={`notification ${type}`}
       data-testid="notification-item"
     >
-      <div className="notification-content">
-        <span className="notification-icon">
-          {getIcon()}
-        </span>
-        <span className="notification-message">{message}</span>
-      </div>
+      <span className="notification-message">{message}</span>
       <button
         type="button"
         className="btn-dismiss"

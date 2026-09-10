@@ -86,21 +86,14 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
     <div className="modal-overlay form-overlay">
       <div className="modal-content form-modal">
         <div className="modal-header">
-          <div className="modal-title-group">
-            <h2 className="modal-title">
-              {isEditMode ? 'Edit Traffic Zone' : 'Register New Traffic Zone'}
-            </h2>
-            <p className="modal-subtitle">
-              {isEditMode ? `Updating zone record #${zone?.zoneId || zone?.id}` : 'Establish municipal monitoring zone and signal timing'}
-            </p>
-          </div>
+          <h2>{isEditMode ? 'Edit Traffic Zone' : 'Add Traffic Zone'}</h2>
           <button
             type="button"
-            className="btn-close close-btn"
+            className="btn-close"
             onClick={onClose}
             aria-label="Close"
           >
-            ×
+            X
           </button>
         </div>
 
@@ -108,9 +101,7 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="zoneName">
-              Zone Name <span className="required-star">*</span>
-            </label>
+            <label htmlFor="zoneName">Zone Name</label>
             <input
               ref={firstInputRef}
               id="zoneName"
@@ -123,88 +114,69 @@ const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
             />
           </div>
 
-          <div className="form-row-2">
-            <div className="form-group">
-              <label htmlFor="zoneCode">
-                Zone Code <span className="required-star">*</span>
-              </label>
-              <input
-                id="zoneCode"
-                name="zoneCode"
-                type="text"
-                placeholder="e.g. Z-101"
-                value={zoneCode}
-                onChange={(e) => setZoneCode(e.target.value)}
-                required
-                disabled={isEditMode}
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="district">
-                District
-              </label>
-              <input
-                id="district"
-                name="district"
-                type="text"
-                placeholder="e.g. Central City"
-                value={district}
-                onChange={(e) => setDistrict(e.target.value)}
-                required
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="zoneCode">Zone Code</label>
+            <input
+              id="zoneCode"
+              name="zoneCode"
+              type="text"
+              placeholder="e.g. Z-101"
+              value={zoneCode}
+              onChange={(e) => setZoneCode(e.target.value)}
+              required
+              disabled={isEditMode}
+            />
           </div>
 
-          <div className="form-row-2">
-            <div className="form-group">
-              <label htmlFor="currentCongestionLevel">
-                Congestion Level
-              </label>
-              <select
-                id="currentCongestionLevel"
-                name="currentCongestionLevel"
-                value={currentCongestionLevel}
-                onChange={(e) => setCurrentCongestionLevel(e.target.value)}
-              >
-                <option value="LOW">LOW</option>
-                <option value="MODERATE">MODERATE</option>
-                <option value="HIGH">HIGH</option>
-                <option value="SEVERE">SEVERE</option>
-              </select>
-            </div>
+          <div className="form-group">
+            <label htmlFor="district">District</label>
+            <input
+              id="district"
+              name="district"
+              type="text"
+              placeholder="e.g. Central City"
+              value={district}
+              onChange={(e) => setDistrict(e.target.value)}
+              required
+            />
+          </div>
 
-            <div className="form-group">
-              <label htmlFor="signalCycleSeconds">
-                Signal Cycle (Seconds)
-              </label>
-              <input
-                id="signalCycleSeconds"
-                name="signalCycleSeconds"
-                type="number"
-                min="10"
-                max="300"
-                value={signalCycleSeconds}
-                onChange={(e) => setSignalCycleSeconds(e.target.value)}
-                required
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="currentCongestionLevel">Congestion Level</label>
+            <select
+              id="currentCongestionLevel"
+              name="currentCongestionLevel"
+              value={currentCongestionLevel}
+              onChange={(e) => setCurrentCongestionLevel(e.target.value)}
+            >
+              <option value="LOW">LOW</option>
+              <option value="MODERATE">MODERATE</option>
+              <option value="HIGH">HIGH</option>
+              <option value="SEVERE">SEVERE</option>
+            </select>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="signalCycleSeconds">Signal Cycle (Seconds)</label>
+            <input
+              id="signalCycleSeconds"
+              name="signalCycleSeconds"
+              type="number"
+              min="10"
+              max="300"
+              value={signalCycleSeconds}
+              onChange={(e) => setSignalCycleSeconds(e.target.value)}
+              required
+            />
           </div>
 
           <div className="modal-actions">
             <button
-              type="button"
-              className="btn-secondary"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button
               type="submit"
-              className="btn-submit btn-primary"
+              className="btn-submit"
               disabled={submitting || !zoneName.trim() || !zoneCode.trim()}
             >
-              {submitting ? 'Processing...' : isEditMode ? 'Save Changes' : 'Add Zone'}
+              {isEditMode ? 'Save Changes' : 'Add Zone'}
             </button>
           </div>
         </form>

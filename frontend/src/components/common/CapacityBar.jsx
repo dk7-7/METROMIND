@@ -4,41 +4,42 @@ const CapacityBar = ({ current = 0, total = 0, currentLoad, capacityUnits }) => 
   const cur = typeof currentLoad === 'number' ? currentLoad : Number(current) || 0;
   const tot = typeof capacityUnits === 'number' ? capacityUnits : Number(total) || 0;
 
-  let percentage = 0;
-  if (tot > 0) {
-    percentage = (cur / tot) * 100;
-  }
+  const percentage = tot > 0 ? (cur / tot) * 100 : 0;
+  const clampedPercentage = Math.min(Math.max(percentage, 0), 100);
 
-  let statusClass = 'status-normal';
-  let statusText = 'NORMAL';
-
+  let color = '#22c55e';
   if (percentage >= 90) {
-    statusClass = 'status-critical';
-    statusText = 'CRITICAL';
+    color = '#ef4444';
   } else if (percentage >= 70) {
-    statusClass = 'status-elevated';
-    statusText = 'ELEVATED';
+    color = '#f59e0b';
   }
 
   return (
-    <div className={`capacity-bar-container ${statusClass}`}>
-      <div className="capacity-bar-labels">
-        <span className="capacity-bar-values">
-          {cur.toFixed(1)} <span className="capacity-bar-total">/ {tot.toFixed(1)}</span>
+    <div className="capacity-bar-container" data-testid="capacity-bar">
+      <div className="capacity-bar-info">
+        <span className="capacity-bar-text">
+          {cur} / {tot} ({percentage.toFixed(1)}%)
         </span>
-        <div className="capacity-bar-status-wrapper">
-          <span className="capacity-bar-badge">
-            {statusText}
-          </span>
-          <span className="capacity-bar-percent">
-            {percentage.toFixed(1)}%
-          </span>
-        </div>
       </div>
-      <div className="capacity-bar-track">
+      <div
+        className="capacity-bar-track"
+        style={{
+          width: '100%',
+          height: '8px',
+          backgroundColor: '#e2e8f0',
+          borderRadius: '4px',
+          overflow: 'hidden',
+        }}
+      >
         <div
           className="capacity-bar-fill"
           data-testid="capacity-bar-fill"
+          style={{
+            width: `${clampedPercentage}%`,
+            height: '100%',
+            backgroundColor: color,
+            transition: 'width 0.3s ease',
+          }}
         />
       </div>
     </div>

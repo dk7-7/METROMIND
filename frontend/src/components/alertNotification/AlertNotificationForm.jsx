@@ -55,107 +55,74 @@ const AlertNotificationForm = ({ onClose, onSuccess }) => {
     <div className="modal-overlay form-overlay">
       <div className="modal-content form-modal">
         <div className="modal-header">
-          <div className="modal-header-icon-title">
-            <div className="modal-icon-badge alert-badge">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
-                <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" />
-              </svg>
-            </div>
-            <div>
-              <h2 className="modal-title">
-                Broadcast Operational Alert
-              </h2>
-              <p className="modal-subtitle">
-                Dispatch critical notifications to specific municipal roles
-              </p>
-            </div>
-          </div>
-
+          <h2>Broadcast Alert</h2>
           <button
             type="button"
-            className="btn-close close-btn"
+            className="btn-close"
             onClick={onClose}
             aria-label="Close"
           >
-            ✕
+            X
           </button>
         </div>
 
-        <div>
-          {formError && <ErrorHandler error={formError} />}
+        {formError && <ErrorHandler error={formError} />}
 
-          <form onSubmit={handleSubmit}>
-            <div className="form-row-2">
-              <div className="form-group">
-                <label htmlFor="targetRole">
-                  Target Role
-                </label>
-                <select
-                  ref={firstInputRef}
-                  id="targetRole"
-                  name="targetRole"
-                  value={targetRole}
-                  onChange={(e) => setTargetRole(e.target.value)}
-                >
-                  <option value="CITY_ADMINISTRATOR">CITY_ADMINISTRATOR</option>
-                  <option value="TRAFFIC_CONTROLLER">TRAFFIC_CONTROLLER</option>
-                  <option value="UTILITY_SUPERVISOR">UTILITY_SUPERVISOR</option>
-                  <option value="FIELD_TECHNICIAN">FIELD_TECHNICIAN</option>
-                </select>
-              </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="targetRole">Target Role</label>
+            <select
+              ref={firstInputRef}
+              id="targetRole"
+              name="targetRole"
+              value={targetRole}
+              onChange={(e) => setTargetRole(e.target.value)}
+            >
+              <option value="CITY_ADMINISTRATOR">CITY_ADMINISTRATOR</option>
+              <option value="TRAFFIC_CONTROLLER">TRAFFIC_CONTROLLER</option>
+              <option value="UTILITY_SUPERVISOR">UTILITY_SUPERVISOR</option>
+              <option value="FIELD_TECHNICIAN">FIELD_TECHNICIAN</option>
+            </select>
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="severity">
-                  Severity
-                </label>
-                <select
-                  id="severity"
-                  name="severity"
-                  value={severity}
-                  onChange={(e) => setSeverity(e.target.value)}
-                >
-                  <option value="LOW">LOW</option>
-                  <option value="MEDIUM">MEDIUM</option>
-                  <option value="HIGH">HIGH</option>
-                  <option value="CRITICAL">CRITICAL</option>
-                </select>
-              </div>
-            </div>
+          <div className="form-group">
+            <label htmlFor="severity">Severity</label>
+            <select
+              id="severity"
+              name="severity"
+              value={severity}
+              onChange={(e) => setSeverity(e.target.value)}
+            >
+              <option value="LOW">LOW</option>
+              <option value="MEDIUM">MEDIUM</option>
+              <option value="HIGH">HIGH</option>
+              <option value="CRITICAL">CRITICAL</option>
+            </select>
+          </div>
 
-            <div className="form-group">
-              <label htmlFor="message">
-                Alert Message <span className="required-star">*</span>
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={4}
-                placeholder="e.g. Critical traffic diversion required near Sector 4 due to ongoing pipeline repair"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                required
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="message">Message</label>
+            <textarea
+              id="message"
+              name="message"
+              rows={4}
+              placeholder="e.g. Critical traffic diversion required near Sector 4"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              required
+            />
+          </div>
 
-            <div className="modal-actions">
-              <button
-                type="button"
-                className="btn-secondary"
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="btn-submit btn-primary"
-                disabled={submitting || !message.trim()}
-              >
-                {submitting ? 'Broadcasting...' : 'Send Alert'}
-              </button>
-            </div>
-          </form>
-        </div>
+          <div className="modal-actions">
+            <button
+              type="submit"
+              className="btn-submit"
+              disabled={submitting || !message.trim()}
+            >
+              Send Alert
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );

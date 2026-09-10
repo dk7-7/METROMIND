@@ -33,13 +33,10 @@ const SearchFilterBar = ({
   return (
     <div className="search-filter-bar">
       <div className="search-input-wrapper">
-        <span className="search-icon">
-          🔍
-        </span>
         <input
           type="text"
           className="search-input"
-          placeholder="Search records by title / query..."
+          placeholder="Search by title..."
           value={searchValue}
           onChange={handleSearchChange}
         />

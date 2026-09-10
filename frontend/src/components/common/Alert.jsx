@@ -23,32 +23,13 @@ const Alert = ({
 
   if (!visible || !message) return null;
 
-  const getIcon = () => {
-    switch (type) {
-      case 'success':
-        return '✓';
-      case 'error':
-        return '✕';
-      case 'warning':
-        return '!';
-      case 'info':
-      default:
-        return 'i';
-    }
-  };
-
   return (
     <div
       className={`alert alert-${type}`}
       data-testid="alert-box"
       role="alert"
     >
-      <div className="alert-content">
-        <span className="alert-icon">
-          {getIcon()}
-        </span>
-        <span className="alert-message">{message}</span>
-      </div>
+      <span className="alert-message">{message}</span>
       <button
         type="button"
         className="alert-close-btn"
@@ -58,7 +39,7 @@ const Alert = ({
         }}
         aria-label="Close"
       >
-        ×
+        X
       </button>
     </div>
   );

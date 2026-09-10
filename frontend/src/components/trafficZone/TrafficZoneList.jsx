@@ -6,10 +6,11 @@ import TrafficZoneForm from './TrafficZoneForm';
 import Pagination from '../common/Pagination';
 import EmptyState from '../common/EmptyState';
 import Alert from '../common/Alert';
+import ErrorHandler from '../common/ErrorHandler';
 
 const TrafficZoneList = () => {
   const dispatch = useDispatch();
-  const { items = [], loading } = useSelector((state) => state.trafficZone || {});
+  const { items = [], loading, error } = useSelector((state) => state.trafficZone || state.trafficZones || {});
   const { user } = useSelector((state) => state.auth || {});
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,54 +52,42 @@ const TrafficZoneList = () => {
 
   // Pagination - 5 per page
   const itemsPerPage = 5;
-  const totalItems = items.length;
+  const rawItems = Array.isArray(items) ? items : [];
+  const totalItems = rawItems.length;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = rawItems.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className="zone-list-container">
       <div className="page-header">
-        <div className="page-title-group">
-          <div className="page-title-row">
-            <h1 className="page-title">
-              Traffic Zones
-            </h1>
-            <span className="badge-record-count">
-              {items.length} Zones
-            </span>
-          </div>
-          <p className="page-subtitle">
-            Municipal corridor surveillance, traffic signal cycles, and real-time congestion monitoring
-          </p>
-        </div>
+        <h1>Traffic Zones</h1>
 
         {canAdd && (
           <button
             type="button"
-            className="btn-add-zone btn-primary"
+            className="btn-add-zone"
             onClick={handleAdd}
           >
-            <span>+</span> Add Traffic Zone
+            + Add Zone
           </button>
         )}
       </div>
+
+      {error && <ErrorHandler error={error} />}
 
       {successMessage && (
         <Alert
           message={successMessage}
           type="success"
-          duration={4000}
+          duration={3000}
           onClose={() => setSuccessMessage(null)}
         />
       )}
 
-      {loading && items.length === 0 ? (
-        <div className="loading-state">
-          <div className="skeleton" />
-          <div className="skeleton" />
-        </div>
-      ) : items.length === 0 ? (
+      {loading && rawItems.length === 0 && !error ? (
+        <div className="loading-state">Loading...</div>
+      ) : rawItems.length === 0 ? (
         <EmptyState message="No traffic zones found." />
       ) : (
         <>
@@ -109,50 +98,29 @@ const TrafficZoneList = () => {
                   <th>Zone Name</th>
                   <th>Zone Code</th>
                   <th>District</th>
-                  <th>Congestion</th>
-                  <th>Cycle (sec)</th>
-                  <th className="th-actions">Actions</th>
+                  <th>Congestion Level</th>
+                  <th>Signal Cycle (s)</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((zone) => {
                   const id = zone.zoneId || zone.id;
-                  const congLevel = (zone.currentCongestionLevel || 'low').toLowerCase();
 
                   return (
                     <tr key={id}>
-                      <td className="td-zone-name">
-                        <span className="zone-icon-title">
-                          <span>🚦</span> {zone.zoneName}
-                        </span>
-                      </td>
+                      <td>{zone.zoneName}</td>
+                      <td>{zone.zoneCode}</td>
+                      <td>{zone.district}</td>
+                      <td>{zone.currentCongestionLevel || 'LOW'}</td>
+                      <td>{zone.signalCycleSeconds}s</td>
                       <td>
-                        <code className="zone-code-badge">
-                          {zone.zoneCode}
-                        </code>
-                      </td>
-                      <td className="td-district">
-                        {zone.district}
-                      </td>
-                      <td>
-                        <span className={`status-badge congestion-${congLevel}`}>
-                          <span className="status-dot" />
-                          {zone.currentCongestionLevel || 'LOW'}
-                        </span>
-                      </td>
-                      <td className="td-cycle">
-                        <span className="cycle-badge">
-                          <span>⏱️</span> {zone.signalCycleSeconds}s
-                        </span>
-                      </td>
-                      <td className="td-actions">
                         <div className="action-button-group">
                           {canEdit && (
                             <button
                               type="button"
                               className="btn-action-edit"
                               onClick={() => handleEdit(zone)}
-                              aria-label={`Edit zone ${zone.zoneName}`}
                             >
                               Edit
                             </button>
@@ -162,7 +130,6 @@ const TrafficZoneList = () => {
                               type="button"
                               className="btn-delete"
                               onClick={() => handleDelete(id)}
-                              aria-label={`Delete zone ${zone.zoneName}`}
                             >
                               Delete
                             </button>

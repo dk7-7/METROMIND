@@ -6,10 +6,11 @@ import AlertNotificationForm from './AlertNotificationForm';
 import Pagination from '../common/Pagination';
 import EmptyState from '../common/EmptyState';
 import Alert from '../common/Alert';
+import ErrorHandler from '../common/ErrorHandler';
 
 const AlertNotificationList = () => {
   const dispatch = useDispatch();
-  const { items = [], loading } = useSelector((state) => state.alertNotification || {});
+  const { items = [], loading, error } = useSelector((state) => state.alertNotification || state.alertNotifications || {});
   const { user } = useSelector((state) => state.auth || {});
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,100 +34,68 @@ const AlertNotificationList = () => {
 
   // Pagination - 5 items per page
   const itemsPerPage = 5;
-  const totalItems = items.length;
+  const rawItems = Array.isArray(items) ? items : [];
+  const totalItems = rawItems.length;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = rawItems.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="alert-list-container animate-fade-in">
-      {/* Header section */}
+    <div className="alert-list-container">
       <div className="page-header">
-        <div className="page-title-group">
-          <div className="page-title-row">
-            <h1 className="page-title">
-              <span>⚠️</span> Alerts & Broadcasts
-            </h1>
-            <span className="badge-record-count">
-              {items.length} Alerts
-            </span>
-          </div>
-          <p className="page-subtitle">
-            Citywide emergency bulletins, operational notices, and inter-departmental dispatch logs
-          </p>
-        </div>
+        <h1>Alerts</h1>
 
         {canBroadcast && (
           <button
             type="button"
-            className="btn-broadcast-alert btn-primary"
+            className="btn-broadcast-alert"
             onClick={() => setIsModalOpen(true)}
           >
-            <span>+</span> Broadcast Alert
+            + Broadcast Alert
           </button>
         )}
       </div>
+
+      {error && <ErrorHandler error={error} />}
 
       {successMessage && (
         <Alert
           message={successMessage}
           type="success"
-          duration={4000}
+          duration={3000}
           onClose={() => setSuccessMessage(null)}
         />
       )}
 
-      {loading && items.length === 0 ? (
-        <div className="loading-state">
-          <div className="skeleton" />
-          <div className="skeleton" />
-        </div>
-      ) : items.length === 0 ? (
+      {loading && rawItems.length === 0 && !error ? (
+        <div className="loading-state">Loading...</div>
+      ) : rawItems.length === 0 ? (
         <EmptyState message="No alerts found." />
       ) : (
-        <div className="table-card">
-          <div className="table-responsive">
+        <>
+          <div className="table-card">
             <table>
               <thead>
                 <tr>
                   <th>Severity</th>
-                  <th>Alert Message</th>
+                  <th>Message</th>
                   <th>Target Role</th>
                   <th>Status</th>
-                  <th className="th-actions">Actions</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((alert) => {
                   const id = alert.alertId || alert.id;
                   const isRead = !!(alert.isRead || alert.read);
-                  const sevClass = `severity-${(alert.severity || 'low').toLowerCase()}`;
 
                   return (
-                    <tr
-                      key={id}
-                      className={isRead ? 'alert-row-read' : 'alert-row-unread'}
-                    >
+                    <tr key={id}>
+                      <td>{alert.severity || 'LOW'}</td>
+                      <td>{alert.message}</td>
+                      <td>{alert.targetRole || 'ALL'}</td>
+                      <td>{isRead ? 'Read' : 'Unread'}</td>
                       <td>
-                        <span className={`status-badge ${sevClass}`}>
-                          {alert.severity || 'LOW'}
-                        </span>
-                      </td>
-                      <td className={isRead ? 'alert-msg-read' : 'alert-msg-unread'}>
-                        <div className="alert-msg-text">{alert.message}</div>
-                      </td>
-                      <td>
-                        <span className="target-role-badge">
-                          {alert.targetRole || 'ALL'}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`alert-read-status ${isRead ? 'read' : 'new'}`}>
-                          <span className="status-dot" />
-                          {isRead ? 'Read' : 'New'}
-                        </span>
-                      </td>
-                      <td className="td-actions">
                         {!isRead && (
                           <button
                             type="button"
@@ -150,7 +119,7 @@ const AlertNotificationList = () => {
             currentPage={currentPage}
             onPageChange={(page) => setCurrentPage(page)}
           />
-        </div>
+        </>
       )}
 
       {isModalOpen && (

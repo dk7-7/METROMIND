@@ -5,10 +5,11 @@ import FieldObservationForm from './FieldObservationForm';
 import Pagination from '../common/Pagination';
 import EmptyState from '../common/EmptyState';
 import Alert from '../common/Alert';
+import ErrorHandler from '../common/ErrorHandler';
 
 const FieldObservationList = () => {
   const dispatch = useDispatch();
-  const { items = [], loading } = useSelector((state) => state.fieldObservation || {});
+  const { items = [], loading, error } = useSelector((state) => state.fieldObservation || state.fieldObservations || {});
 
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,112 +21,68 @@ const FieldObservationList = () => {
 
   // Pagination - 5 per page
   const itemsPerPage = 5;
-  const totalItems = items.length;
+  const rawItems = Array.isArray(items) ? items : [];
+  const totalItems = rawItems.length;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = rawItems.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="observation-list-container animate-fade-in">
-      {/* Header section */}
+    <div className="observation-list-container">
       <div className="page-header">
-        <div className="page-title-group">
-          <div className="page-title-row">
-            <h1 className="page-title">
-              <span>📋</span> Field Observations
-            </h1>
-            <span className="badge-record-count">
-              {items.length} Observations
-            </span>
-          </div>
-          <p className="page-subtitle">
-            Live sensor readings, technician field inspections, and on-site sensory reports
-          </p>
-        </div>
+        <h1>Field Observations</h1>
 
         <button
           type="button"
-          className="btn-add-observation btn-primary"
+          className="btn-add-observation"
           onClick={() => setIsModalOpen(true)}
         >
-          <span>+</span> Add Observation
+          + Add Observation
         </button>
       </div>
+
+      {error && <ErrorHandler error={error} />}
 
       {successMessage && (
         <Alert
           message={successMessage}
           type="success"
-          duration={4000}
+          duration={3000}
           onClose={() => setSuccessMessage(null)}
         />
       )}
 
-      {loading && items.length === 0 ? (
-        <div className="loading-state">
-          <div className="skeleton" />
-          <div className="skeleton" />
-        </div>
-      ) : items.length === 0 ? (
+      {loading && rawItems.length === 0 && !error ? (
+        <div className="loading-state">Loading...</div>
+      ) : rawItems.length === 0 ? (
         <EmptyState message="No field observations found." />
       ) : (
-        <div className="table-card">
-          <div className="table-responsive">
+        <>
+          <div className="table-card">
             <table>
               <thead>
                 <tr>
-                  <th className="th-id">ID</th>
+                  <th>ID</th>
                   <th>Observation</th>
                   <th>Sensor Reading</th>
+                  <th>Unit</th>
                   <th>Coordinates</th>
-                  <th>Technician</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((obs) => {
                   const id = obs.observationId || obs.id;
-                  const techName = obs.technician?.fullName || obs.technician?.username || 'Technician';
+
                   return (
                     <tr key={id}>
+                      <td>#{id}</td>
+                      <td>{obs.observationText}</td>
+                      <td>{obs.sensorReadingValue != null ? obs.sensorReadingValue : 'N/A'}</td>
+                      <td>{obs.unit || 'N/A'}</td>
                       <td>
-                        <span className="badge-id">
-                          #{id}
-                        </span>
-                      </td>
-                      <td className="td-observation-text">
-                        <div className="observation-text">{obs.observationText}</div>
-                      </td>
-                      <td>
-                        {obs.sensorReadingValue != null ? (
-                          <div className="sensor-reading-badge">
-                            <span>{obs.sensorReadingValue}</span>
-                            <span className="sensor-reading-unit">
-                              {obs.unit || ''}
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="na-text">N/A</span>
-                        )}
-                      </td>
-                      <td className="td-coordinates">
-                        {obs.latitude != null && obs.longitude != null ? (
-                          <div className="coordinates-badge">
-                            <span>📍</span>
-                            <span>
-                              {Number(obs.latitude).toFixed(4)}, {Number(obs.longitude).toFixed(4)}
-                            </span>
-                          </div>
-                        ) : (
-                          <span className="na-text">N/A</span>
-                        )}
-                      </td>
-                      <td>
-                        <div className="technician-wrapper">
-                          <div className="technician-avatar">
-                            {techName.charAt(0)}
-                          </div>
-                          <span className="technician-name">{techName}</span>
-                        </div>
+                        {obs.latitude != null && obs.longitude != null
+                          ? `${obs.latitude}, ${obs.longitude}`
+                          : 'N/A'}
                       </td>
                     </tr>
                   );
@@ -140,7 +97,7 @@ const FieldObservationList = () => {
             currentPage={currentPage}
             onPageChange={(page) => setCurrentPage(page)}
           />
-        </div>
+        </>
       )}
 
       {isModalOpen && (

@@ -1,23 +1,12 @@
 import React from 'react';
 
-const EmptyState = ({ message = 'No data available.' }) => {
+const EmptyState = ({ message = 'No records found.' }) => {
   return (
-    <div
-      className="empty-state"
-      data-testid="empty-state"
-    >
-      <div
-        className="empty-state-icon"
-        aria-hidden="true"
-      >
-        📡
+    <div className="empty-state" data-testid="empty-state">
+      <div className="empty-state-icon" aria-hidden="true">
+        ℹ️
       </div>
-      <p className="empty-state-message">
-        {message}
-      </p>
-      <p className="empty-state-subtext">
-        Municipal telemetry feed is active. No matching operational entries found.
-      </p>
+      <p className="empty-state-message">{message}</p>
     </div>
   );
 };
