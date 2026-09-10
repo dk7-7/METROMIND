@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { logout } from '../../store/slices/authSlice';
@@ -6,6 +6,19 @@ import { logout } from '../../store/slices/authSlice';
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'));
+  };
 
   const { isAuthenticated, user, token } = useSelector((state) => state.auth);
   const storedToken = localStorage.getItem('token');
@@ -99,6 +112,21 @@ const Navbar = () => {
               </button>
             </div>
           )}
+
+          <button
+            type="button"
+            className="theme-toggle-btn"
+            onClick={toggleTheme}
+            aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+            title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
+          >
+            <span className="theme-toggle-icon" aria-hidden="true">
+              {theme === 'dark' ? '☀️' : '🌙'}
+            </span>
+            <span className="theme-toggle-text">
+              {theme === 'dark' ? 'Light' : 'Dark'}
+            </span>
+          </button>
         </div>
       </div>
     </nav>
