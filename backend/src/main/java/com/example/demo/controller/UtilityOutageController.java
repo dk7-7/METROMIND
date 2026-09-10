@@ -45,8 +45,25 @@ public class UtilityOutageController {
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityOutage not found"));
     }
 
+    @PostMapping
+    @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR','UTILITY_SUPERVISOR')")
+    public ResponseEntity<UtilityOutage> create(@RequestBody OutageDto dto) {
+        if (utilityOutageService != null) {
+            return ResponseEntity.status(org.springframework.http.HttpStatus.CREATED).body(utilityOutageService.createOutage(dto));
+        }
+        UtilityOutage outage = UtilityOutage.builder()
+                .outageType(dto.getOutageType() != null ? com.example.demo.enums.OutageType.valueOf(dto.getOutageType()) : com.example.demo.enums.OutageType.UNPLANNED)
+                .affectedArea(dto.getAffectedArea() != null ? dto.getAffectedArea() : "Sector Area")
+                .status(com.example.demo.enums.OutageStatus.ACTIVE)
+                .severity(dto.getSeverity() != null ? com.example.demo.enums.Severity.valueOf(dto.getSeverity()) : com.example.demo.enums.Severity.MEDIUM)
+                .estimatedRestorationTime(dto.getEstimatedRestorationTime())
+                .startTime(java.time.LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(org.springframework.http.HttpStatus.CREATED).body(repository.save(outage));
+    }
+
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('UTILITY_SUPERVISOR')")
+    @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR','UTILITY_SUPERVISOR')")
     public ResponseEntity<UtilityOutage> update(@PathVariable Long id, @RequestBody OutageDto dto) {
         if (utilityOutageService != null) {
             return ResponseEntity.ok(utilityOutageService.updateOutage(id, dto));
@@ -63,7 +80,7 @@ public class UtilityOutageController {
     }
 
     @PutMapping("/{id}/resolve")
-    @PreAuthorize("hasRole('UTILITY_SUPERVISOR')")
+    @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR','UTILITY_SUPERVISOR')")
     public ResponseEntity<UtilityOutage> resolve(@PathVariable Long id, @RequestBody(required = false) Object dummy) {
         if (utilityOutageService != null) {
             return ResponseEntity.ok(utilityOutageService.resolveOutage(id));

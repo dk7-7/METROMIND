@@ -4,6 +4,7 @@ import com.example.demo.dto.OutageDto;
 import com.example.demo.entity.UtilityGrid;
 import com.example.demo.entity.UtilityOutage;
 import com.example.demo.enums.GridStatus;
+import com.example.demo.enums.GridType;
 import com.example.demo.enums.OutageStatus;
 import com.example.demo.enums.OutageType;
 import com.example.demo.enums.Severity;
@@ -34,6 +35,74 @@ public class UtilityOutageService {
     @Transactional(readOnly = true)
     public Optional<UtilityOutage> getOutageById(Long id) {
         return repository.findById(id);
+    }
+
+    public UtilityOutage createOutage(OutageDto dto) {
+        if (dto.getAffectedArea() == null || dto.getAffectedArea().trim().isEmpty()) {
+            throw new com.example.demo.exception.BusinessValidationException("Affected area cannot be empty");
+        }
+
+        OutageType type = OutageType.UNPLANNED;
+        if (dto.getOutageType() != null && !dto.getOutageType().trim().isEmpty()) {
+            try {
+                type = OutageType.valueOf(dto.getOutageType().trim().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new com.example.demo.exception.BusinessValidationException("Invalid outage type");
+            }
+        }
+
+        Severity severity = Severity.MEDIUM;
+        if (dto.getSeverity() != null && !dto.getSeverity().trim().isEmpty()) {
+            try {
+                severity = Severity.valueOf(dto.getSeverity().trim().toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new com.example.demo.exception.BusinessValidationException("Invalid severity");
+            }
+        }
+
+        UtilityGrid grid = null;
+        if (dto.getGridId() != null) {
+            grid = utilityGridRepository.findById(dto.getGridId())
+                    .orElseThrow(() -> new ResourceNotFoundException("UtilityGrid not found"));
+        } else {
+            List<UtilityGrid> grids = utilityGridRepository.findAll();
+            if (!grids.isEmpty()) {
+                grid = grids.stream()
+                        .filter(g -> g.getDistrict() != null && dto.getAffectedArea() != null &&
+                                (dto.getAffectedArea().toLowerCase().contains(g.getDistrict().toLowerCase()) ||
+                                 g.getGridName().toLowerCase().contains(dto.getAffectedArea().toLowerCase())))
+                        .findFirst()
+                        .orElse(grids.get(0));
+            }
+        }
+
+        if (grid == null) {
+            grid = utilityGridRepository.save(UtilityGrid.builder()
+                    .gridName("Central Power Grid")
+                    .gridType(GridType.POWER)
+                    .district("Central")
+                    .capacityUnits(500.0)
+                    .currentLoad(300.0)
+                    .status(GridStatus.DEGRADED)
+                    .build());
+        }
+
+        UtilityOutage outage = UtilityOutage.builder()
+                .grid(grid)
+                .outageType(type)
+                .affectedArea(dto.getAffectedArea().trim())
+                .estimatedRestorationTime(dto.getEstimatedRestorationTime())
+                .status(OutageStatus.ACTIVE)
+                .severity(severity)
+                .startTime(LocalDateTime.now())
+                .build();
+
+        UtilityOutage saved = repository.save(outage);
+
+        grid.setStatus(GridStatus.DEGRADED);
+        utilityGridRepository.save(grid);
+
+        return saved;
     }
 
     public UtilityOutage updateOutage(Long id, OutageDto dto) {

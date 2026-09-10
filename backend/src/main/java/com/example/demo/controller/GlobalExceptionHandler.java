@@ -52,6 +52,27 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(body, HttpStatus.FORBIDDEN);
     }
 
+    @ExceptionHandler(org.springframework.web.HttpRequestMethodNotSupportedException.class)
+    public ResponseEntity<Map<String, String>> handleMethodNotSupported(org.springframework.web.HttpRequestMethodNotSupportedException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler(org.springframework.web.bind.MissingServletRequestParameterException.class)
+    public ResponseEntity<Map<String, String>> handleMissingParams(org.springframework.web.bind.MissingServletRequestParameterException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
+    public ResponseEntity<Map<String, String>> handleNotReadable(org.springframework.http.converter.HttpMessageNotReadableException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", "Invalid request body or parameter format");
+        return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(org.springframework.web.bind.MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidation(org.springframework.web.bind.MethodArgumentNotValidException ex) {
         Map<String, String> body = new HashMap<>();

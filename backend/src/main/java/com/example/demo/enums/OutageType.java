@@ -1,5 +1,5 @@
 package com.example.demo.enums;
 
 public enum OutageType {
-PLANNED, UNPLANNED
+    PLANNED, UNPLANNED, EMERGENCY, MAINTENANCE
 }
