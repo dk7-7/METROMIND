@@ -268,17 +268,6 @@ const Login = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isIntroComplete, handleSkipIntro]);
 
-  // Replay Intro Handler
-  const handleReplayIntro = () => {
-    setIsIntroComplete(false);
-    setIntroPhase('video');
-    setSyncProgress(14);
-    if (videoRef.current) {
-      videoRef.current.currentTime = 0;
-      videoRef.current.play().catch(() => {});
-    }
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (error) {
@@ -513,18 +502,6 @@ const Login = () => {
                 Register Personnel
               </Link>
             </div>
-
-            {isSettled && (
-              <button
-                type="button"
-                className="replay-intro-btn"
-                onClick={handleReplayIntro}
-                title="Replay cinematic smart city intro animation"
-              >
-                <span className="replay-icon" aria-hidden="true">⟲</span>
-                <span>Replay Intro</span>
-              </button>
-            )}
           </div>
 
           {/* Bottom Security Compliance Stamp */}
