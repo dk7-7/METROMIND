@@ -913,9 +913,9 @@ tbody tr:last-child td {
 }
 
 .btn-action-edit, .btn-action-resolve {
-  background: rgba(2, 132, 199, 0.15);
+  background: rgba(2, 132, 199, 0.12);
   color: #38bdf8;
-  border: 1px solid rgba(56, 189, 248, 0.3);
+  border: 1px solid rgba(56, 189, 248, 0.35);
   padding: 5px 12px;
   font-size: 0.78rem;
   font-weight: 600;
@@ -925,15 +925,21 @@ tbody tr:last-child td {
 }
 
 .btn-action-edit:hover, .btn-action-resolve:hover {
-  background: rgba(2, 132, 199, 0.3);
+  background: rgba(2, 132, 199, 0.28);
   color: #ffffff;
   border-color: var(--accent-cyan);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-action-edit:active, .btn-action-resolve:active {
+  transform: translateY(0);
 }
 
 .btn-delete {
-  background: rgba(239, 68, 68, 0.12);
+  background: rgba(239, 68, 68, 0.1);
   color: #f87171;
-  border: 1px solid rgba(239, 68, 68, 0.28);
+  border: 1px solid rgba(239, 68, 68, 0.3);
   padding: 5px 12px;
   font-size: 0.78rem;
   font-weight: 600;
@@ -943,9 +949,15 @@ tbody tr:last-child td {
 }
 
 .btn-delete:hover {
-  background: rgba(239, 68, 68, 0.25);
+  background: rgba(239, 68, 68, 0.24);
   color: #ffffff;
   border-color: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-delete:active {
+  transform: translateY(0);
 }
 
 /* ==========================================================================
@@ -1001,6 +1013,7 @@ tbody tr:last-child td {
   color: var(--text-main);
   outline: none;
   cursor: pointer;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .filter-select:focus {
@@ -1054,6 +1067,11 @@ tbody tr:last-child td {
   background: rgba(56, 189, 248, 0.18);
   border-color: var(--accent-cyan);
   color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.btn-prev:active:not(:disabled), .btn-next:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .btn-prev:disabled, .btn-next:disabled {
@@ -1062,13 +1080,13 @@ tbody tr:last-child td {
 }
 
 /* ==========================================================================
-   CAPACITY BAR (Liquid Glass)
+   CAPACITY & TELEMETRY PROGRESS BAR
    ========================================================================== */
 .capacity-bar-container {
   display: flex;
   flex-direction: column;
   gap: 6px;
-  min-width: 150px;
+  min-width: 160px;
 }
 
 .capacity-bar-info {
@@ -1077,6 +1095,10 @@ tbody tr:last-child td {
   font-size: 0.78rem;
   font-family: 'JetBrains Mono', monospace;
   color: var(--text-secondary);
+}
+
+.capacity-bar-text {
+  font-weight: 600;
 }
 
 .capacity-bar-track {
@@ -1096,13 +1118,13 @@ tbody tr:last-child td {
 }
 
 /* ==========================================================================
-   MODALS & FORMS (Liquid Glass)
+   MODALS & FORMS (Liquid Glass Command Center)
    ========================================================================== */
 .modal-overlay, .form-overlay {
   position: fixed;
   inset: 0;
   z-index: 2000;
-  background: rgba(2, 6, 23, 0.78);
+  background: rgba(4, 8, 18, 0.78);
   backdrop-filter: var(--glass-blur-heavy);
   -webkit-backdrop-filter: var(--glass-blur-heavy);
   display: flex;
@@ -1110,6 +1132,10 @@ tbody tr:last-child td {
   justify-content: center;
   padding: 20px;
   overflow-y: auto;
+}
+
+[data-theme="light"] .modal-overlay, [data-theme="light"] .form-overlay {
+  background: rgba(15, 23, 42, 0.45);
 }
 
 .modal-content, .form-modal {
@@ -1123,6 +1149,18 @@ tbody tr:last-child td {
   max-width: 540px;
   padding: 28px;
   position: relative;
+  animation: modalScaleIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .modal-header {
@@ -1194,7 +1232,7 @@ tbody tr:last-child td {
 }
 
 /* ==========================================================================
-   AUTHENTICATION SCREENS (Login & Register)
+   AUTHENTICATION SCREENS (Login & Register Command Center)
    ========================================================================== */
 .auth-wrapper {
   display: flex;
@@ -1214,6 +1252,18 @@ tbody tr:last-child td {
   width: 100%;
   max-width: 440px;
   padding: 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.auth-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--brand-primary), var(--accent-cyan), var(--accent-indigo));
 }
 
 .auth-header {
@@ -1271,13 +1321,13 @@ tbody tr:last-child td {
 
 .registry-tabs {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   background: var(--glass-bg-secondary);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border-default);
   border-radius: var(--radius-lg);
-  padding: 8px;
+  padding: 6px;
   flex-wrap: wrap;
 }
 
@@ -1294,19 +1344,20 @@ tbody tr:last-child td {
 }
 
 .registry-tabs button:hover, .registry-tab-btn:hover {
-  color: #ffffff;
+  color: var(--text-main);
   background: var(--glass-bg-subtle);
+  transform: translateY(-1px);
 }
 
 .registry-tabs button.active, .registry-tab-btn.active {
   color: var(--accent-cyan);
   background: rgba(0, 240, 255, 0.12);
-  border-color: rgba(0, 240, 255, 0.3);
-  box-shadow: 0 0 12px rgba(0, 240, 255, 0.18);
+  border-color: rgba(0, 240, 255, 0.35);
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.18);
 }
 
 /* ==========================================================================
-   EMPTY STATE & LOADING STATE
+   EMPTY STATE & LOADING STATE (Shimmer Skeleton)
    ========================================================================== */
 .empty-state {
   background: var(--glass-bg-secondary);
@@ -1338,6 +1389,25 @@ tbody tr:last-child td {
   font-weight: 600;
   font-size: 0.95rem;
   font-family: 'JetBrains Mono', monospace;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-state::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.1), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
 /* ==========================================================================
@@ -1388,6 +1458,7 @@ tbody tr:last-child td {
   cursor: pointer;
   padding: 2px 6px;
   opacity: 0.8;
+  transition: opacity var(--transition-fast);
 }
 
 .alert-close-btn:hover {
@@ -1417,7 +1488,7 @@ tbody tr:last-child td {
   justify-content: space-between;
   padding: 14px 18px;
   border-radius: var(--radius-md);
-  background: rgba(15, 23, 42, 0.92);
+  background: rgba(12, 20, 38, 0.94);
   backdrop-filter: var(--glass-blur);
   -webkit-backdrop-filter: var(--glass-blur);
   box-shadow: var(--glass-shadow-lg);
@@ -1479,9 +1550,21 @@ tbody tr:last-child td {
 /* ==========================================================================
    RESPONSIVE DESIGN (Media Queries)
    ========================================================================== */
+@media (max-width: 1024px) {
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 768px) {
   .navbar-container {
     padding: 10px 16px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .navbar-menu {
+    justify-content: space-between;
   }
 
   .main-content {
@@ -1490,6 +1573,10 @@ tbody tr:last-child td {
 
   .stat-cards {
     grid-template-columns: 1fr;
+  }
+
+  .donut-body {
+    flex-direction: column;
   }
 
   .page-header {
@@ -1507,5 +1594,17 @@ tbody tr:last-child td {
     right: 12px;
     left: 12px;
     max-width: none;
+  }
+}
+
+/* ==========================================================================
+   ACCESSIBILITY: REDUCED MOTION SUPPORT
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
