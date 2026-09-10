@@ -368,146 +368,162 @@ const Login = () => {
         </button>
       )}
 
-      {/* 5. METROMIND LIQUID-GLASS LOGIN INTERFACE (Revealed seamlessly underneath video) */}
-      <div className={`auth-wrapper login-wrapper ${isSettled ? 'card-settled' : isRevealing ? 'card-revealing' : isDissolving ? 'card-emerging' : 'card-dormant'}`}>
-        <div className="auth-container login-card liquid-glass-panel">
-          {/* Ambient Glass Highlight Line */}
-          <div className="glass-specular-glow" aria-hidden="true" />
-
-          {/* Header & Branding */}
-          <div className="auth-header">
-            <div className="login-brand-icon-wrapper">
-              <div className="brand-icon-glow" />
-              <div className="brand-icon-inner">
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                  <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#00f0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M2 17L12 22L22 17" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M2 12L12 17L22 12" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-            </div>
-            <h2 className="auth-title">MetroMind</h2>
-            <p className="auth-subtitle">Command Center Gateway</p>
-
-            <div className="login-telemetry-badge">
-              <span className="status-live-beacon" />
-              <span className="status-badge-text">MUNICIPAL NETWORK ACTIVE</span>
-            </div>
+      {/* 5. METROMIND SPLIT COMPOSITION: 3D SMART CITY ILLUSTRATION + LIQUID-GLASS LOGIN */}
+      <div className={`login-split-container ${isSettled ? 'card-settled' : isRevealing ? 'card-revealing' : isDissolving ? 'card-emerging' : 'card-dormant'}`}>
+        {/* LEFT / CENTER SHOWCASE: 3D SMART CITY INFRASTRUCTURE & THREE ROLES */}
+        <div className="login-visual-showcase">
+          <div className="visual-ambient-backdrop" aria-hidden="true" />
+          <div className="visual-image-frame">
+            <img
+              src={process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/ln_image.png` : '/ln_image.png'}
+              alt="MetroMind Smart City Infrastructure - Field Supervisor, Traffic Controller, Utility Manager"
+              className="smart-city-3d-image"
+              loading="eager"
+            />
           </div>
+        </div>
 
-          {/* Authentication Error Feedback */}
-          {error && (
-            <div className="error-alert login-error-banner" role="alert">
-              <span className="alert-icon" aria-hidden="true">⚠️</span>
-              <span className="alert-text">
-                {typeof error === 'string' ? error : error?.message || 'Authentication failed. Please verify credentials.'}
-              </span>
-            </div>
-          )}
+        {/* RIGHT PANEL: REFINED FROSTED-GLASS LOGIN FORM */}
+        <div className="login-panel-section">
+          <div className="auth-container login-card liquid-glass-panel">
+            {/* Ambient Glass Highlight Line */}
+            <div className="glass-specular-glow" aria-hidden="true" />
 
-          {/* Login Form */}
-          <form onSubmit={handleSubmit} className="login-form-container" noValidate>
-            <div className="form-group">
-              <label htmlFor="username">
-                <span className="label-text">Username</span>
-                <span className="label-tag">OPERATOR ID</span>
-              </label>
-              <div className="input-field-wrapper">
-                <span className="input-icon" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                    <circle cx="12" cy="7" r="4"></circle>
+            {/* Header & Branding */}
+            <div className="auth-header">
+              <div className="login-brand-icon-wrapper">
+                <div className="brand-icon-glow" />
+                <div className="brand-icon-inner">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#00f0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                </span>
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  placeholder="Enter username / operator handle"
-                  value={username}
-                  onChange={(e) => {
-                    if (error) dispatch(clearError());
-                    setUsername(e.target.value);
-                  }}
-                  autoComplete="username"
-                  required
-                />
+                </div>
+              </div>
+              <h2 className="auth-title">MetroMind</h2>
+              <p className="auth-subtitle">Command Center Gateway</p>
+
+              <div className="login-telemetry-badge">
+                <span className="status-live-beacon" />
+                <span className="status-badge-text">MUNICIPAL NETWORK ACTIVE</span>
               </div>
             </div>
 
-            <div className="form-group">
-              <label htmlFor="password">
-                <span className="label-text">Password</span>
-                <span className="label-tag">SECURITY KEY</span>
-              </label>
-              <div className="input-field-wrapper">
-                <span className="input-icon" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                  </svg>
+            {/* Authentication Error Feedback */}
+            {error && (
+              <div className="error-alert login-error-banner" role="alert">
+                <span className="alert-icon" aria-hidden="true">⚠️</span>
+                <span className="alert-text">
+                  {typeof error === 'string' ? error : error?.message || 'Authentication failed. Please verify credentials.'}
                 </span>
-                <input
-                  id="password"
-                  name="password"
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder="Enter secure password"
-                  value={password}
-                  onChange={(e) => {
-                    if (error) dispatch(clearError());
-                    setPassword(e.target.value);
-                  }}
-                  autoComplete="current-password"
-                  required
-                />
-                <button
-                  type="button"
-                  className="password-toggle-btn"
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  tabIndex={0}
-                >
-                  {showPassword ? 'Hide' : 'Show'}
-                </button>
+              </div>
+            )}
+
+            {/* Login Form */}
+            <form onSubmit={handleSubmit} className="login-form-container" noValidate>
+              <div className="form-group">
+                <label htmlFor="username">
+                  <span className="label-text">Username</span>
+                  <span className="label-tag">OPERATOR ID</span>
+                </label>
+                <div className="input-field-wrapper">
+                  <span className="input-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                      <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </span>
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    placeholder="Enter username / operator handle"
+                    value={username}
+                    onChange={(e) => {
+                      if (error) dispatch(clearError());
+                      setUsername(e.target.value);
+                    }}
+                    autoComplete="username"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="password">
+                  <span className="label-text">Password</span>
+                  <span className="label-tag">SECURITY KEY</span>
+                </label>
+                <div className="input-field-wrapper">
+                  <span className="input-icon" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                  </span>
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Enter secure password"
+                    value={password}
+                    onChange={(e) => {
+                      if (error) dispatch(clearError());
+                      setPassword(e.target.value);
+                    }}
+                    autoComplete="current-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="password-toggle-btn"
+                    onClick={() => setShowPassword(!showPassword)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    tabIndex={0}
+                  >
+                    {showPassword ? 'Hide' : 'Show'}
+                  </button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                className="btn-submit login-submit-btn"
+                disabled={loading}
+              >
+                <span className="btn-glow-layer" aria-hidden="true" />
+                <span className="btn-content-flex">
+                  {loading ? (
+                    <>
+                      <span className="btn-spinner" aria-hidden="true" />
+                      <span>AUTHENTICATING CREDENTIALS...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>AUTHENTICATE & ACCESS</span>
+                      <span className="btn-arrow" aria-hidden="true">➔</span>
+                    </>
+                  )}
+                </span>
+              </button>
+            </form>
+
+            {/* Footer & Registration Navigation */}
+            <div className="auth-footer login-footer-meta">
+              <div className="auth-footer-nav">
+                <span className="footer-prompt">Need an account? </span>
+                <Link to="/register" className="register-link">
+                  Register Personnel
+                </Link>
               </div>
             </div>
 
-            <button
-              type="submit"
-              className="btn-submit login-submit-btn"
-              disabled={loading}
-            >
-              <span className="btn-glow-layer" aria-hidden="true" />
-              <span className="btn-content-flex">
-                {loading ? (
-                  <>
-                    <span className="btn-spinner" aria-hidden="true" />
-                    <span>AUTHENTICATING CREDENTIALS...</span>
-                  </>
-                ) : (
-                  <>
-                    <span>AUTHENTICATE & ACCESS</span>
-                    <span className="btn-arrow" aria-hidden="true">➔</span>
-                  </>
-                )}
-              </span>
-            </button>
-          </form>
-
-          {/* Footer & Registration Navigation */}
-          <div className="auth-footer login-footer-meta">
-            <div className="auth-footer-nav">
-              <span className="footer-prompt">Need an account? </span>
-              <Link to="/register" className="register-link">
-                Register Personnel
-              </Link>
+            {/* Bottom Security Compliance Stamp */}
+            <div className="login-security-stamp">
+              <span className="stamp-icon" aria-hidden="true">🔒</span>
+              <span>ENCRYPTED TLS 1.3 • SMART-GRID PROTOCOL VERIFIED</span>
             </div>
-          </div>
-
-          {/* Bottom Security Compliance Stamp */}
-          <div className="login-security-stamp">
-            <span className="stamp-icon" aria-hidden="true">🔒</span>
-            <span>ENCRYPTED TLS 1.3 • SMART-GRID PROTOCOL VERIFIED</span>
           </div>
         </div>
       </div>

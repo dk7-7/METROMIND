@@ -2421,52 +2421,126 @@ td:first-child {
   transform: translateX(3px);
 }
 
-/* --- 4. Liquid-Glass Login Card & Seamless Reveal (3.0s–5.0s) --- */
-.auth-wrapper.login-wrapper {
+/* --- 4. Split Composition: 3D Smart City Visual + Refined Login Panel --- */
+.login-split-container {
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 480px;
+  max-width: 1260px;
   margin: 0 auto;
-  padding: 24px;
-  display: flex;
+  padding: 24px 20px;
+  display: grid;
+  grid-template-columns: 1.16fr 0.84fr;
+  gap: 48px;
+  align-items: center;
   justify-content: center;
+  min-height: calc(100vh - 120px);
   transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), filter 1.2s ease;
 }
 
-/* Card Timeline States */
-.auth-wrapper.login-wrapper.card-dormant {
+/* Timeline Motion States */
+.login-split-container.card-dormant {
   opacity: 0;
-  transform: translateY(28px) scale(0.96);
+  transform: translateY(32px) scale(0.97);
   filter: blur(8px);
   pointer-events: none;
 }
 
-.auth-wrapper.login-wrapper.card-emerging {
+.login-split-container.card-emerging {
   opacity: 0.55;
-  transform: translateY(16px) scale(0.98);
+  transform: translateY(18px) scale(0.985);
   filter: blur(3px);
   pointer-events: none;
 }
 
-.auth-wrapper.login-wrapper.card-revealing {
+.login-split-container.card-revealing {
   opacity: 0.95;
-  transform: translateY(4px) scale(0.995);
+  transform: translateY(6px) scale(0.995);
   filter: blur(0.5px);
   pointer-events: auto;
 }
 
-.auth-wrapper.login-wrapper.card-settled {
+.login-split-container.card-settled {
   opacity: 1;
   transform: translateY(0) scale(1);
   filter: blur(0px);
   pointer-events: auto;
 }
 
+/* --- Left / Center Showcase: 3D Smart City Illustration --- */
+.login-visual-showcase {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.visual-ambient-backdrop {
+  position: absolute;
+  inset: -12%;
+  background: radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.22) 0%, rgba(56, 189, 248, 0.14) 35%, rgba(99, 102, 241, 0.08) 60%, transparent 78%);
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: 0;
+  animation: beaconPulse 4s infinite ease-in-out;
+}
+
+.visual-image-frame {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 540px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 22px;
+  overflow: hidden;
+  background: rgba(12, 20, 38, 0.45);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  box-shadow:
+    0 24px 64px -16px rgba(0, 0, 0, 0.85),
+    0 0 35px rgba(0, 240, 255, 0.14),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease, border-color 0.5s ease;
+}
+
+.visual-image-frame:hover {
+  transform: translateY(-4px) scale(1.008);
+  border-color: rgba(0, 240, 255, 0.45);
+  box-shadow:
+    0 32px 80px -16px rgba(0, 0, 0, 0.9),
+    0 0 45px rgba(0, 240, 255, 0.24),
+    inset 0 1px 1px rgba(255, 255, 255, 0.3);
+}
+
+.smart-city-3d-image {
+  width: 100%;
+  height: auto;
+  max-height: 680px;
+  object-fit: contain;
+  display: block;
+  filter: contrast(1.02) saturate(1.04);
+  transition: transform 0.6s ease;
+}
+
+/* --- Right Side: Refined Frosted-Glass Login Panel --- */
+.login-panel-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  justify-self: center;
+}
+
 /* Liquid Glass Card Shell */
 .auth-container.login-card.liquid-glass-panel {
   position: relative;
-  background: rgba(12, 20, 38, 0.78);
+  background: rgba(12, 20, 38, 0.84);
   backdrop-filter: blur(32px) saturate(160%);
   -webkit-backdrop-filter: blur(32px) saturate(160%);
   border: 1px solid rgba(56, 189, 248, 0.28);
@@ -2476,7 +2550,7 @@ td:first-child {
     0 0 32px rgba(0, 240, 255, 0.1),
     inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
   width: 100%;
-  padding: 40px 36px 32px;
+  padding: 36px 32px 28px;
   overflow: hidden;
   transition: box-shadow 0.4s ease, border-color 0.4s ease, background 0.4s ease;
 }
@@ -2835,8 +2909,52 @@ td:first-child {
   opacity: 0.7;
 }
 
-/* Mobile & Tablet Responsive Adaptations */
-@media (max-width: 768px) {
+/* Tablet & Mobile Responsive Adaptations for Split Login */
+@media (max-width: 1080px) {
+  .login-split-container {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 32px;
+    padding: 24px 16px;
+    max-width: 960px;
+  }
+
+  .smart-city-3d-image {
+    max-height: 560px;
+  }
+
+  .auth-container.login-card.liquid-glass-panel {
+    padding: 30px 24px 24px;
+  }
+}
+
+@media (max-width: 820px) {
+  .login-split-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    padding: 16px 12px 48px;
+    min-height: auto;
+  }
+
+  .login-visual-showcase {
+    width: 100%;
+    max-width: 440px;
+  }
+
+  .visual-image-frame {
+    max-height: 340px;
+  }
+
+  .smart-city-3d-image {
+    max-height: 340px;
+  }
+
+  .login-panel-section {
+    width: 100%;
+    max-width: 460px;
+  }
+
   .intro-telemetry-hud {
     padding: 20px 16px;
   }
@@ -2865,7 +2983,7 @@ td:first-child {
   }
 
   .auth-container.login-card.liquid-glass-panel {
-    padding: 28px 20px 24px;
+    padding: 28px 20px 22px;
   }
 
   .auth-title {
@@ -2877,7 +2995,9 @@ td:first-child {
 @media (prefers-reduced-motion: reduce) {
   .cinematic-video-viewport,
   .cinematic-city-video,
-  .auth-wrapper.login-wrapper,
+  .login-split-container,
+  .visual-image-frame,
+  .smart-city-3d-image,
   .intro-telemetry-hud {
     transition: none !important;
     animation: none !important;
@@ -2893,7 +3013,7 @@ td:first-child {
     display: none !important;
   }
 
-  .auth-wrapper.login-wrapper {
+  .login-split-container {
     opacity: 1 !important;
     transform: none !important;
     filter: none !important;
