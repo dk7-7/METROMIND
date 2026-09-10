@@ -2062,6 +2062,366 @@ td:first-child {
   padding: 12px 0 24px;
 }
 
+/* --- 1. Viewport & Video Backdrop with Slow Forward Drift --- */
+.cinematic-video-viewport {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cinematic-video-viewport.phase-video {
+  z-index: 20;
+}
+
+.cinematic-video-viewport.phase-dissolve {
+  z-index: 15;
+}
+
+.cinematic-video-viewport.phase-reveal,
+.cinematic-video-viewport.phase-settled {
+  z-index: 0;
+}
+
+.cinematic-city-video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%) scale(1.0);
+  object-fit: cover;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), filter 1.2s cubic-bezier(0.4, 0, 0.2, 1), transform 5s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform, opacity, filter;
+}
+
+.phase-video .cinematic-city-video {
+  opacity: 1;
+  filter: blur(0px) brightness(1.05) contrast(1.05);
+  transform: translate(-50%, -50%) scale(1.04);
+}
+
+.phase-dissolve .cinematic-city-video {
+  opacity: 0.45;
+  filter: blur(2.5px) brightness(0.85) saturate(120%);
+  transform: translate(-50%, -50%) scale(1.048);
+}
+
+.phase-reveal .cinematic-city-video {
+  opacity: 0.32;
+  filter: blur(2px) brightness(0.75);
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+.phase-settled .cinematic-city-video {
+  opacity: 0.28;
+  filter: blur(1.5px) brightness(0.70);
+  transform: translate(-50%, -50%) scale(1.05);
+}
+
+/* Smart City Network Canvas Overlay */
+.smart-city-network-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Atmospheric Darkening Veil */
+.cinematic-darkening-veil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, rgba(7, 12, 24, 0.15) 0%, rgba(7, 12, 24, 0.75) 75%, rgba(7, 12, 24, 0.95) 100%);
+  transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 1.2s ease;
+  pointer-events: none;
+  z-index: 3;
+}
+
+.phase-video .cinematic-darkening-veil {
+  opacity: 0.25;
+}
+
+.phase-dissolve .cinematic-darkening-veil {
+  opacity: 0.68;
+  background: radial-gradient(circle at 50% 45%, rgba(7, 12, 24, 0.4) 0%, rgba(7, 12, 24, 0.88) 75%, rgba(7, 12, 24, 0.98) 100%);
+}
+
+.phase-reveal .cinematic-darkening-veil,
+.phase-settled .cinematic-darkening-veil {
+  opacity: 0.82;
+  background: radial-gradient(circle at 50% 45%, rgba(7, 12, 24, 0.55) 0%, rgba(7, 12, 24, 0.92) 80%, #070c18 100%);
+}
+
+/* Atmospheric Light Bloom Flare during Dissolve (2.5s–3.5s) */
+.cinematic-bloom-flare {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 45%, rgba(0, 240, 255, 0.18) 0%, rgba(99, 102, 241, 0.10) 35%, transparent 70%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  mix-blend-mode: screen;
+}
+
+.phase-dissolve .cinematic-bloom-flare {
+  opacity: 0.95;
+  animation: bloomPulse 1s ease-in-out forwards;
+}
+
+.phase-reveal .cinematic-bloom-flare {
+  opacity: 0.25;
+  transition: opacity 1s ease;
+}
+
+.phase-settled .cinematic-bloom-flare {
+  opacity: 0;
+}
+
+@keyframes bloomPulse {
+  0% {
+    opacity: 0.2;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.02);
+  }
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+}
+
+/* Subtle Geometric Grid Matrix */
+.cinematic-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0.6;
+}
+
+/* --- 2. Smart City Telemetry HUD (0.0s–2.5s) --- */
+.intro-telemetry-hud {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 36px 48px;
+  pointer-events: none;
+  z-index: 25;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s ease;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.intro-telemetry-hud.hud-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0px);
+}
+
+.intro-telemetry-hud.hud-fading {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.99);
+  filter: blur(6px);
+  pointer-events: none;
+}
+
+.hud-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hud-brand-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(11, 19, 34, 0.65);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4), 0 0 16px rgba(0, 240, 255, 0.12);
+}
+
+.hud-pulse-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-cyan);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--accent-cyan);
+  animation: beaconPulse 1.8s infinite ease-in-out;
+}
+
+.hud-brand-label {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--accent-cyan);
+  text-shadow: 0 0 8px rgba(0, 240, 255, 0.4);
+}
+
+.hud-meta-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(11, 19, 34, 0.55);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.hud-meta-divider {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.hud-bottom-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.hud-telemetry-status {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: rgba(11, 19, 34, 0.75);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  padding: 12px 20px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  max-width: 480px;
+  width: 100%;
+}
+
+.hud-telemetry-icon {
+  font-size: 1.25rem;
+  color: var(--accent-cyan);
+  filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.6));
+}
+
+.hud-telemetry-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hud-status-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--text-main);
+}
+
+.hud-progress-track {
+  height: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.hud-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--brand-primary), var(--accent-cyan));
+  box-shadow: 0 0 10px var(--accent-cyan);
+  transition: width 0.1s linear;
+}
+
+.hud-progress-number {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  min-width: 42px;
+  text-align: right;
+}
+
+.hud-coords-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  background: rgba(11, 19, 34, 0.55);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 8px 16px;
+  border-radius: var(--radius-md);
+}
+
+.hud-coords-sub {
+  font-size: 0.65rem;
+  color: var(--accent-cyan);
+  letter-spacing: 0.08em;
+}
+
+/* --- 3. Discreet Skip Intro Button --- */
+.intro-skip-btn {
+  position: fixed;
+  top: 32px;
+  right: 40px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(11, 19, 34, 0.75);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  color: var(--text-main);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 8px 18px;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 12px rgba(0, 240, 255, 0.15);
+  transition: all var(--transition-normal);
+}
+
+.intro-skip-btn:hover {
+  background: rgba(0, 240, 255, 0.15);
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.skip-arrow {
+  font-size: 0.85rem;
+  transition: transform var(--transition-fast);
+}
+
+.intro-skip-btn:hover .skip-arrow {
+  transform: translateX(3px);
+}
+
 /* --- 4. Split Composition: 3D Smart City Visual + Refined Login Panel --- */
 .login-split-container {
   position: relative;
