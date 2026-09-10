@@ -693,24 +693,25 @@ h3 {
 }
 
 .stat-card-icon {
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-sm);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
   background: var(--glass-bg-subtle);
   border: 1px solid var(--glass-border-subtle);
-  transition: transform var(--transition-fast);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 .stat-card:hover .stat-card-icon {
-  transform: scale(1.08);
+  transform: scale(1.1);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.15);
 }
 
 .stat-card-tag {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -719,6 +720,7 @@ h3 {
   border-radius: var(--radius-sm);
   background: rgba(0, 240, 255, 0.08);
   border: 1px solid rgba(0, 240, 255, 0.2);
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .stat-card-label {
@@ -739,12 +741,13 @@ h3 {
 }
 
 .stat-card-value {
-  font-size: 2.15rem;
+  font-size: 2.25rem;
   font-weight: 800;
   color: var(--text-main);
-  letter-spacing: -0.03em;
+  letter-spacing: 0.02em;
   line-height: 1;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 16px rgba(0, 240, 255, 0.2);
 }
 
 .stat-card-pulse {
@@ -869,10 +872,16 @@ h3 {
   -webkit-backdrop-filter: blur(18px) saturate(130%);
   border: 1px solid var(--glass-border-default);
   border-radius: var(--radius-lg);
-  padding: 22px 24px;
+  padding: 24px 26px;
   box-shadow: var(--glass-shadow), var(--glass-inner-light);
   display: flex;
   flex-direction: column;
+  transition: border-color var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.incident-status-donut:hover, .recent-activity-container:hover, .dashboard-overview-panel:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glass-shadow-lg), 0 0 18px rgba(0, 240, 255, 0.08);
 }
 
 .card-header-flex {
@@ -881,7 +890,8 @@ h3 {
   justify-content: space-between;
   margin-bottom: 18px;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--glass-border-subtle);
+  border-bottom: 1px solid transparent;
+  border-image: linear-gradient(90deg, var(--glass-border-default), rgba(0, 240, 255, 0.15), var(--glass-border-default)) 1;
 }
 
 .telemetry-badge, .live-feed-badge {
@@ -1023,7 +1033,8 @@ h3 {
 .donut-legend-item:hover {
   background: var(--glass-bg-elevated);
   border-color: var(--glass-border-hover);
-  transform: translateX(2px);
+  transform: translateX(3px) scale(1.01);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .legend-status-wrapper {
@@ -1033,9 +1044,14 @@ h3 {
 }
 
 .legend-dot {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: var(--radius-full);
+  transition: transform var(--transition-fast);
+}
+
+.donut-legend-item:hover .legend-dot {
+  transform: scale(1.3);
 }
 
 .legend-status {
