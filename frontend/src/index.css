@@ -432,6 +432,9 @@ code, pre, .font-mono, td:first-child, .badge-id {
 /* ==========================================================================
    PAGE HEADERS & TYPOGRAPHY
    ========================================================================== */
+/* ==========================================================================
+   PAGE HEADERS & TYPOGRAPHY
+   ========================================================================== */
 .page-header {
   display: flex;
   align-items: center;
@@ -439,20 +442,64 @@ code, pre, .font-mono, td:first-child, .badge-id {
   margin-bottom: 24px;
   gap: 16px;
   flex-wrap: wrap;
+  padding: 16px 22px;
+  background: var(--glass-bg-primary);
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  border: 1px solid var(--glass-border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow), var(--glass-inner-light);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Page Header subtle tactical ambient scan line */
+.page-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 240, 255, 0.04) 45%,
+    rgba(0, 240, 255, 0.08) 50%,
+    rgba(0, 240, 255, 0.04) 55%,
+    transparent 100%
+  );
+  animation: scanLineSweep 5s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Neon edge accent */
+.page-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-sky), transparent);
+  opacity: 0.8;
 }
 
 h1 {
   font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  letter-spacing: 0.02em;
   color: var(--text-main);
   font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, var(--text-main) 60%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 h2 {
   font-size: 1.35rem;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.01em;
   color: var(--text-main);
   font-family: 'Orbitron', sans-serif;
 }
@@ -460,12 +507,13 @@ h2 {
 h3 {
   font-size: 1.05rem;
   font-weight: 650;
+  letter-spacing: 0.01em;
   color: var(--text-main);
   font-family: 'Orbitron', sans-serif;
 }
 
-/* Standard Buttons */
-.btn-primary, .btn-submit, .btn-add-record, .btn-add-grid, .btn-add-zone, .btn-add-observation, .btn-broadcast-alert {
+/* Standard Buttons & Command Action Buttons */
+.btn-primary, .btn-submit, .btn-add-record, .btn-add-grid, .btn-add-zone, .btn-add-outage, .btn-add-observation, .btn-broadcast-alert {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -473,24 +521,28 @@ h3 {
   background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   color: #ffffff;
   border: 1px solid rgba(56, 189, 248, 0.4);
-  padding: 8px 18px;
+  padding: 9px 20px;
   font-size: 0.875rem;
   font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  letter-spacing: 0.02em;
   border-radius: var(--radius-md);
   cursor: pointer;
   box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3), var(--glass-inner-light);
   transition: all var(--transition-fast);
   text-decoration: none;
+  position: relative;
+  z-index: 1;
 }
 
-.btn-primary:hover, .btn-submit:hover, .btn-add-record:hover, .btn-add-grid:hover, .btn-add-zone:hover, .btn-add-observation:hover, .btn-broadcast-alert:hover {
+.btn-primary:hover, .btn-submit:hover, .btn-add-record:hover, .btn-add-grid:hover, .btn-add-zone:hover, .btn-add-outage:hover, .btn-add-observation:hover, .btn-broadcast-alert:hover {
   background: linear-gradient(135deg, #0369a1 0%, #075985 100%);
   border-color: var(--accent-cyan);
-  box-shadow: 0 6px 20px rgba(0, 240, 255, 0.35);
+  box-shadow: 0 6px 22px rgba(0, 240, 255, 0.4), var(--glass-inner-light);
   transform: translateY(-1px);
 }
 
-.btn-primary:active, .btn-submit:active, .btn-add-record:active, .btn-add-grid:active, .btn-add-zone:active, .btn-add-observation:active, .btn-broadcast-alert:active {
+.btn-primary:active, .btn-submit:active, .btn-add-record:active, .btn-add-grid:active, .btn-add-zone:active, .btn-add-outage:active, .btn-add-observation:active, .btn-broadcast-alert:active {
   transform: translateY(0);
 }
 
@@ -505,9 +557,10 @@ h3 {
   background: var(--glass-bg-elevated);
   color: var(--text-main);
   border: 1px solid var(--glass-border-subtle);
-  padding: 8px 16px;
+  padding: 9px 18px;
   font-size: 0.875rem;
   font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all var(--transition-fast);
@@ -516,6 +569,7 @@ h3 {
 .btn-secondary:hover {
   background: var(--glass-bg-primary);
   border-color: var(--glass-border-hover);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
   transform: translateY(-1px);
 }
 
