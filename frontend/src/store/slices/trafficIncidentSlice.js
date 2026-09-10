@@ -50,6 +50,8 @@ export const create = createAsyncThunk(
       const message =
         error.response?.data?.message ||
         error.response?.data?.error ||
+        (error.response?.status === 409 ? 'Incident already exists' : null) ||
+        (error.response?.status === 500 ? 'Unable to save traffic incident' : null) ||
         error.message ||
         'Unable to save traffic incident';
       return rejectWithValue(message);
@@ -74,6 +76,8 @@ export const update = createAsyncThunk(
       const message =
         error.response?.data?.message ||
         error.response?.data?.error ||
+        (error.response?.status === 409 ? 'Incident already exists' : null) ||
+        (error.response?.status === 500 ? 'Unable to save traffic incident' : null) ||
         error.message ||
         'Unable to save traffic incident';
       return rejectWithValue(message);

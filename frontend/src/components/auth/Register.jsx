@@ -36,78 +36,52 @@ const Register = () => {
 
   return (
     <div className="auth-wrapper">
-      <div className="auth-container animate-fade-in">
-        {/* Brand Header */}
+      <div className="auth-container">
         <div className="auth-header">
-          <div className="auth-logo-badge">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-              <circle cx="8.5" cy="7" r="4" />
-              <line x1="20" y1="8" x2="20" y2="14" />
-              <line x1="23" y1="11" x2="17" y2="11" />
-            </svg>
-          </div>
-          <h2 className="auth-title">
-            Metro<span className="text-primary">Mind</span>
-          </h2>
-          <p className="auth-subtitle">
-            Municipal Personnel Credential Onboarding
-          </p>
+          <h2 className="auth-title">MetroMind</h2>
+          <p className="auth-subtitle">Personnel Registration</p>
         </div>
 
         {error && (
           <div className="error-alert">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <span>{typeof error === 'string' ? error : error.message || 'Registration failed'}</span>
+            {typeof error === 'string' ? error : error?.message || 'Registration failed'}
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
-          <div className="form-row-2">
-            <div className="form-group">
-              <label htmlFor="username">
-                Username <span className="required-star">*</span>
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                placeholder="Choose username"
-                value={formData.username}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">
-                Password <span className="required-star">*</span>
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Choose password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Choose a username"
+              value={formData.username}
+              onChange={handleChange}
+              required
+            />
           </div>
 
           <div className="form-group">
-            <label htmlFor="fullName">
-              Full Legal Name <span className="required-star">*</span>
-            </label>
+            <label htmlFor="password">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Choose a password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="fullName">Full Name</label>
             <input
               id="fullName"
               name="fullName"
               type="text"
-              placeholder="e.g. John Doe"
+              placeholder="Enter full name"
               value={formData.fullName}
               onChange={handleChange}
               required
@@ -115,9 +89,7 @@ const Register = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="role">
-              Operational Role <span className="required-star">*</span>
-            </label>
+            <label htmlFor="role">Role</label>
             <select
               id="role"
               name="role"
@@ -131,59 +103,42 @@ const Register = () => {
             </select>
           </div>
 
-          <div className="form-row-2">
-            <div className="form-group">
-              <label htmlFor="district">
-                Assigned District
-              </label>
-              <input
-                id="district"
-                name="district"
-                type="text"
-                placeholder="e.g. North District"
-                value={formData.district}
-                onChange={handleChange}
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="district">District</label>
+            <input
+              id="district"
+              name="district"
+              type="text"
+              placeholder="Enter district"
+              value={formData.district}
+              onChange={handleChange}
+            />
+          </div>
 
-            <div className="form-group">
-              <label htmlFor="badgeNumber">
-                Official Badge ID
-              </label>
-              <input
-                id="badgeNumber"
-                name="badgeNumber"
-                type="text"
-                placeholder="e.g. MM-4029"
-                value={formData.badgeNumber}
-                onChange={handleChange}
-              />
-            </div>
+          <div className="form-group">
+            <label htmlFor="badgeNumber">Badge Number</label>
+            <input
+              id="badgeNumber"
+              name="badgeNumber"
+              type="text"
+              placeholder="Enter badge number"
+              value={formData.badgeNumber}
+              onChange={handleChange}
+            />
           </div>
 
           <button
             type="submit"
-            className="btn-submit btn-primary"
+            className="btn-submit"
             disabled={loading}
           >
-            {loading ? (
-              <>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="animate-spin">
-                  <path d="M21 12a9 9 0 1 1-6.219-8.56" />
-                </svg>
-                Enrolling Personnel...
-              </>
-            ) : (
-              'Complete Registration'
-            )}
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
 
         <div className="auth-footer">
-          <span>Already have active credentials? </span>
-          <Link to="/login">
-            Login here
-          </Link>
+          <span>Already registered? </span>
+          <Link to="/login">Login</Link>
         </div>
       </div>
     </div>

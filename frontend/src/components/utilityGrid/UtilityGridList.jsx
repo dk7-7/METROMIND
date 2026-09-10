@@ -7,36 +7,12 @@ import CapacityBar from '../common/CapacityBar';
 import Pagination from '../common/Pagination';
 import EmptyState from '../common/EmptyState';
 import Alert from '../common/Alert';
-
-const getGridIcon = (type) => {
-  switch (type?.toUpperCase()) {
-    case 'POWER':
-      return (
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-        </svg>
-      );
-    case 'WATER':
-      return (
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z" />
-        </svg>
-      );
-    case 'GAS':
-      return (
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z" />
-        </svg>
-      );
-    default:
-      return null;
-  }
-};
+import ErrorHandler from '../common/ErrorHandler';
 
 const UtilityGridList = () => {
   const dispatch = useDispatch();
-  const { items = [], loading } = useSelector(
-    (state) => state.utilityGrid || {}
+  const { items = [], loading, error } = useSelector(
+    (state) => state.utilityGrid || state.utilityGrids || {}
   );
   const { user } = useSelector((state) => state.auth || {});
 
@@ -79,101 +55,72 @@ const UtilityGridList = () => {
 
   // Pagination - 5 items per page
   const itemsPerPage = 5;
-  const totalItems = items.length;
+  const rawItems = Array.isArray(items) ? items : [];
+  const totalItems = rawItems.length;
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = items.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = rawItems.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
-    <div className="grid-list-container animate-fade-in">
-      {/* Header section */}
+    <div className="grid-list-container">
       <div className="page-header">
-        <div className="page-title-group">
-          <div className="page-title-row">
-            <h1 className="page-title">
-              <span>⚡</span> Utility Grids
-            </h1>
-            <span className="badge-record-count">
-              {items.length} Grids
-            </span>
-          </div>
-          <p className="page-subtitle">
-            Monitor real-time load telemetry, power distribution networks, and municipal substations
-          </p>
-        </div>
+        <h1>Utility Grids</h1>
 
         {canAdd && (
           <button
             type="button"
-            className="btn-add-grid btn-primary"
+            className="btn-add-grid"
             onClick={handleAdd}
           >
-            <span>+</span> Add Utility Grid
+            + Add Grid
           </button>
         )}
       </div>
+
+      {error && <ErrorHandler error={error} />}
 
       {successMessage && (
         <Alert
           message={successMessage}
           type="success"
-          duration={4000}
+          duration={3000}
           onClose={() => setSuccessMessage(null)}
         />
       )}
 
-      {loading && items.length === 0 ? (
-        <div className="loading-state">
-          <div className="skeleton" />
-          <div className="skeleton" />
-        </div>
-      ) : items.length === 0 ? (
+      {loading && rawItems.length === 0 && !error ? (
+        <div className="loading-state">Loading...</div>
+      ) : rawItems.length === 0 ? (
         <EmptyState message="No utility grids monitored." />
       ) : (
-        <div className="table-card">
-          <div className="table-responsive">
+        <>
+          <div className="table-card">
             <table>
               <thead>
                 <tr>
                   <th>Grid Name</th>
                   <th>Grid Type</th>
                   <th>District</th>
-                  <th className="th-capacity">Capacity & Load</th>
-                  <th className="th-actions">Actions</th>
+                  <th>Capacity & Load</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((grid) => {
                   const id = grid.gridId || grid.id;
-                  const typeName = (grid.gridType || 'other').toLowerCase();
 
                   return (
                     <tr key={id}>
-                      <td className="td-grid-name">
-                        <div className="grid-name-wrapper">
-                          <span className={`grid-status-dot grid-type-dot-${typeName}`} />
-                          <span>{grid.gridName}</span>
-                        </div>
-                      </td>
-                      <td>
-                        <span className={`badge-grid-type grid-type-${typeName}`}>
-                          {getGridIcon(grid.gridType)}
-                          {grid.gridType}
-                        </span>
-                      </td>
-                      <td className="td-district">
-                        <div className="district-wrapper">
-                          <span>📍</span>
-                          <span>{grid.district}</span>
-                        </div>
-                      </td>
+                      <td>{grid.gridName || grid.name}</td>
+                      <td>{grid.gridType || grid.type}</td>
+                      <td>{grid.district}</td>
                       <td>
                         <CapacityBar
                           current={grid.currentLoad || 0}
                           total={grid.capacityUnits || 100}
                         />
                       </td>
-                      <td className="td-actions">
+                      <td>
                         <div className="action-button-group">
                           {canEdit && (
                             <button
@@ -201,13 +148,14 @@ const UtilityGridList = () => {
               </tbody>
             </table>
           </div>
+
           <Pagination
             totalItems={totalItems}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}
             onPageChange={(page) => setCurrentPage(page)}
           />
-        </div>
+        </>
       )}
 
       {isModalOpen && (

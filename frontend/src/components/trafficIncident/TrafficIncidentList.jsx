@@ -14,7 +14,7 @@ const TrafficIncidentList = () => {
   const { items = [], loading, error } = useSelector(
     (state) => state.trafficIncident || state.trafficIncidents || {}
   );
-  const { user, role: directRole } = useSelector((state) => state.auth || {});
+  const { user } = useSelector((state) => state.auth || {});
 
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
@@ -23,7 +23,7 @@ const TrafficIncidentList = () => {
   const [editingIncident, setEditingIncident] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
 
-  const role = user?.role || directRole || localStorage.getItem('role') || '';
+  const role = user?.role || localStorage.getItem('role') || '';
   const canAddRecord =
     role === 'CITY_ADMINISTRATOR' || role === 'TRAFFIC_CONTROLLER';
   const canDelete =
@@ -40,11 +40,7 @@ const TrafficIncidentList = () => {
     try {
       const resultAction = await dispatch(deleteRecord(id));
       if (deleteRecord.fulfilled.match(resultAction)) {
-        const msg =
-          resultAction.payload?.message ||
-          (typeof resultAction.payload === 'string'
-            ? resultAction.payload
-            : 'TrafficIncident deleted successfully.');
+        const msg = 'TrafficIncident deleted successfully.';
         setSuccessMessage(msg);
         dispatch(addNotification({ message: msg, type: 'success' }));
         dispatch(fetchAll());
@@ -89,27 +85,15 @@ const TrafficIncidentList = () => {
   return (
     <div className="incident-list-container">
       <div className="page-header">
-        <div className="page-title-group">
-          <div className="page-title-row">
-            <h1 className="page-title">
-              Traffic Incidents
-            </h1>
-            <span className="badge-record-count">
-              {rawItems.length} Records
-            </span>
-          </div>
-          <p className="page-subtitle">
-            Live traffic incident log, emergency dispatch status, and severity dispatch records
-          </p>
-        </div>
+        <h1>Traffic Incidents</h1>
 
         {canAddRecord && (
           <button
             type="button"
-            className="btn-add-record btn-primary"
+            className="btn-add-record"
             onClick={handleAdd}
           >
-            <span>+</span> Report Incident
+            + Add Record
           </button>
         )}
       </div>
@@ -120,7 +104,7 @@ const TrafficIncidentList = () => {
         <Alert
           message={successMessage}
           type="success"
-          duration={4000}
+          duration={3000}
           onClose={() => setSuccessMessage(null)}
         />
       )}
@@ -147,10 +131,7 @@ const TrafficIncidentList = () => {
       />
 
       {loading && filteredItems.length === 0 && !error && (
-        <div className="loading-state">
-          <div className="skeleton" />
-          <div className="skeleton" />
-        </div>
+        <div className="loading-state">Loading...</div>
       )}
 
       {filteredItems.length === 0 ? (
@@ -165,58 +146,32 @@ const TrafficIncidentList = () => {
                   <th>Title</th>
                   <th>Severity</th>
                   <th>Status</th>
-                  <th>Zone</th>
-                  <th className="th-actions">Actions</th>
+                  <th>Traffic Zone</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {currentItems.map((item) => {
                   const id = item.incidentId || item.id;
-                  const zoneLabel = item.zone?.zoneName || item.zoneName || (item.zoneId ? `Zone ${item.zoneId}` : 'Main Zone');
-                  const sevClass = `severity-${(item.severity || 'low').toLowerCase()}`;
-                  const statClass = `status-${(item.status || 'reported').toLowerCase()}`;
+                  const zoneLabel =
+                    item.zone?.zoneName ||
+                    item.zoneName ||
+                    (item.zoneId ? `Zone ${item.zoneId}` : '');
 
                   return (
                     <tr key={id}>
-                      <td className="td-id">
-                        <span className="badge-id">
-                          #{id}
-                        </span>
-                      </td>
-                      <td className="td-title-desc">
-                        <span className="record-title">
-                          {item.title}
-                        </span>
-                        {item.description && (
-                          <span className="record-description">
-                            {item.description}
-                          </span>
-                        )}
-                      </td>
+                      <td>#{id}</td>
+                      <td>{item.title}</td>
+                      <td>{item.severity}</td>
+                      <td>{item.status || 'REPORTED'}</td>
+                      <td>{zoneLabel}</td>
                       <td>
-                        <span className={`status-badge ${sevClass}`}>
-                          <span className="status-dot" />
-                          {item.severity}
-                        </span>
-                      </td>
-                      <td>
-                        <span className={`badge-status ${statClass}`}>
-                          {item.status || 'REPORTED'}
-                        </span>
-                      </td>
-                      <td className="td-zone">
-                        <span className="zone-label-wrap">
-                          <span>📍</span> {zoneLabel}
-                        </span>
-                      </td>
-                      <td className="td-actions">
                         <div className="action-button-group">
                           {canAddRecord && (
                             <button
                               type="button"
                               className="btn-action-edit"
                               onClick={() => handleEdit(item)}
-                              aria-label={`Edit incident ${id}`}
                             >
                               Edit
                             </button>
@@ -226,7 +181,6 @@ const TrafficIncidentList = () => {
                               type="button"
                               className="btn-delete"
                               onClick={() => handleDelete(id)}
-                              aria-label={`Delete incident ${id}`}
                             >
                               Delete
                             </button>

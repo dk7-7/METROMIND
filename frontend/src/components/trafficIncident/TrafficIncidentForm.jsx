@@ -34,7 +34,6 @@ const TrafficIncidentForm = ({
   const [zoneId, setZoneId] = useState(
     targetItem?.zone?.zoneId || targetItem?.zoneId || targetItem?.zone?.id || ''
   );
-  const [description, setDescription] = useState(targetItem?.description || '');
   const [formError, setFormError] = useState(null);
   const [formWarning, setFormWarning] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -43,19 +42,16 @@ const TrafficIncidentForm = ({
     (state) => state.trafficZone?.items || state.trafficZones?.items || []
   );
 
-  // Focus first input element on modal mount using useRef
   useEffect(() => {
     if (titleInputRef.current) {
       titleInputRef.current.focus();
     }
   }, []);
 
-  // Fetch zones on mount
   useEffect(() => {
     dispatch(fetchTrafficZones());
   }, [dispatch]);
 
-  // Pre-fill form with backend response when incident/item prop or id is provided
   useEffect(() => {
     if (targetItem) {
       setTitle(targetItem.title || '');
@@ -67,7 +63,6 @@ const TrafficIncidentForm = ({
           targetItem.zone ||
           ''
       );
-      setDescription(targetItem.description || '');
     } else if (targetId) {
       dispatch(fetchById(targetId)).then((action) => {
         if (action.payload) {
@@ -81,7 +76,6 @@ const TrafficIncidentForm = ({
               fetched.zone ||
               ''
           );
-          setDescription(fetched.description || '');
         }
       });
     }
@@ -93,7 +87,11 @@ const TrafficIncidentForm = ({
     setFormWarning(null);
 
     if (!title.trim()) {
-      setFormWarning('Title is required');
+      return;
+    }
+
+    if (!zoneId) {
+      setFormWarning('Traffic Zone not selected');
       return;
     }
 
@@ -102,8 +100,7 @@ const TrafficIncidentForm = ({
     const payload = {
       title: title.trim(),
       severity,
-      zoneId: zoneId ? Number(zoneId) : 1,
-      description,
+      zoneId: Number(zoneId),
     };
 
     try {
@@ -112,11 +109,7 @@ const TrafficIncidentForm = ({
           update({ id: targetId, data: payload })
         );
         if (update.fulfilled.match(resultAction)) {
-          const successMsg =
-            resultAction.payload?.message ||
-            (typeof resultAction.payload === 'string'
-              ? resultAction.payload
-              : 'TrafficIncident updated successfully.');
+          const successMsg = 'TrafficIncident updated successfully.';
           dispatch(
             addNotification({
               message: successMsg,
@@ -132,11 +125,7 @@ const TrafficIncidentForm = ({
       } else {
         const resultAction = await dispatch(create(payload));
         if (create.fulfilled.match(resultAction)) {
-          const successMsg =
-            resultAction.payload?.message ||
-            (typeof resultAction.payload === 'string'
-              ? resultAction.payload
-              : 'TrafficIncident created successfully.');
+          const successMsg = 'TrafficIncident created successfully.';
           dispatch(
             addNotification({
               message: successMsg,
@@ -161,21 +150,16 @@ const TrafficIncidentForm = ({
     <div className="modal-overlay form-overlay">
       <div className="modal-content form-modal">
         <div className="modal-header">
-          <div className="modal-title-group">
-            <h2 className="modal-title">
-              {isEditMode ? 'Edit Traffic Incident' : 'Report New Incident'}
-            </h2>
-            <p className="modal-subtitle">
-              {isEditMode ? `Updating incident record #${targetId}` : 'Submit municipal emergency or roadway alert'}
-            </p>
-          </div>
+          <h2>
+            {isEditMode ? 'Edit Traffic Incident' : 'Report New Incident'}
+          </h2>
           <button
             type="button"
-            className="btn-close close-btn"
+            className="btn-close"
             onClick={onClose}
             aria-label="Close"
           >
-            ×
+            X
           </button>
         </div>
 
@@ -185,16 +169,14 @@ const TrafficIncidentForm = ({
           <Alert
             message={formWarning}
             type="warning"
-            duration={5000}
+            duration={3000}
             onClose={() => setFormWarning(null)}
           />
         )}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="title">
-              Incident Title <span className="required-star">*</span>
-            </label>
+            <label htmlFor="title">Title</label>
             <input
               ref={titleInputRef}
               id="title"
@@ -211,78 +193,51 @@ const TrafficIncidentForm = ({
             />
           </div>
 
-          <div className="form-row-2">
-            <div className="form-group">
-              <label htmlFor="severity">
-                Severity
-              </label>
-              <select
-                id="severity"
-                name="severity"
-                value={severity}
-                onChange={(e) => setSeverity(e.target.value)}
-              >
-                <option value="LOW">LOW</option>
-                <option value="MEDIUM">MEDIUM</option>
-                <option value="HIGH">HIGH</option>
-                <option value="CRITICAL">CRITICAL</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="trafficZone">
-                Traffic Zone
-              </label>
-              <select
-                id="trafficZone"
-                name="trafficZone"
-                value={zoneId}
-                onChange={(e) => {
-                  setZoneId(e.target.value);
-                  if (formWarning) setFormWarning(null);
-                }}
-              >
-                <option value="">Select a Traffic Zone</option>
-                {trafficZones.map((zone) => {
-                  const zId = zone.zoneId || zone.id;
-                  return (
-                    <option key={zId} value={zId}>
-                      {zone.zoneName} {zone.zoneCode ? `(${zone.zoneCode})` : ''}
-                    </option>
-                  );
-                })}
-              </select>
-            </div>
+          <div className="form-group">
+            <label htmlFor="severity">Severity</label>
+            <select
+              id="severity"
+              name="severity"
+              value={severity}
+              onChange={(e) => setSeverity(e.target.value)}
+            >
+              <option value="LOW">LOW</option>
+              <option value="MEDIUM">MEDIUM</option>
+              <option value="HIGH">HIGH</option>
+              <option value="CRITICAL">CRITICAL</option>
+            </select>
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">
-              Description & Field Details
-            </label>
-            <textarea
-              id="description"
-              name="description"
-              rows={3}
-              placeholder="Provide operational context, emergency response units dispatched, lane closures, etc."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+            <label htmlFor="trafficZone">Traffic Zone</label>
+            <select
+              id="trafficZone"
+              name="trafficZone"
+              value={zoneId}
+              onChange={(e) => {
+                setZoneId(e.target.value);
+                if (formWarning) setFormWarning(null);
+              }}
+            >
+              <option value="">Select a Traffic Zone</option>
+              {trafficZones.map((zone) => {
+                const zId = zone.zoneId || zone.id;
+                return (
+                  <option key={zId} value={zId}>
+                    {zone.zoneName}
+                  </option>
+                );
+              })}
+            </select>
           </div>
 
           <div className="modal-actions">
             <button
-              type="button"
-              className="btn-secondary"
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button
               type="submit"
-              className="btn-submit btn-primary"
+              className="btn-submit"
               disabled={submitting || !title.trim()}
             >
-              {submitting ? 'Processing...' : isEditMode ? 'Save Changes' : 'Report Incident'}
+              {isEditMode ? 'Save Changes' : 'Report Incident'}
             </button>
           </div>
         </form>

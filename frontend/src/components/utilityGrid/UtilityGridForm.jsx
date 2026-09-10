@@ -9,8 +9,8 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
   const dispatch = useDispatch();
   const firstInputRef = useRef(null);
 
-  const [gridName, setGridName] = useState(grid?.gridName || '');
-  const [gridType, setGridType] = useState(grid?.gridType || 'POWER');
+  const [gridName, setGridName] = useState(grid?.gridName || grid?.name || '');
+  const [gridType, setGridType] = useState(grid?.gridType || grid?.type || 'POWER');
   const [district, setDistrict] = useState(grid?.district || '');
   const [capacityUnits, setCapacityUnits] = useState(grid?.capacityUnits || 100);
   const [currentLoad, setCurrentLoad] = useState(grid?.currentLoad || 0);
@@ -25,8 +25,8 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
 
   useEffect(() => {
     if (grid) {
-      setGridName(grid.gridName || '');
-      setGridType(grid.gridType || 'POWER');
+      setGridName(grid.gridName || grid.name || '');
+      setGridType(grid.gridType || grid.type || 'POWER');
       setDistrict(grid.district || '');
       setCapacityUnits(grid.capacityUnits || 100);
       setCurrentLoad(grid.currentLoad || 0);
@@ -82,136 +82,98 @@ const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
     <div className="modal-overlay form-overlay">
       <div className="modal-content form-modal">
         <div className="modal-header">
-          <div className="modal-header-icon-title">
-            <div className="modal-icon-badge">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-              </svg>
-            </div>
-            <div>
-              <h2 className="modal-title">
-                {isEditMode ? 'Modify Utility Grid' : 'Register Utility Grid'}
-              </h2>
-              <p className="modal-subtitle">
-                {isEditMode ? `Updating grid record #${grid.gridId || grid.id}` : 'Provision and configure infrastructure capacity'}
-              </p>
-            </div>
-          </div>
-
+          <h2>{isEditMode ? 'Edit Utility Grid' : 'Add Utility Grid'}</h2>
           <button
             type="button"
-            className="btn-close close-btn"
+            className="btn-close"
             onClick={onClose}
             aria-label="Close"
           >
-            ✕
+            X
           </button>
         </div>
 
-        <div>
-          {formError && <ErrorHandler error={formError} />}
+        {formError && <ErrorHandler error={formError} />}
 
-          <form onSubmit={handleSubmit}>
-            <div className="form-group">
-              <label htmlFor="gridName">
-                Grid Name <span className="required-star">*</span>
-              </label>
-              <input
-                ref={firstInputRef}
-                id="gridName"
-                name="gridName"
-                type="text"
-                placeholder="e.g. Metro Central Substation"
-                value={gridName}
-                onChange={(e) => setGridName(e.target.value)}
-                required
-              />
-            </div>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="gridName">Grid Name</label>
+            <input
+              ref={firstInputRef}
+              id="gridName"
+              name="gridName"
+              type="text"
+              placeholder="e.g. Metro Central Substation"
+              value={gridName}
+              onChange={(e) => setGridName(e.target.value)}
+              required
+            />
+          </div>
 
-            <div className="form-row-2">
-              <div className="form-group">
-                <label htmlFor="gridType">
-                  Grid Type
-                </label>
-                <select
-                  id="gridType"
-                  name="gridType"
-                  value={gridType}
-                  onChange={(e) => setGridType(e.target.value)}
-                >
-                  <option value="POWER">POWER</option>
-                  <option value="WATER">WATER</option>
-                  <option value="GAS">GAS</option>
-                </select>
-              </div>
+          <div className="form-group">
+            <label htmlFor="gridType">Grid Type</label>
+            <select
+              id="gridType"
+              name="gridType"
+              value={gridType}
+              onChange={(e) => setGridType(e.target.value)}
+            >
+              <option value="POWER">POWER</option>
+              <option value="WATER">WATER</option>
+              <option value="GAS">GAS</option>
+            </select>
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="district">
-                  District <span className="required-star">*</span>
-                </label>
-                <input
-                  id="district"
-                  name="district"
-                  type="text"
-                  placeholder="e.g. North District"
-                  value={district}
-                  onChange={(e) => setDistrict(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
+          <div className="form-group">
+            <label htmlFor="district">District</label>
+            <input
+              id="district"
+              name="district"
+              type="text"
+              placeholder="e.g. North District"
+              value={district}
+              onChange={(e) => setDistrict(e.target.value)}
+              required
+            />
+          </div>
 
-            <div className="form-row-2">
-              <div className="form-group">
-                <label htmlFor="capacityUnits">
-                  Capacity Units <span className="required-star">*</span>
-                </label>
-                <input
-                  id="capacityUnits"
-                  name="capacityUnits"
-                  type="number"
-                  min="1"
-                  step="any"
-                  value={capacityUnits}
-                  onChange={(e) => setCapacityUnits(e.target.value)}
-                  required
-                />
-              </div>
+          <div className="form-group">
+            <label htmlFor="capacityUnits">Capacity Units</label>
+            <input
+              id="capacityUnits"
+              name="capacityUnits"
+              type="number"
+              min="1"
+              step="any"
+              value={capacityUnits}
+              onChange={(e) => setCapacityUnits(e.target.value)}
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label htmlFor="currentLoad">
-                  Current Load (Units)
-                </label>
-                <input
-                  id="currentLoad"
-                  name="currentLoad"
-                  type="number"
-                  min="0"
-                  step="any"
-                  value={currentLoad}
-                  onChange={(e) => setCurrentLoad(e.target.value)}
-                />
-              </div>
-            </div>
+          <div className="form-group">
+            <label htmlFor="currentLoad">Current Load</label>
+            <input
+              id="currentLoad"
+              name="currentLoad"
+              type="number"
+              min="0"
+              step="any"
+              value={currentLoad}
+              onChange={(e) => setCurrentLoad(e.target.value)}
+            />
+          </div>
 
-            <div className="modal-actions">
-              <button
-                type="button"
-                className="btn-secondary"
-                onClick={onClose}
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="btn-submit btn-primary"
-                disabled={submitting || !gridName.trim()}
-              >
-                {submitting ? 'Saving...' : isEditMode ? 'Save Changes' : 'Add Grid'}
-              </button>
-            </div>
-          </form>
-        </div>
+          <div className="modal-actions">
+            <button
+              type="submit"
+              className="btn-submit"
+              disabled={submitting || !gridName.trim()}
+            >
+              {isEditMode ? 'Save Changes' : 'Add Grid'}
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
