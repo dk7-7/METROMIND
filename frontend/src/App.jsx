@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Navbar from './components/layout/Navbar';
@@ -169,8 +169,41 @@ const HomeView = () => {
 };
 
 function App() {
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.defaultMuted = true;
+      videoRef.current.muted = true;
+      const playPromise = videoRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Gracefully handle browser autoplay policy
+        });
+      }
+    }
+  }, []);
+
   return (
     <div className="app">
+      {/* Global Background Video Layer */}
+      <div className="app-video-backdrop" aria-hidden="true">
+        <video
+          ref={videoRef}
+          className="app-bg-video"
+          src={process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/login.mp4` : '/login.mp4'}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+          tabIndex={-1}
+        >
+          <source src={process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/login.mp4` : '/login.mp4'} type="video/mp4" />
+          <source src="/login.mp4" type="video/mp4" />
+        </video>
+      </div>
       <Navbar />
       <NotificationStack />
       <main className="main-content">

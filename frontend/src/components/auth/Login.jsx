@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { login, clearError } from '../../store/slices/authSlice';
@@ -6,7 +6,6 @@ import { login, clearError } from '../../store/slices/authSlice';
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const videoRef = useRef(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,19 +28,6 @@ const Login = () => {
     };
   }, [dispatch, error]);
 
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.defaultMuted = true;
-      videoRef.current.muted = true;
-      const playPromise = videoRef.current.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Fallback if browser policy delays autoplay
-        });
-      }
-    }
-  }, []);
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (error) {
@@ -52,25 +38,6 @@ const Login = () => {
 
   return (
     <div className="auth-wrapper login-wrapper">
-      {/* Background Video Layer */}
-      <div className="login-video-backdrop" aria-hidden="true">
-        <video
-          ref={videoRef}
-          className="login-bg-video"
-          src={process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/login.mp4` : '/login.mp4'}
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-          tabIndex={-1}
-        >
-          <source src={process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/login.mp4` : '/login.mp4'} type="video/mp4" />
-          <source src="/login.mp4" type="video/mp4" />
-        </video>
-      </div>
-
       <div className="auth-container login-card">
         <div className="auth-header">
           <h2 className="auth-title">MetroMind</h2>
