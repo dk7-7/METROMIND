@@ -529,7 +529,7 @@ h3 {
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .dashboard-header-row {
@@ -538,7 +538,50 @@ h3 {
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  padding-bottom: 4px;
+  padding: 16px 20px;
+  background: var(--glass-bg-primary);
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  border: 1px solid var(--glass-border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--glass-shadow), var(--glass-inner-light);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Scan-line sweep — the memorable design anchor */
+.dashboard-header-row::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(0, 240, 255, 0.06) 45%,
+    rgba(0, 240, 255, 0.12) 50%,
+    rgba(0, 240, 255, 0.06) 55%,
+    transparent 100%
+  );
+  animation: scanLineSweep 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+/* Subtle top-edge glow */
+.dashboard-header-row::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-cyan), var(--accent-indigo), transparent);
+  opacity: 0.7;
+}
+
+@keyframes scanLineSweep {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
 }
 
 .dashboard-title-group h1 {
@@ -723,6 +766,59 @@ h3 {
   box-shadow: 0 0 8px var(--status-warning);
 }
 
+/* Variant-colored left edge accents */
+.stat-card-incident {
+  border-left: 3px solid var(--status-error);
+}
+
+.stat-card-incident .stat-card-icon {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.stat-card-incident:hover {
+  box-shadow: var(--glass-shadow-lg), 0 0 20px rgba(239, 68, 68, 0.15);
+}
+
+.stat-card-outage {
+  border-left: 3px solid var(--status-warning);
+}
+
+.stat-card-outage .stat-card-icon {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.25);
+}
+
+.stat-card-outage:hover {
+  box-shadow: var(--glass-shadow-lg), 0 0 20px rgba(245, 158, 11, 0.15);
+}
+
+.stat-card-alert {
+  border-left: 3px solid var(--accent-purple);
+}
+
+.stat-card-alert .stat-card-icon {
+  background: rgba(168, 85, 247, 0.1);
+  border-color: rgba(168, 85, 247, 0.25);
+}
+
+.stat-card-alert:hover {
+  box-shadow: var(--glass-shadow-lg), 0 0 20px rgba(168, 85, 247, 0.15);
+}
+
+.stat-card-zone {
+  border-left: 3px solid var(--accent-cyan);
+}
+
+.stat-card-zone .stat-card-icon {
+  background: rgba(0, 240, 255, 0.08);
+  border-color: rgba(0, 240, 255, 0.2);
+}
+
+.stat-card-zone:hover {
+  box-shadow: var(--glass-shadow-lg), 0 0 20px rgba(0, 240, 255, 0.16);
+}
+
 .stat-card-footer {
   display: flex;
   align-items: center;
@@ -822,22 +918,47 @@ h3 {
 .donut-body {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 28px;
   flex-wrap: wrap;
 }
 
 .donut-chart-box {
   position: relative;
-  width: 140px;
-  height: 140px;
+  width: 160px;
+  height: 160px;
   flex-shrink: 0;
   margin: 0 auto;
+}
+
+/* Outer glow ring behind the donut */
+.donut-chart-box::before {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: var(--radius-full);
+  background: conic-gradient(
+    from 0deg,
+    rgba(0, 240, 255, 0.12),
+    rgba(99, 102, 241, 0.08),
+    rgba(56, 189, 248, 0.12),
+    rgba(0, 240, 255, 0.12)
+  );
+  filter: blur(8px);
+  animation: glowRingSpin 8s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes glowRingSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .donut-svg {
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
+  position: relative;
+  z-index: 1;
 }
 
 .donut-bg-ring {
@@ -847,7 +968,8 @@ h3 {
 }
 
 .donut-segment {
-  transition: stroke-dasharray 0.4s ease, stroke-dashoffset 0.4s ease;
+  transition: stroke-dasharray 0.6s cubic-bezier(0.4, 0, 0.2, 1), stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 0 3px currentColor);
 }
 
 .donut-center-info {
@@ -858,22 +980,25 @@ h3 {
   align-items: center;
   justify-content: center;
   pointer-events: none;
+  z-index: 2;
 }
 
 .donut-center-value {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 800;
   color: var(--text-main);
   line-height: 1;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Orbitron', sans-serif;
+  text-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
 }
 
 .donut-center-tag {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--text-muted);
-  margin-top: 2px;
+  letter-spacing: 0.12em;
+  color: var(--accent-cyan);
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .donut-legend {
