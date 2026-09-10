@@ -50,21 +50,40 @@ public class UtilityGridController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
+    @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR','UTILITY_SUPERVISOR')")
     public ResponseEntity<UtilityGrid> create(@RequestBody UtilityGrid grid) {
         return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(grid));
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('UTILITY_SUPERVISOR')")
+    @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR','UTILITY_SUPERVISOR')")
     public ResponseEntity<UtilityGrid> update(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
         UtilityGrid grid = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("UtilityGrid not found"));
-        if (updates.containsKey("currentLoad")) {
+
+        if (updates.containsKey("gridName") && updates.get("gridName") != null) {
+            grid.setGridName(updates.get("gridName").toString());
+        }
+        if (updates.containsKey("gridType") && updates.get("gridType") != null) {
+            grid.setGridType(com.example.demo.enums.GridType.valueOf(updates.get("gridType").toString()));
+        }
+        if (updates.containsKey("district") && updates.get("district") != null) {
+            grid.setDistrict(updates.get("district").toString());
+        }
+        if (updates.containsKey("capacityUnits") && updates.get("capacityUnits") != null) {
+            grid.setCapacityUnits(Double.valueOf(updates.get("capacityUnits").toString()));
+        }
+        if (updates.containsKey("status") && updates.get("status") != null) {
+            grid.setStatus(com.example.demo.enums.GridStatus.valueOf(updates.get("status").toString()));
+        }
+        repository.save(grid);
+
+        if (updates.containsKey("currentLoad") && updates.get("currentLoad") != null) {
+            Double newLoad = Double.valueOf(updates.get("currentLoad").toString());
             if (utilityGridService != null) {
-                utilityGridService.updateLoad(id, Double.valueOf(updates.get("currentLoad").toString()));
+                utilityGridService.updateLoad(id, newLoad);
             } else {
-                grid.setCurrentLoad(Double.valueOf(updates.get("currentLoad").toString()));
+                grid.setCurrentLoad(newLoad);
                 repository.save(grid);
             }
         }
@@ -72,7 +91,7 @@ public class UtilityGridController {
     }
 
     @PostMapping("/{id}/outages")
-    @PreAuthorize("hasRole('UTILITY_SUPERVISOR')")
+    @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR','UTILITY_SUPERVISOR')")
     public ResponseEntity<UtilityOutage> registerOutage(@PathVariable Long id, @RequestBody OutageDto dto) {
         if (utilityGridService != null) {
             return ResponseEntity.status(HttpStatus.CREATED).body(utilityGridService.registerOutage(id, dto));
