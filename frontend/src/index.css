@@ -1112,7 +1112,7 @@ h3 {
   top: 16px;
   bottom: -4px;
   width: 2px;
-  background: var(--glass-border-default);
+  background: linear-gradient(180deg, var(--accent-cyan), rgba(99, 102, 241, 0.3), transparent);
 }
 
 .timeline-body {
@@ -1121,16 +1121,19 @@ h3 {
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  padding: 9px 12px;
+  padding: 10px 14px;
   border-radius: var(--radius-sm);
   background: var(--glass-bg-subtle);
   border: 1px solid var(--glass-border-subtle);
+  border-left: 2px solid transparent;
   transition: all var(--transition-fast);
 }
 
 .timeline-node:hover .timeline-body {
   background: var(--glass-bg-elevated);
   border-color: var(--glass-border-hover);
+  border-left-color: var(--accent-cyan);
+  box-shadow: 0 2px 12px rgba(0, 240, 255, 0.08);
 }
 
 .timeline-content-left {
@@ -1212,12 +1215,33 @@ h3 {
   border-radius: var(--radius-md);
   padding: 14px 16px;
   transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Inner corner glow on hover */
+.zone-telemetry-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle at 0 0, rgba(0, 240, 255, 0.08), transparent 70%);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  pointer-events: none;
 }
 
 .zone-telemetry-card:hover {
   background: var(--glass-bg-elevated);
   border-color: var(--glass-border-hover);
   transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.zone-telemetry-card:hover::after {
+  opacity: 1;
 }
 
 .zone-telemetry-top {
@@ -1231,6 +1255,9 @@ h3 {
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-main);
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
 }
 
 .zone-congestion-pill {
@@ -1240,6 +1267,7 @@ h3 {
   padding: 2px 7px;
   border-radius: var(--radius-sm);
   text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
 }
 
 .congestion-low {
@@ -1278,7 +1306,22 @@ h3 {
 .zone-telemetry-bar-fill {
   height: 100%;
   border-radius: var(--radius-full);
-  transition: width 0.4s ease;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+/* Animated shimmer on bar fills */
+.zone-telemetry-bar-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: barShimmer 2s ease-in-out infinite;
+}
+
+@keyframes barShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
 }
 
 .congestion-bar-low {
