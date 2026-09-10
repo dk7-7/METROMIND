@@ -69,7 +69,6 @@ const Login = () => {
           <source src={process.env.PUBLIC_URL ? `${process.env.PUBLIC_URL}/login.mp4` : '/login.mp4'} type="video/mp4" />
           <source src="/login.mp4" type="video/mp4" />
         </video>
-        <div className="login-bg-overlay" aria-hidden="true" />
       </div>
 
       <div className="auth-container login-card">
