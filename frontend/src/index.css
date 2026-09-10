@@ -1701,7 +1701,6 @@ tbody tr:last-child td {
   border: 1px solid var(--glass-border-default);
   border-radius: var(--radius-lg);
   padding: 6px;
-  flex-wrap: wrap;
 }
 
 .registry-tabs button, .registry-tab-btn {
@@ -1923,21 +1922,231 @@ tbody tr:last-child td {
 /* ==========================================================================
    RESPONSIVE DESIGN (Media Queries)
    ========================================================================== */
+
+/* --- Auth page styling enhancements --- */
+.auth-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.auth-title {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  background: linear-gradient(135deg, var(--text-main) 40%, var(--accent-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 4px;
+}
+
+.auth-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.auth-container .btn-submit {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.95rem;
+  margin-top: 8px;
+}
+
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--glass-border-subtle);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.auth-footer a {
+  color: var(--accent-cyan);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.auth-footer a:hover {
+  color: var(--text-main);
+  text-decoration: underline;
+}
+
+/* --- Registry tabs horizontal scroll --- */
+.registry-tabs {
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  position: relative;
+}
+
+.registry-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.registry-tabs::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.2);
+  border-radius: var(--radius-full);
+}
+
+.registry-tabs button, .registry-tab-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* --- Table scroll shadow indicator --- */
+.table-card {
+  position: relative;
+}
+
+.table-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 32px;
+  background: linear-gradient(90deg, transparent, rgba(var(--bg-app-rgb), 0.6));
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+}
+
+.table-card:hover::after {
+  opacity: 1;
+}
+
+/* --- Entrance animations for stat cards --- */
+@keyframes cardSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stat-card {
+  animation: cardSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.stat-card:nth-child(1) { animation-delay: 0ms; }
+.stat-card:nth-child(2) { animation-delay: 60ms; }
+.stat-card:nth-child(3) { animation-delay: 120ms; }
+.stat-card:nth-child(4) { animation-delay: 180ms; }
+
+/* --- Glass shimmer on hover for panels --- */
+.incident-status-donut::after,
+.recent-activity-container::after,
+.dashboard-overview-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(0, 240, 255, 0.03) 45%,
+    rgba(0, 240, 255, 0.06) 50%,
+    rgba(0, 240, 255, 0.03) 55%,
+    transparent 60%
+  );
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.incident-status-donut,
+.recent-activity-container,
+.dashboard-overview-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.incident-status-donut:hover::after,
+.recent-activity-container:hover::after,
+.dashboard-overview-panel:hover::after {
+  opacity: 1;
+}
+
+/* --- Severity / Status badge styling --- */
+td {
+  white-space: nowrap;
+}
+
+/* --- 1200px breakpoint --- */
+@media (max-width: 1200px) {
+  .main-content {
+    max-width: 100%;
+    padding: 20px 20px 40px;
+  }
+
+  .navbar {
+    max-width: 100%;
+    width: calc(100% - 24px);
+  }
+}
+
+/* --- 1024px breakpoint --- */
 @media (max-width: 1024px) {
   .dashboard-charts {
     grid-template-columns: 1fr;
   }
+
+  .stat-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .zone-telemetry-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
+/* --- 768px breakpoint --- */
 @media (max-width: 768px) {
   .navbar-container {
     padding: 10px 16px;
     flex-direction: column;
     align-items: stretch;
+    gap: 8px;
+  }
+
+  .navbar-brand {
+    font-size: 1.15rem;
   }
 
   .navbar-menu {
     justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .navbar-nav-links, .navbar-auth-links {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+    gap: 4px;
+  }
+
+  .navbar-nav-links::-webkit-scrollbar,
+  .navbar-auth-links::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   .main-content {
@@ -1945,21 +2154,38 @@ tbody tr:last-child td {
   }
 
   .stat-cards {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .stat-card {
+    padding: 14px 16px;
+    min-height: 130px;
+  }
+
+  .stat-card-value {
+    font-size: 1.75rem;
   }
 
   .donut-body {
     flex-direction: column;
   }
 
+  .donut-chart-box {
+    width: 120px;
+    height: 120px;
+  }
+
   .page-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 12px;
   }
 
   .modal-content, .form-modal {
     padding: 20px;
     margin: 10px;
+    max-width: 100%;
   }
 
   .notification-stack {
@@ -1967,6 +2193,279 @@ tbody tr:last-child td {
     right: 12px;
     left: 12px;
     max-width: none;
+  }
+
+  .dashboard-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .dashboard-title-group h1 {
+    font-size: 1.4rem;
+  }
+
+  .search-filter-bar {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .search-input-wrapper,
+  .filter-select-wrapper {
+    min-width: 100%;
+  }
+
+  .pagination {
+    flex-direction: column;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .zone-telemetry-grid {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  h2 {
+    font-size: 1.15rem;
+  }
+}
+
+/* --- 640px breakpoint: Table card fallback --- */
+@media (max-width: 640px) {
+  .table-card {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    overflow: visible;
+  }
+
+  .table-card::after {
+    display: none;
+  }
+
+  .table-card table {
+    display: block;
+  }
+
+  .table-card thead {
+    display: none;
+  }
+
+  .table-card tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .table-card tbody tr {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: var(--glass-bg-primary);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border-default);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    box-shadow: var(--glass-shadow);
+    transition: all var(--transition-fast);
+  }
+
+  .table-card tbody tr:hover {
+    box-shadow: var(--glass-shadow-lg), 0 0 12px rgba(0, 240, 255, 0.1);
+    border-color: var(--glass-border-hover);
+    transform: translateY(-2px);
+  }
+
+  .table-card tbody tr td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--glass-border-subtle);
+    font-size: 0.85rem;
+    white-space: normal;
+  }
+
+  .table-card tbody tr td:last-child {
+    border-bottom: none;
+    padding-top: 8px;
+    justify-content: flex-start;
+  }
+
+  .table-card tbody tr td::before {
+    content: attr(data-label);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    margin-right: 12px;
+  }
+
+  .action-button-group {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .stat-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-overlay, .form-overlay {
+    padding: 12px;
+    align-items: flex-start;
+    padding-top: 60px;
+  }
+}
+
+/* --- 480px breakpoint: Small phone --- */
+@media (max-width: 480px) {
+  .navbar {
+    top: 0;
+    margin-top: 0;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .navbar-container {
+    padding: 8px 12px;
+  }
+
+  .navbar-brand {
+    font-size: 1rem;
+  }
+
+  .nav-link {
+    font-size: 0.75rem;
+    padding: 5px 8px;
+  }
+
+  .btn-logout {
+    font-size: 0.75rem;
+    padding: 5px 10px;
+  }
+
+  .theme-toggle-btn {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+
+  .theme-toggle-text {
+    display: none;
+  }
+
+  .main-content {
+    padding: 12px 8px 28px;
+  }
+
+  .stat-card {
+    padding: 12px 14px;
+    min-height: 110px;
+  }
+
+  .stat-card-value {
+    font-size: 1.5rem;
+  }
+
+  .stat-card-label {
+    font-size: 0.7rem;
+  }
+
+  .stat-card-tag {
+    font-size: 0.6rem;
+  }
+
+  .stat-card-icon {
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+  }
+
+  h3 {
+    font-size: 0.9rem;
+  }
+
+  .dashboard-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .dashboard-status-indicator {
+    font-size: 0.65rem;
+    padding: 4px 10px;
+  }
+
+  .auth-container {
+    padding: 24px 20px;
+  }
+
+  .auth-title {
+    font-size: 1.25rem;
+  }
+
+  .donut-chart-box {
+    width: 110px;
+    height: 110px;
+  }
+
+  .donut-legend-item {
+    padding: 6px 10px;
+    font-size: 0.78rem;
+  }
+
+  .modal-content, .form-modal {
+    padding: 16px;
+    border-radius: var(--radius-md);
+  }
+
+  .btn-primary, .btn-submit, .btn-add-record, .btn-add-grid, .btn-add-zone, .btn-add-observation, .btn-broadcast-alert {
+    padding: 8px 14px;
+    font-size: 0.8rem;
+  }
+
+  .btn-action-edit, .btn-action-resolve, .btn-delete {
+    padding: 4px 10px;
+    font-size: 0.72rem;
+  }
+
+  .telemetry-badge, .live-feed-badge {
+    font-size: 0.62rem;
+    padding: 3px 6px;
+  }
+
+  .registry-tabs {
+    padding: 4px;
+  }
+
+  .registry-tabs button, .registry-tab-btn {
+    padding: 6px 12px;
+    font-size: 0.78rem;
+  }
+
+  .card-header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 9px 12px;
+    font-size: 0.85rem;
   }
 }
 
