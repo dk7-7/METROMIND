@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const AnimatedCounter = ({ value = 0, duration = 1000, prefix = '', suffix = '', decimals = 0 }) => {
-  const [displayValue, setDisplayValue] = useState(0);
+  const [displayValue, setDisplayValue] = useState(Number(value) || 0);
+  const displayValueRef = useRef(displayValue);
 
   useEffect(() => {
-    let startVal = displayValue;
+    displayValueRef.current = displayValue;
+  }, [displayValue]);
+
+  useEffect(() => {
+    const startVal = displayValueRef.current;
     const targetVal = Number(value) || 0;
     if (startVal === targetVal) return;
 
