@@ -1,17 +1,7 @@
 import React, { useState } from 'react';
-import {
-  BarChart2,
-  TrendingUp,
-  Activity,
-  Calendar,
-  Clock,
-  Zap,
-  Sliders,
-  Filter
-} from 'lucide-react';
-import AnimatedCounter from '../common/AnimatedCounter';
+import { BarChart2 } from 'lucide-react';
 
-const AnalyticsSection = ({ incidents = [] }) => {
+const AnalyticsSection = () => {
   const [timeRange, setTimeRange] = useState('TODAY');
   const [activeChartTab, setActiveChartTab] = useState('VOLUME');
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import api from '../../services/api';
 import { fetchAll as fetchIncidents } from '../../store/slices/trafficIncidentSlice';
@@ -21,7 +21,6 @@ import RecentActivity from './RecentActivity';
 import TrafficIncidentForm from '../trafficIncident/TrafficIncidentForm';
 
 import {
-  Activity,
   Layers,
   Cpu,
   Flame,
@@ -32,10 +31,7 @@ import {
   BarChart2,
   Sparkles,
   RefreshCw,
-  Plus,
-  Radio,
-  Clock,
-  Compass
+  Plus
 } from 'lucide-react';
 
 const Dashboard = () => {
@@ -51,7 +47,6 @@ const Dashboard = () => {
   const [activeSectionTab, setActiveSectionTab] = useState('ALL');
   const [greenCorridorActive, setGreenCorridorActive] = useState(false);
   const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-  const [selectedEntityTelemetry, setSelectedEntityTelemetry] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const incidents = useSelector((state) => state.trafficIncident?.items || []);
@@ -60,7 +55,7 @@ const Dashboard = () => {
   const alerts = useSelector((state) => state.alertNotification?.items || []);
   const grids = useSelector((state) => state.utilityGrid?.items || []);
 
-  const loadData = () => {
+  const loadData = useCallback(() => {
     setIsRefreshing(true);
     dispatch(fetchIncidents());
     dispatch(fetchOutages());
@@ -78,11 +73,11 @@ const Dashboard = () => {
       .finally(() => {
         setTimeout(() => setIsRefreshing(false), 500);
       });
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     loadData();
-  }, [dispatch]);
+  }, [loadData]);
 
   // Combine calculated stats
   const computedStats = {
@@ -216,7 +211,7 @@ const Dashboard = () => {
         <section className="dashboard-section-block">
           <DigitalTwinCity
             incidents={incidents}
-            onSelectEntity={(entity) => setSelectedEntityTelemetry(entity)}
+            onSelectEntity={() => {}}
             onActivateGreenCorridor={() => setGreenCorridorActive(!greenCorridorActive)}
             greenCorridorActive={greenCorridorActive}
           />
@@ -237,7 +232,7 @@ const Dashboard = () => {
             <IncidentCenter
               incidents={incidents}
               onReportClick={() => setIsReportModalOpen(true)}
-              onSelectIncident={(inc) => setSelectedEntityTelemetry(inc)}
+              onSelectIncident={() => {}}
             />
           )}
 
@@ -274,7 +269,7 @@ const Dashboard = () => {
       {/* Analytics & Longitudinal Heatmaps */}
       {(activeSectionTab === 'ALL' || activeSectionTab === 'ANALYTICS') && (
         <section className="dashboard-section-block">
-          <AnalyticsSection incidents={incidents} />
+          <AnalyticsSection />
         </section>
       )}
 

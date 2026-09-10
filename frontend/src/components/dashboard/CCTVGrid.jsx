@@ -2,14 +2,7 @@ import React, { useState } from 'react';
 import {
   Video,
   Maximize2,
-  Minimize2,
-  RefreshCw,
-  Eye,
-  Sliders,
-  ShieldCheck,
-  Activity,
-  Layers,
-  Sparkles
+  RefreshCw
 } from 'lucide-react';
 import StatusBadge from '../common/StatusBadge';
 import SkeletonLoader from '../common/SkeletonLoader';
