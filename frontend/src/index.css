@@ -152,14 +152,42 @@ code, pre, .font-mono, td:first-child, .badge-id {
 }
 
 /* ==========================================================================
-   AMBIENT BACKGROUND & APP SHELL
+   AMBIENT BACKGROUND & GLOBAL APP VIDEO
    ========================================================================== */
+.app-video-backdrop, .login-video-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app-bg-video, .login-bg-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  filter: blur(1.5px);
+  opacity: 0.28;
+  pointer-events: none;
+}
+
 .app {
   position: relative;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: var(--bg-app);
+  background-color: rgba(7, 12, 24, 0.76);
   background-image:
     linear-gradient(rgba(0, 240, 255, 0.025) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 240, 255, 0.025) 1px, transparent 1px),
@@ -171,6 +199,7 @@ code, pre, .font-mono, td:first-child, .badge-id {
 }
 
 [data-theme="light"] .app {
+  background-color: rgba(241, 245, 249, 0.82);
   background-image:
     linear-gradient(rgba(2, 132, 199, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(2, 132, 199, 0.03) 1px, transparent 1px),
@@ -184,6 +213,21 @@ code, pre, .font-mono, td:first-child, .badge-id {
   width: 100%;
   margin: 0 auto;
   padding: 24px 24px 48px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .app-bg-video, .login-bg-video {
+    opacity: 0.18;
+    filter: blur(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .app-bg-video, .login-bg-video {
+    display: none !important;
+  }
 }
 
 /* ==========================================================================
@@ -1232,36 +1276,8 @@ tbody tr:last-child td {
 }
 
 /* ==========================================================================
-   AUTHENTICATION SCREENS & LOGIN BACKGROUND VIDEO
+   AUTHENTICATION SCREENS (Login & Register Command Center)
    ========================================================================== */
-.login-video-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.login-bg-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: 1;
-  filter: blur(1.5px);
-  opacity: 0.35;
-  pointer-events: none;
-}
-
 .auth-wrapper {
   position: relative;
   z-index: 2;
