@@ -177,8 +177,8 @@ code, pre, .font-mono, td:first-child, .badge-id {
   height: 100vh;
   object-fit: cover;
   z-index: 0;
-  filter: blur(1.5px);
-  opacity: 0.28;
+  filter: blur(0.5px);
+  opacity: 0.60;
   pointer-events: none;
 }
 
@@ -187,24 +187,24 @@ code, pre, .font-mono, td:first-child, .badge-id {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: rgba(7, 12, 24, 0.76);
+  background-color: rgba(7, 12, 24, 0.45);
   background-image:
-    linear-gradient(rgba(0, 240, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 240, 255, 0.025) 1px, transparent 1px),
-    radial-gradient(circle at 10% 10%, rgba(2, 132, 199, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.03) 0%, transparent 55%);
+    linear-gradient(rgba(0, 240, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 10% 10%, rgba(2, 132, 199, 0.14) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.10) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(0, 240, 255, 0.04) 0%, transparent 55%);
   background-size: 32px 32px, 32px 32px, auto, auto, auto;
   background-attachment: fixed;
 }
 
 [data-theme="light"] .app {
-  background-color: rgba(241, 245, 249, 0.82);
+  background-color: rgba(241, 245, 249, 0.52);
   background-image:
-    linear-gradient(rgba(2, 132, 199, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(2, 132, 199, 0.03) 1px, transparent 1px),
-    radial-gradient(circle at 10% 10%, rgba(2, 132, 199, 0.07) 0%, transparent 40%),
-    radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.05) 0%, transparent 40%);
+    linear-gradient(rgba(2, 132, 199, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(2, 132, 199, 0.04) 1px, transparent 1px),
+    radial-gradient(circle at 10% 10%, rgba(2, 132, 199, 0.09) 0%, transparent 40%),
+    radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.06) 0%, transparent 40%);
 }
 
 .main-content {
@@ -219,8 +219,8 @@ code, pre, .font-mono, td:first-child, .badge-id {
 
 @media (max-width: 768px) {
   .app-bg-video, .login-bg-video {
-    opacity: 0.18;
-    filter: blur(2px);
+    opacity: 0.45;
+    filter: blur(1px);
   }
 }
 
