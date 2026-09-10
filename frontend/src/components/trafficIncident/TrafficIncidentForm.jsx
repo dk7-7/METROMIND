@@ -90,17 +90,12 @@ const TrafficIncidentForm = ({
       return;
     }
 
-    if (!zoneId) {
-      setFormWarning('Traffic Zone not selected');
-      return;
-    }
-
     setSubmitting(true);
 
     const payload = {
       title: title.trim(),
       severity,
-      zoneId: Number(zoneId),
+      zoneId: zoneId ? Number(zoneId) : 1,
     };
 
     try {
