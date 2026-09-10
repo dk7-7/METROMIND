@@ -1244,7 +1244,7 @@ tbody tr:last-child td {
   height: 100vh;
   overflow: hidden;
   pointer-events: none;
-  z-index: 0;
+  z-index: 1;
 }
 
 .login-bg-video {
@@ -1256,7 +1256,7 @@ tbody tr:last-child td {
   width: 100vw;
   height: 100vh;
   object-fit: cover;
-  z-index: 0;
+  z-index: 1;
   filter: blur(1.5px);
   opacity: 0.35;
   pointer-events: none;
