@@ -38,6 +38,14 @@ const DashboardView = () => {
   const outages = useSelector((state) => state.utilityOutage?.items || []);
   const zones = useSelector((state) => state.trafficZone?.items || []);
   const alerts = useSelector((state) => state.alertNotification?.items || []);
+  const loading = useSelector(
+    (state) =>
+      state.trafficIncident?.loading ||
+      state.utilityOutage?.loading ||
+      state.trafficZone?.loading ||
+      state.alertNotification?.loading ||
+      false
+  );
 
   useEffect(() => {
     dispatch(fetchIncidents());
@@ -68,17 +76,65 @@ const DashboardView = () => {
 
   return (
     <div className="dashboard-container">
-      <h1>Dashboard</h1>
+      <div className="dashboard-header-row">
+        <div className="dashboard-title-group">
+          <h1>Dashboard</h1>
+          <p className="dashboard-subtitle">Real-time city infrastructure overview</p>
+        </div>
+        <div className="dashboard-status-indicator">
+          <span className="operational-dot" aria-hidden="true" />
+          <span className="operational-text">SYSTEM OPERATIONAL</span>
+          <span className="operational-divider" aria-hidden="true">•</span>
+          <span className="operational-sync">Telemetry Synced</span>
+        </div>
+      </div>
+
       <StatCards
         totalIncidents={totalIncidents}
         activeOutages={activeOutages}
         congestedZones={congestedZones}
         criticalAlerts={criticalAlerts}
+        loading={loading}
       />
+
       <div className="dashboard-charts">
-        <IncidentStatusDonut incidents={incidents} />
-        <RecentActivity activities={activities} />
+        <IncidentStatusDonut incidents={incidents} loading={loading} />
+        <RecentActivity activities={activities} loading={loading} />
       </div>
+
+      {zones.length > 0 && (
+        <div className="dashboard-overview-panel">
+          <div className="card-header-flex">
+            <h3>Traffic Zone Telemetry & Capacity</h3>
+            <span className="telemetry-badge">{zones.length} ZONES ACTIVE</span>
+          </div>
+          <div className="zone-telemetry-grid">
+            {zones.slice(0, 4).map((zone) => {
+              const cap = Math.min(100, Math.round(zone.currentCongestionLevel === 'SEVERE' ? 95 : zone.currentCongestionLevel === 'HIGH' ? 80 : zone.currentCongestionLevel === 'MODERATE' ? 55 : 25));
+              return (
+                <div key={zone.id || zone.zoneName} className="zone-telemetry-card">
+                  <div className="zone-telemetry-top">
+                    <span className="zone-telemetry-name">{zone.zoneName}</span>
+                    <span className={`zone-congestion-pill congestion-${(zone.currentCongestionLevel || 'LOW').toLowerCase()}`}>
+                      {zone.currentCongestionLevel || 'LOW'}
+                    </span>
+                  </div>
+                  <div className="zone-telemetry-bar-bg">
+                    <div
+                      className={`zone-telemetry-bar-fill congestion-bar-${(zone.currentCongestionLevel || 'LOW').toLowerCase()}`}
+                      style={{ width: `${cap}%` }}
+                    />
+                  </div>
+                  <div className="zone-telemetry-bottom">
+                    <span className="zone-telemetry-cap">Load: {cap}%</span>
+                    <span className="zone-telemetry-speed">{zone.averageSpeed ? `${zone.averageSpeed} km/h` : 'Flowing'}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
