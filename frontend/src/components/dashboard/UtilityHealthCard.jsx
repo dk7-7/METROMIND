@@ -4,87 +4,53 @@ import { useNavigate } from 'react-router-dom';
 const UtilityHealthCard = ({ grids = [], outages = [], loading = false }) => {
   const navigate = useNavigate();
 
-  // If grids exist in store, calculate or group by type
-  // Default base utility infrastructure rows
-  const utilityCategories = [
-    {
-      id: 'power',
-      name: 'Power Grid',
-      icon: '⚡',
-      typeMatch: ['ELECTRIC', 'POWER', 'GRID', 'SUBSTATION'],
-      defaultHealth: 98,
-      defaultStatus: 'Operational',
-      defaultCondition: 'High Efficiency',
-    },
-    {
-      id: 'water',
-      name: 'Water Supply',
-      icon: '💧',
-      typeMatch: ['WATER', 'AQUEDUCT', 'HYDRO'],
-      defaultHealth: 94,
-      defaultStatus: 'Stable',
-      defaultCondition: 'Pressure Normal',
-    },
-    {
-      id: 'waste',
-      name: 'Waste Management',
-      icon: '♻️',
-      typeMatch: ['WASTE', 'SANITATION', 'RECYCLING'],
-      defaultHealth: 91,
-      defaultStatus: 'Operational',
-      defaultCondition: 'Capacity 68%',
-    },
-    {
-      id: 'lighting',
-      name: 'Street Lighting',
-      icon: '💡',
-      typeMatch: ['LIGHT', 'LIGHTING', 'ILLUMINATION'],
-      defaultHealth: 88,
-      defaultStatus: 'Maintenance',
-      defaultCondition: 'Scheduled Check',
-    },
-  ];
+  const getGridIcon = (type = '', name = '') => {
+    const t = `${type} ${name}`.toUpperCase();
+    if (t.includes('POWER') || t.includes('ELECTRIC') || t.includes('ENERGY')) return '⚡';
+    if (t.includes('WATER') || t.includes('HYDRO') || t.includes('AQUEDUCT')) return '💧';
+    if (t.includes('GAS') || t.includes('FUEL')) return '🔥';
+    if (t.includes('LIGHT') || t.includes('ILLUMINATION')) return '💡';
+    if (t.includes('WASTE') || t.includes('SANITATION')) return '♻️';
+    if (t.includes('TELECOM') || t.includes('FIBER') || t.includes('NETWORK')) return '📡';
+    return '🔌';
+  };
 
-  // Dynamically enrich utility data if grids are available
-  const utilities = utilityCategories.map((cat) => {
-    const matchingGrids = grids.filter((g) => {
-      const gType = (g.gridType || g.gridName || '').toUpperCase();
-      return cat.typeMatch.some((m) => gType.includes(m));
-    });
-
-    const activeOutageForCat = outages.some((o) => {
-      const oType = (o.outageType || o.affectedArea || '').toUpperCase();
-      return cat.typeMatch.some((m) => oType.includes(m));
-    });
-
-    let health = cat.defaultHealth;
-    let status = cat.defaultStatus;
-    let condition = cat.defaultCondition;
-
-    if (matchingGrids.length > 0) {
-      const totalCap = matchingGrids.reduce((s, g) => s + (g.capacityUnits || 100), 0);
-      const totalLoad = matchingGrids.reduce((s, g) => s + (g.currentLoad || 50), 0);
-      const loadRatio = totalCap > 0 ? (totalLoad / totalCap) * 100 : 70;
-      health = Math.max(75, Math.min(100, Math.round(100 - (activeOutageForCat ? 18 : loadRatio * 0.15))));
-      condition = activeOutageForCat ? 'Outage Reported' : `Load: ${Math.round(loadRatio)}%`;
-      status = activeOutageForCat ? 'Attention Req' : health >= 90 ? 'Operational' : 'Maintenance';
-    } else if (activeOutageForCat) {
-      health = 82;
-      status = 'Warning';
-      condition = 'Outage Active';
+  const getGridHealth = (grid, hasOutage) => {
+    if (hasOutage) return 72;
+    const status = (grid.status || 'OPERATIONAL').toUpperCase();
+    if (status === 'OPERATIONAL') {
+      const load = grid.capacityUnits && grid.capacityUnits > 0 ? (grid.currentLoad / grid.capacityUnits) : 0.7;
+      return Math.max(85, Math.min(100, Math.round(100 - (load > 0.85 ? 12 : 3))));
     }
+    if (status === 'DEGRADED') return 74;
+    if (status === 'MAINTENANCE') return 65;
+    return 40;
+  };
 
-    return {
-      ...cat,
-      health,
-      status,
-      condition,
-    };
-  });
+  const getGridCondition = (grid, hasOutage) => {
+    if (hasOutage) return 'Outage Active';
+    const cap = grid.capacityUnits || 0;
+    const load = grid.currentLoad || 0;
+    if (cap > 0) {
+      const pct = Math.round((load / cap) * 100);
+      return `Load: ${pct}% (${load}/${cap} Units)`;
+    }
+    return grid.status || 'Active';
+  };
 
-  const overallHealth = Math.round(
-    utilities.reduce((sum, u) => sum + u.health, 0) / utilities.length
-  );
+  const overallHealth =
+    grids.length > 0
+      ? Math.round(
+          grids.reduce((sum, g) => {
+            const hasOutage = outages.some(
+              (o) => o.gridId === (g.gridId || g.id) && o.status !== 'RESTORED'
+            );
+            return sum + getGridHealth(g, hasOutage);
+          }, 0) / grids.length
+        )
+      : outages.length > 0
+      ? Math.max(0, 100 - outages.filter((o) => o.status !== 'RESTORED').length * 15)
+      : 100;
 
   if (loading) {
     return (
@@ -112,48 +78,77 @@ const UtilityHealthCard = ({ grids = [], outages = [], loading = false }) => {
         </div>
       </div>
 
-      <div className="utility-list-compact">
-        {utilities.map((item) => {
-          const isWarning = item.status.toLowerCase().includes('warning') || item.status.toLowerCase().includes('attention');
-          const isMaintenance = item.status.toLowerCase().includes('maintenance');
-          const statusClass = isWarning ? 'badge-warning' : isMaintenance ? 'badge-maintenance' : 'badge-nominal';
-          const progressClass = isWarning ? 'progress-amber' : isMaintenance ? 'progress-purple' : 'progress-cyan';
+      {grids.length === 0 ? (
+        <div className="empty-state-compact">
+          <span className="empty-state-dot" aria-hidden="true" />
+          <p className="no-data-text">No utility grids registered in system.</p>
+          <span className="empty-state-sub">Create or monitor utility grids to track infrastructure health.</span>
+        </div>
+      ) : (
+        <div className="utility-list-compact">
+          {grids.slice(0, 5).map((grid) => {
+            const gridId = grid.gridId || grid.id;
+            const hasOutage = outages.some(
+              (o) => o.gridId === gridId && o.status !== 'RESTORED'
+            );
+            const health = getGridHealth(grid, hasOutage);
+            const condition = getGridCondition(grid, hasOutage);
+            const icon = getGridIcon(grid.gridType, grid.gridName);
+            const statusText = hasOutage ? 'Outage' : grid.status || 'OPERATIONAL';
 
-          return (
-            <div key={item.id} className="utility-row-item">
-              <div className="utility-row-top">
-                <div className="utility-name-group">
-                  <span className="utility-icon" aria-hidden="true">{item.icon}</span>
-                  <span className="utility-name">{item.name}</span>
+            const isWarning = hasOutage || (grid.status && (grid.status === 'DEGRADED' || grid.status === 'WARNING'));
+            const isMaintenance = grid.status === 'MAINTENANCE';
+            const statusClass = isWarning ? 'badge-warning' : isMaintenance ? 'badge-maintenance' : 'badge-nominal';
+            const progressClass = isWarning ? 'progress-amber' : isMaintenance ? 'progress-purple' : 'progress-cyan';
+
+            return (
+              <div
+                key={gridId || grid.gridName}
+                className="utility-row-item"
+                onClick={() => navigate('/utility-grids')}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    navigate('/utility-grids');
+                  }
+                }}
+              >
+                <div className="utility-row-top">
+                  <div className="utility-name-group">
+                    <span className="utility-icon" aria-hidden="true">{icon}</span>
+                    <span className="utility-name">{grid.gridName}</span>
+                  </div>
+                  <div className="utility-status-group">
+                    <span className={`utility-status-pill ${statusClass}`}>
+                      {statusText}
+                    </span>
+                    <span className="utility-health-number">{health}%</span>
+                  </div>
                 </div>
-                <div className="utility-status-group">
-                  <span className={`utility-status-pill ${statusClass}`}>
-                    {item.status}
-                  </span>
-                  <span className="utility-health-number">{item.health}%</span>
+
+                <div className="utility-progress-track" aria-hidden="true">
+                  <div
+                    className={`utility-progress-fill ${progressClass}`}
+                    style={{ width: `${health}%` }}
+                  />
+                </div>
+
+                <div className="utility-row-bottom">
+                  <span className="utility-condition-label">{condition}</span>
+                  <span className="utility-grid-count">{grid.district ? `District: ${grid.district}` : 'Grid Online'}</span>
                 </div>
               </div>
-
-              <div className="utility-progress-track" aria-hidden="true">
-                <div
-                  className={`utility-progress-fill ${progressClass}`}
-                  style={{ width: `${item.health}%` }}
-                />
-              </div>
-
-              <div className="utility-row-bottom">
-                <span className="utility-condition-label">{item.condition}</span>
-                <span className="utility-grid-count">Telemetry Nominal</span>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
 
       <div className="card-action-footer">
         <div className="card-footer-meta">
           <span className="meta-icon" aria-hidden="true">🔌</span>
-          <span>Municipal Grid Sync Active</span>
+          <span>{grids.length} Active Infrastructure Grids</span>
         </div>
         <button
           type="button"

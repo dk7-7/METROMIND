@@ -80,17 +80,23 @@ const DashboardView = () => {
     (a) => a.severity === 'CRITICAL' && !a.isRead
   ).length;
 
-  // Compute utility load & health from real grid items if available
-  let calculatedLoad = 72;
+  // Compute utility load & health dynamically from actual grid and outage items
+  let calculatedLoad = 0;
   if (grids.length > 0) {
-    const totalCap = grids.reduce((s, g) => s + (g.capacityUnits || 100), 0);
-    const totalLoad = grids.reduce((s, g) => s + (g.currentLoad || 50), 0);
+    const totalCap = grids.reduce((s, g) => s + (Number(g.capacityUnits) || 0), 0);
+    const totalLoad = grids.reduce((s, g) => s + (Number(g.currentLoad) || 0), 0);
     if (totalCap > 0) {
       calculatedLoad = Math.round((totalLoad / totalCap) * 100);
     }
   }
 
-  const calculatedHealth = activeOutages > 0 ? Math.max(78, 100 - activeOutages * 6.5) : 98.5;
+  let calculatedHealth = 100;
+  if (grids.length > 0) {
+    const operationalCount = grids.filter((g) => (g.status || 'OPERATIONAL') === 'OPERATIONAL').length;
+    calculatedHealth = Math.round((operationalCount / grids.length) * 100);
+  } else if (activeOutages > 0) {
+    calculatedHealth = Math.max(0, 100 - activeOutages * 20);
+  }
 
   return (
     <div className="dashboard-container">
