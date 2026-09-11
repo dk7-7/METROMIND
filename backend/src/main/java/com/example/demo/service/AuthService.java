@@ -34,13 +34,18 @@ public class AuthService {
             throw new com.example.demo.exception.BusinessValidationException("Invalid role");
         }
 
+        String district = (dto.getDistrict() != null && !dto.getDistrict().trim().isEmpty())
+                ? dto.getDistrict().trim() : null;
+        String badgeNumber = (dto.getBadgeNumber() != null && !dto.getBadgeNumber().trim().isEmpty())
+                ? dto.getBadgeNumber().trim() : null;
+
         CityUser user = CityUser.builder()
                 .username(dto.getUsername())
                 .passwordHash(passwordEncoder.encode(dto.getPassword()))
                 .fullName(dto.getFullName())
                 .role(parsedRole)
-                .district(dto.getDistrict())
-                .badgeNumber(dto.getBadgeNumber())
+                .district(district)
+                .badgeNumber(badgeNumber)
                 .isActive(true)
                 .build();
         cityUserRepository.save(user);
