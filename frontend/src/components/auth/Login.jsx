@@ -487,7 +487,7 @@ const Login = () => {
                     </>
                   ) : (
                     <>
-                      <span>AUTHENTICATE & ACCESS</span>
+                      <span>Login</span>
                       <span className="btn-arrow" aria-hidden="true">➔</span>
                     </>
                   )}
