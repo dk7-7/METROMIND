@@ -13,17 +13,23 @@ const SmartCityNetworkCanvas = ({ opacity = 1 }) => {
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext('2d');
+    if (!canvas || typeof canvas.getContext !== 'function') return;
+    let ctx = null;
+    try {
+      ctx = canvas.getContext('2d');
+    } catch (e) {
+      return;
+    }
+    if (!ctx) return;
     let animationFrameId;
 
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let width = (canvas.width = window.innerWidth || 1024);
+    let height = (canvas.height = window.innerHeight || 768);
 
     const handleResize = () => {
       if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+      width = canvas.width = window.innerWidth || 1024;
+      height = canvas.height = window.innerHeight || 768;
     };
 
     window.addEventListener('resize', handleResize);
