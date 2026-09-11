@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CityUserRepository extends JpaRepository<CityUser, Long> {
-Optional<CityUser> findByUsername(String username);
-List<CityUser> findByRole(Role role);
+    Optional<CityUser> findByUsername(String username);
+    Optional<CityUser> findByBadgeNumber(String badgeNumber);
+    List<CityUser> findByRole(Role role);
 }

@@ -23,13 +23,22 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
     public AuthResponseDto register(RegisterDto dto) {
-        if (cityUserRepository.findByUsername(dto.getUsername()).isPresent()) {
+        String username = dto.getUsername() != null ? dto.getUsername().trim() : null;
+        if (username == null || username.isEmpty()) {
+            throw new com.example.demo.exception.BusinessValidationException("Username is required");
+        }
+
+        if (cityUserRepository.findByUsername(username).isPresent()) {
             throw new com.example.demo.exception.BusinessValidationException("Username already exists");
+        }
+
+        if (dto.getRole() == null || dto.getRole().trim().isEmpty()) {
+            throw new com.example.demo.exception.BusinessValidationException("Role is required");
         }
 
         Role parsedRole;
         try {
-            parsedRole = Role.valueOf(dto.getRole());
+            parsedRole = Role.valueOf(dto.getRole().trim().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new com.example.demo.exception.BusinessValidationException("Invalid role");
         }
@@ -39,10 +48,14 @@ public class AuthService {
         String badgeNumber = (dto.getBadgeNumber() != null && !dto.getBadgeNumber().trim().isEmpty())
                 ? dto.getBadgeNumber().trim() : null;
 
+        if (badgeNumber != null && cityUserRepository.findByBadgeNumber(badgeNumber).isPresent()) {
+            throw new com.example.demo.exception.BusinessValidationException("Badge number already exists");
+        }
+
         CityUser user = CityUser.builder()
-                .username(dto.getUsername())
+                .username(username)
                 .passwordHash(passwordEncoder.encode(dto.getPassword()))
-                .fullName(dto.getFullName())
+                .fullName(dto.getFullName() != null ? dto.getFullName().trim() : "")
                 .role(parsedRole)
                 .district(district)
                 .badgeNumber(badgeNumber)
