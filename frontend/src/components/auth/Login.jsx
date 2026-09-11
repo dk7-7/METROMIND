@@ -265,14 +265,18 @@ const Login = () => {
   // Video Autoplay policy handling & sync
   useEffect(() => {
     const video = videoRef.current;
-    if (video) {
-      video.defaultMuted = true;
-      video.muted = true;
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Gracefully fallback if autoplay restricted
-        });
+    if (video && typeof video.play === 'function') {
+      try {
+        video.defaultMuted = true;
+        video.muted = true;
+        const playPromise = video.play();
+        if (playPromise !== undefined && typeof playPromise.catch === 'function') {
+          playPromise.catch(() => {
+            // Gracefully fallback if autoplay restricted
+          });
+        }
+      } catch (e) {
+        // ignore video play errors in jsdom
       }
     }
   }, [introPhase]);
@@ -439,7 +443,7 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="login-form-container" noValidate>
               <div className="form-group">
                 <label htmlFor="email">
-                  <span className="label-text">Email</span>
+                  <span className="label-text">Email / Username</span>
                   <span className="label-tag">OPERATOR ID</span>
                 </label>
                 <div className="input-field-wrapper">
@@ -452,15 +456,15 @@ const Login = () => {
                   <input
                     id="email"
                     name="email"
-                    type="email"
-                    placeholder="operator@metromind.gov"
+                    type="text"
+                    placeholder="Enter username (operator@metromind.gov)"
                     value={email}
                     onChange={(e) => {
                       if (error) dispatch(clearError());
                       if (sessionExpiredMessage) setSessionExpiredMessage(null);
                       setEmail(e.target.value);
                     }}
-                    autoComplete="email"
+                    autoComplete="username"
                     data-testid="email-input"
                     required
                   />
