@@ -14,10 +14,15 @@ import AlertNotificationList from './components/alertNotification/AlertNotificat
 import StatCards from './components/dashboard/StatCards';
 import IncidentStatusDonut from './components/dashboard/IncidentStatusDonut';
 import RecentActivity from './components/dashboard/RecentActivity';
+import CityHealthSummary from './components/dashboard/CityHealthSummary';
+import UtilityHealthCard from './components/dashboard/UtilityHealthCard';
+import UtilityAlertsCard from './components/dashboard/UtilityAlertsCard';
+import TrafficInfrastructureTelemetry from './components/dashboard/TrafficInfrastructureTelemetry';
 import { fetchAll as fetchIncidents } from './store/slices/trafficIncidentSlice';
 import { fetchAll as fetchOutages } from './store/slices/utilityOutageSlice';
 import { fetchAll as fetchZones } from './store/slices/trafficZoneSlice';
 import { fetchAll as fetchAlerts } from './store/slices/alertNotificationSlice';
+import { fetchAll as fetchGrids } from './store/slices/utilityGridSlice';
 
 // Protected Route Component
 const ProtectedRoute = ({ children }) => {
@@ -38,23 +43,35 @@ const DashboardView = () => {
   const outages = useSelector((state) => state.utilityOutage?.items || []);
   const zones = useSelector((state) => state.trafficZone?.items || []);
   const alerts = useSelector((state) => state.alertNotification?.items || []);
+  const grids = useSelector((state) => state.utilityGrid?.items || []);
   const loading = useSelector(
     (state) =>
       state.trafficIncident?.loading ||
       state.utilityOutage?.loading ||
       state.trafficZone?.loading ||
       state.alertNotification?.loading ||
+      state.utilityGrid?.loading ||
       false
   );
+
+  const [lastUpdated, setLastUpdated] = useState(() => {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  });
 
   useEffect(() => {
     dispatch(fetchIncidents());
     dispatch(fetchOutages());
     dispatch(fetchZones());
     dispatch(fetchAlerts());
+    dispatch(fetchGrids());
+
+    setLastUpdated(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
   }, [dispatch]);
 
   const totalIncidents = incidents.length;
+  const resolvedIncidents = incidents.filter(
+    (i) => i.status === 'RESOLVED' || i.status === 'CLOSED'
+  ).length;
   const activeOutages = outages.filter((o) => o.status !== 'RESTORED').length;
   const congestedZones = zones.filter(
     (z) => z.currentCongestionLevel === 'HIGH' || z.currentCongestionLevel === 'SEVERE'
@@ -63,78 +80,75 @@ const DashboardView = () => {
     (a) => a.severity === 'CRITICAL' && !a.isRead
   ).length;
 
-  const activities = [
-    ...incidents.slice(0, 5).map((i) => ({
-      title: `Incident: ${i.title}`,
-      time: i.reportedAt ? new Date(i.reportedAt).toLocaleTimeString() : '',
-    })),
-    ...outages.slice(0, 3).map((o) => ({
-      title: `Outage: ${o.affectedArea}`,
-      time: o.startTime ? new Date(o.startTime).toLocaleTimeString() : '',
-    })),
-  ];
+  // Compute utility load & health from real grid items if available
+  let calculatedLoad = 72;
+  if (grids.length > 0) {
+    const totalCap = grids.reduce((s, g) => s + (g.capacityUnits || 100), 0);
+    const totalLoad = grids.reduce((s, g) => s + (g.currentLoad || 50), 0);
+    if (totalCap > 0) {
+      calculatedLoad = Math.round((totalLoad / totalCap) * 100);
+    }
+  }
+
+  const calculatedHealth = activeOutages > 0 ? Math.max(78, 100 - activeOutages * 6.5) : 98.5;
 
   return (
     <div className="dashboard-container">
+      {/* 1. Header Section */}
       <div className="dashboard-header-row">
         <div className="dashboard-title-group">
           <h1>Dashboard</h1>
           <p className="dashboard-subtitle">Real-time city infrastructure overview</p>
         </div>
-        <div className="dashboard-status-indicator">
-          <span className="operational-dot" aria-hidden="true" />
-          <span className="operational-text">SYSTEM OPERATIONAL</span>
-          <span className="operational-divider" aria-hidden="true">•</span>
-          <span className="operational-sync">Telemetry Synced</span>
+        <div className="dashboard-header-right">
+          <div className="dashboard-status-indicator">
+            <span className="operational-dot" aria-hidden="true" />
+            <span className="operational-text">SYSTEM OPERATIONAL</span>
+            <span className="operational-divider" aria-hidden="true">•</span>
+            <span className="operational-sync">Telemetry Synced</span>
+          </div>
+          <div className="dashboard-last-updated">
+            <span>Last updated: {lastUpdated}</span>
+          </div>
         </div>
       </div>
 
-      <StatCards
-        totalIncidents={totalIncidents}
-        activeOutages={activeOutages}
-        congestedZones={congestedZones}
-        criticalAlerts={criticalAlerts}
+      {/* 2. Unified City Operations Health Summary Strip */}
+      <CityHealthSummary
+        incidents={incidents}
+        outages={outages}
+        zones={zones}
+        alerts={alerts}
+        grids={grids}
         loading={loading}
       />
 
-      <div className="dashboard-charts">
+      {/* 3. 6 Balanced Unified KPI Cards (3 Incidents + 3 Utilities) */}
+      <StatCards
+        totalIncidents={totalIncidents}
+        resolvedIncidents={resolvedIncidents}
+        activeOutages={activeOutages}
+        criticalAlerts={criticalAlerts}
+        congestedZones={congestedZones}
+        utilityHealth={calculatedHealth}
+        utilityLoad={calculatedLoad}
+        loading={loading}
+      />
+
+      {/* 4. Main Dashboard Operations Section (Incident Operations + Utility Infrastructure Health) */}
+      <div className="dashboard-two-column-grid">
         <IncidentStatusDonut incidents={incidents} loading={loading} />
-        <RecentActivity activities={activities} loading={loading} />
+        <UtilityHealthCard grids={grids} outages={outages} loading={loading} />
       </div>
 
-      {zones.length > 0 && (
-        <div className="dashboard-overview-panel">
-          <div className="card-header-flex">
-            <h3>Traffic Zone Telemetry & Capacity</h3>
-            <span className="telemetry-badge">{zones.length} ZONES ACTIVE</span>
-          </div>
-          <div className="zone-telemetry-grid">
-            {zones.slice(0, 4).map((zone) => {
-              const cap = Math.min(100, Math.round(zone.currentCongestionLevel === 'SEVERE' ? 95 : zone.currentCongestionLevel === 'HIGH' ? 80 : zone.currentCongestionLevel === 'MODERATE' ? 55 : 25));
-              return (
-                <div key={zone.id || zone.zoneName} className="zone-telemetry-card">
-                  <div className="zone-telemetry-top">
-                    <span className="zone-telemetry-name">{zone.zoneName}</span>
-                    <span className={`zone-congestion-pill congestion-${(zone.currentCongestionLevel || 'LOW').toLowerCase()}`}>
-                      {zone.currentCongestionLevel || 'LOW'}
-                    </span>
-                  </div>
-                  <div className="zone-telemetry-bar-bg">
-                    <div
-                      className={`zone-telemetry-bar-fill congestion-bar-${(zone.currentCongestionLevel || 'LOW').toLowerCase()}`}
-                      style={{ width: `${cap}%` }}
-                    />
-                  </div>
-                  <div className="zone-telemetry-bottom">
-                    <span className="zone-telemetry-cap">Load: {cap}%</span>
-                    <span className="zone-telemetry-speed">{zone.averageSpeed ? `${zone.averageSpeed} km/h` : 'Flowing'}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
+      {/* 5. Live Activity & Telemetry Section (Recent Incidents + Utility Alerts & Maintenance) */}
+      <div className="dashboard-two-column-grid">
+        <RecentActivity incidents={incidents} loading={loading} />
+        <UtilityAlertsCard outages={outages} alerts={alerts} grids={grids} loading={loading} />
+      </div>
+
+      {/* 6. Full-Width Traffic & Infrastructure Telemetry Section */}
+      <TrafficInfrastructureTelemetry zones={zones} grids={grids} loading={loading} />
     </div>
   );
 };
