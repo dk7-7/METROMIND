@@ -28,7 +28,15 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const resultAction = await dispatch(registerUser(formData));
+    const payload = {
+      username: formData.username.trim(),
+      password: formData.password,
+      fullName: formData.fullName.trim(),
+      role: formData.role,
+      district: formData.district?.trim() || null,
+      badgeNumber: formData.badgeNumber?.trim() || null,
+    };
+    const resultAction = await dispatch(registerUser(payload));
     if (registerUser.fulfilled.match(resultAction)) {
       navigate('/login');
     }
@@ -100,6 +108,7 @@ const Register = () => {
               <option value="TRAFFIC_CONTROLLER">TRAFFIC_CONTROLLER</option>
               <option value="UTILITY_SUPERVISOR">UTILITY_SUPERVISOR</option>
               <option value="FIELD_TECHNICIAN">FIELD_TECHNICIAN</option>
+              <option value="CIVIC_ANALYST">CIVIC_ANALYST</option>
             </select>
           </div>
 
