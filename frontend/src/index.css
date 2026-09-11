@@ -2425,13 +2425,15 @@ td:first-child {
 
 /* --- 4. Centered Liquid-Glass Command Login Interface --- */
 .login-centered-container {
-  position: relative;
-  z-index: 10;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
   width: 100%;
   max-width: 480px;
-  margin: 0 auto;
-  min-height: 100vh;
-  padding: 32px 20px;
+  margin: 0;
+  padding: 24px 20px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2441,28 +2443,28 @@ td:first-child {
 /* Timeline Motion States */
 .login-centered-container.card-dormant {
   opacity: 0;
-  transform: translateY(32px) scale(0.96);
+  transform: translate(-50%, calc(-50% + 32px)) scale(0.96);
   filter: blur(8px);
   pointer-events: none;
 }
 
 .login-centered-container.card-emerging {
   opacity: 0.55;
-  transform: translateY(16px) scale(0.985);
+  transform: translate(-50%, calc(-50% + 16px)) scale(0.985);
   filter: blur(3px);
   pointer-events: none;
 }
 
 .login-centered-container.card-revealing {
   opacity: 0.95;
-  transform: translateY(4px) scale(0.995);
+  transform: translate(-50%, calc(-50% + 4px)) scale(0.995);
   filter: blur(0.5px);
   pointer-events: auto;
 }
 
 .login-centered-container.card-settled {
   opacity: 1;
-  transform: translateY(0) scale(1);
+  transform: translate(-50%, -50%) scale(1);
   filter: blur(0px);
   pointer-events: auto;
 }
