@@ -194,10 +194,16 @@ const Login = () => {
 
   // Check for reduced motion preference
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (mediaQuery.matches) {
-      setIntroPhase('settled');
-      setIsIntroComplete(true);
+    if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+      try {
+        const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+        if (mediaQuery && mediaQuery.matches) {
+          setIntroPhase('settled');
+          setIsIntroComplete(true);
+        }
+      } catch (e) {
+        // ignore
+      }
     }
   }, []);
 
