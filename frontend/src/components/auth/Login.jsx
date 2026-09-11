@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { login, clearError } from '../../store/slices/authSlice';
 
 /**
@@ -145,9 +145,29 @@ const SmartCityNetworkCanvas = ({ opacity = 1 }) => {
 };
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+
+  const location = useLocation();
+  const [sessionExpiredMessage, setSessionExpiredMessage] = useState(() => {
+    try {
+      const msg = sessionStorage.getItem('sessionMessage') || sessionStorage.getItem('error');
+      if (msg && (msg.toLowerCase().includes('session') || msg.toLowerCase().includes('expired') || msg.toLowerCase().includes('login again'))) {
+        sessionStorage.removeItem('sessionMessage');
+        sessionStorage.removeItem('error');
+        return msg;
+      }
+    } catch (e) {}
+    return null;
+  });
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    if (searchParams.get('expired') === 'true' || location.state?.expired) {
+      setSessionExpiredMessage('Session expired. Please log in again.');
+    }
+  }, [location]);
 
   // Intro Sequence Timeline State Machine
   // Phase 0: 'video' (0.0s - 2.5s) - Full cinematic city video & smart network telemetry
@@ -273,7 +293,10 @@ const Login = () => {
     if (error) {
       dispatch(clearError());
     }
-    dispatch(login({ username, password }));
+    if (sessionExpiredMessage) {
+      setSessionExpiredMessage(null);
+    }
+    dispatch(login({ username: email, email, password }));
   };
 
   // Compute classes based on current timeline phase
