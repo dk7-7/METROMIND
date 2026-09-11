@@ -109,6 +109,26 @@ const Navbar = () => {
                 </>
               )}
 
+              {role === 'FIELD_SUPERVISOR' && (
+                <>
+                  <Link to="/field-supervisor" className={`nav-link ${location.pathname.startsWith('/field-supervisor') ? 'active' : ''}`}>
+                    Field Dashboard
+                  </Link>
+                  <Link to="/field-supervisor/incidents" className={`nav-link ${isActive('/field-supervisor/incidents') ? 'active' : ''}`}>
+                    My Incidents
+                  </Link>
+                  <Link to="/field-supervisor/work-orders" className={`nav-link ${isActive('/field-supervisor/work-orders') ? 'active' : ''}`}>
+                    Work Orders
+                  </Link>
+                  <Link to="/field-supervisor/inspections" className={`nav-link ${isActive('/field-supervisor/inspections') ? 'active' : ''}`}>
+                    Inspections
+                  </Link>
+                  <Link to="/field-supervisor/escalations" className={`nav-link ${isActive('/field-supervisor/escalations') ? 'active' : ''}`}>
+                    Escalations
+                  </Link>
+                </>
+              )}
+
               <button
                 type="button"
                 className="btn-logout"

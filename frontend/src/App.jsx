@@ -18,6 +18,7 @@ import CityHealthSummary from './components/dashboard/CityHealthSummary';
 import UtilityHealthCard from './components/dashboard/UtilityHealthCard';
 import UtilityAlertsCard from './components/dashboard/UtilityAlertsCard';
 import TrafficInfrastructureTelemetry from './components/dashboard/TrafficInfrastructureTelemetry';
+import FieldSupervisorDashboard from './components/fieldSupervisor/FieldSupervisorDashboard';
 import { fetchAll as fetchIncidents } from './store/slices/trafficIncidentSlice';
 import { fetchAll as fetchOutages } from './store/slices/utilityOutageSlice';
 import { fetchAll as fetchZones } from './store/slices/trafficZoneSlice';
@@ -231,6 +232,9 @@ const HomeView = () => {
   if (role === 'CITY_ADMINISTRATOR') {
     return <DashboardView />;
   }
+  if (role === 'FIELD_SUPERVISOR') {
+    return <FieldSupervisorDashboard />;
+  }
   if (role === 'TRAFFIC_CONTROLLER') {
     return <TrafficIncidentList />;
   }
@@ -358,6 +362,78 @@ function App() {
             element={
               <ProtectedRoute>
                 <OfficialRegistryView />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/field-supervisor"
+            element={
+              <ProtectedRoute>
+                <FieldSupervisorDashboard initialTab="overview" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/field-supervisor/incidents"
+            element={
+              <ProtectedRoute>
+                <FieldSupervisorDashboard initialTab="incidents" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/field-supervisor/work-orders"
+            element={
+              <ProtectedRoute>
+                <FieldSupervisorDashboard initialTab="work-orders" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/field-supervisor/inspections"
+            element={
+              <ProtectedRoute>
+                <FieldSupervisorDashboard initialTab="inspections" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/field-supervisor/assets"
+            element={
+              <ProtectedRoute>
+                <FieldSupervisorDashboard initialTab="assets" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/field-supervisor/team"
+            element={
+              <ProtectedRoute>
+                <FieldSupervisorDashboard initialTab="team" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/field-supervisor/escalations"
+            element={
+              <ProtectedRoute>
+                <FieldSupervisorDashboard initialTab="escalations" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/field-supervisor/reports"
+            element={
+              <ProtectedRoute>
+                <FieldSupervisorDashboard initialTab="reports" />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/field-supervisor/profile"
+            element={
+              <ProtectedRoute>
+                <FieldSupervisorDashboard initialTab="profile" />
               </ProtectedRoute>
             }
           />
