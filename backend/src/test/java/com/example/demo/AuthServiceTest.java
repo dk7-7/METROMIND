@@ -10,9 +10,6 @@ import com.example.demo.exception.BusinessValidationException;
 import com.example.demo.repository.CityUserRepository;
 import com.example.demo.service.AuthService;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,26 +25,30 @@ import static org.mockito.Mockito.*;
 
 public class AuthServiceTest {
 
-    @Mock
     private CityUserRepository cityUserRepository;
-
-    @Mock
     private PasswordEncoder passwordEncoder;
-
-    @Mock
     private JwtService jwtService;
-
-    @Mock
     private AuthenticationManager authenticationManager;
-
-    @InjectMocks
     private AuthService authService;
 
     @BeforeMethod
     public void setUp() {
-        MockitoAnnotations.openMocks(this);
+        cityUserRepository = mock(CityUserRepository.class);
+        passwordEncoder = mock(PasswordEncoder.class);
+        jwtService = mock(JwtService.class);
+        authenticationManager = mock(AuthenticationManager.class);
+
+        authService = new AuthService(
+                cityUserRepository,
+                passwordEncoder,
+                jwtService,
+                authenticationManager
+        );
+
         when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         when(jwtService.generateToken(any(UserDetails.class))).thenReturn("mockJwtToken");
+        when(cityUserRepository.findByUsername(anyString())).thenReturn(Optional.empty());
+        when(cityUserRepository.findByBadgeNumber(anyString())).thenReturn(Optional.empty());
     }
 
     // 1. Register a completely new valid user with CITY_ADMINISTRATOR and null/empty district/badge
