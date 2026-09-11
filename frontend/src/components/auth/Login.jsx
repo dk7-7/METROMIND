@@ -449,7 +449,7 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="login-form-container" noValidate>
               <div className="form-group">
                 <label htmlFor="email">
-                  <span className="label-text">Email / Username</span>
+                  <span className="label-text">Username</span>
                   <span className="label-tag">OPERATOR ID</span>
                 </label>
                 <div className="input-field-wrapper">
