@@ -81,6 +81,13 @@ const authSlice = createSlice({
       state.token = action.payload?.token || null;
       state.isAuthenticated = !!action.payload;
     },
+    setSessionExpired: (state) => {
+      state.user = null;
+      state.token = null;
+      state.isAuthenticated = false;
+      state.error = 'Session expired. Please log in again.';
+      state.loading = false;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -117,5 +124,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { clearError, logout, setUser } = authSlice.actions;
+export const { clearError, logout, setUser, setSessionExpired } = authSlice.actions;
 export default authSlice.reducer;

@@ -71,6 +71,15 @@ public class SecurityConfig {
                         )
                 )
 
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(jakarta.servlet.http.HttpServletResponse.SC_UNAUTHORIZED);
+                            response.setContentType("application/json");
+                            response.setCharacterEncoding("UTF-8");
+                            response.getWriter().write("{\"status\":401,\"error\":\"Session expired. Please log in again.\",\"message\":\"Session expired. Please log in again.\"}");
+                        })
+                )
+
                 .authenticationProvider(authenticationProvider)
 
                 .addFilterBefore(

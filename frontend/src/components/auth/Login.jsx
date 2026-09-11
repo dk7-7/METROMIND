@@ -419,12 +419,12 @@ const Login = () => {
               </div>
             </div>
 
-            {/* Authentication Error Feedback */}
-            {error && (
-              <div className="error-alert login-error-banner" role="alert">
+            {/* Authentication Error / Session Expiry Feedback */}
+            {(sessionExpiredMessage || error) && (
+              <div className="error-alert login-error-banner" role="alert" data-testid="error-message">
                 <span className="alert-icon" aria-hidden="true">⚠️</span>
                 <span className="alert-text">
-                  {typeof error === 'string' ? error : error?.message || 'Authentication failed. Please verify credentials.'}
+                  {sessionExpiredMessage || (typeof error === 'string' ? error : error?.message || 'Authentication failed. Please verify credentials.')}
                 </span>
               </div>
             )}
@@ -432,28 +432,30 @@ const Login = () => {
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="login-form-container" noValidate>
               <div className="form-group">
-                <label htmlFor="username">
-                  <span className="label-text">Username</span>
+                <label htmlFor="email">
+                  <span className="label-text">Email</span>
                   <span className="label-tag">OPERATOR ID</span>
                 </label>
                 <div className="input-field-wrapper">
                   <span className="input-icon" aria-hidden="true">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                      <circle cx="12" cy="7" r="4"></circle>
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
                     </svg>
                   </span>
                   <input
-                    id="username"
-                    name="username"
-                    type="text"
-                    placeholder="Enter username / operator handle"
-                    value={username}
+                    id="email"
+                    name="email"
+                    type="email"
+                    placeholder="operator@metromind.gov"
+                    value={email}
                     onChange={(e) => {
                       if (error) dispatch(clearError());
-                      setUsername(e.target.value);
+                      if (sessionExpiredMessage) setSessionExpiredMessage(null);
+                      setEmail(e.target.value);
                     }}
-                    autoComplete="username"
+                    autoComplete="email"
+                    data-testid="email-input"
                     required
                   />
                 </div>
@@ -475,13 +477,15 @@ const Login = () => {
                     id="password"
                     name="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter secure password"
+                    placeholder="Enter password"
                     value={password}
                     onChange={(e) => {
                       if (error) dispatch(clearError());
+                      if (sessionExpiredMessage) setSessionExpiredMessage(null);
                       setPassword(e.target.value);
                     }}
                     autoComplete="current-password"
+                    data-testid="password-input"
                     required
                   />
                   <button
