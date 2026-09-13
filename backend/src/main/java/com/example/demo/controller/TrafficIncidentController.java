@@ -131,7 +131,7 @@ public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
     }
 
     @PutMapping("/{id}/resolve")
-    @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR','TRAFFIC_CONTROLLER','FIELD_SUPERVISOR')")
+    @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR','TRAFFIC_CONTROLLER')")
     public ResponseEntity<TrafficIncident> resolve(
             @PathVariable Long id,
             @RequestBody(required = false) Object body) {
