@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAll, deleteRecord } from '../../store/slices/trafficIncidentSlice';
+import { fetchAll, deleteRecord, update } from '../../store/slices/trafficIncidentSlice';
 import { addNotification } from '../../store/slices/alertNotificationSlice';
 import TrafficIncidentForm from './TrafficIncidentForm';
 import Pagination from '../common/Pagination';
@@ -32,6 +32,29 @@ const TrafficIncidentList = () => {
   useEffect(() => {
     dispatch(fetchAll());
   }, [dispatch]);
+
+  const handleResolve = async (incident) => {
+    const id = incident.incidentId || incident.id;
+    try {
+      const payload = {
+        title: incident.title,
+        description: incident.description,
+        severity: incident.severity || 'MEDIUM',
+        incidentType: incident.incidentType,
+        status: 'RESOLVED',
+        zoneId: incident.zone?.zoneId || incident.zoneId || incident.zone?.id || 1,
+      };
+      const resultAction = await dispatch(update({ id, data: payload }));
+      if (update.fulfilled.match(resultAction)) {
+        const msg = 'TrafficIncident resolved successfully.';
+        setSuccessMessage(msg);
+        dispatch(addNotification({ message: msg, type: 'success' }));
+        dispatch(fetchAll());
+      }
+    } catch (err) {
+      // Error handled by redux
+    }
+  };
 
   const handleDelete = async (id) => {
     const confirmed = window.confirm('Are you sure you want to delete this incident?');
@@ -167,6 +190,15 @@ const TrafficIncidentList = () => {
                       <td>{zoneLabel}</td>
                       <td>
                         <div className="action-button-group">
+                          {item.status !== 'RESOLVED' && item.status !== 'CLOSED' && (
+                            <button
+                              type="button"
+                              className="btn-action-resolve"
+                              onClick={() => handleResolve(item)}
+                            >
+                              Resolve
+                            </button>
+                          )}
                           {canAddRecord && (
                             <button
                               type="button"

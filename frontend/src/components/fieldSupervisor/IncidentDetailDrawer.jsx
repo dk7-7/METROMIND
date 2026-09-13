@@ -246,6 +246,39 @@ const IncidentDetailDrawer = ({
                 {isUpdating ? 'Updating...' : 'Apply Status Transition'}
               </button>
 
+              {incident.status !== 'RESOLVED' && incident.status !== 'CLOSED' && (
+                <button
+                  type="button"
+                  className="btn-success fs-btn-update"
+                  onClick={() => {
+                    setSelectedStatus('RESOLVED');
+                    const updatedData = {
+                      title: incident.title,
+                      description: incident.description,
+                      severity: incident.severity || 'MEDIUM',
+                      status: 'RESOLVED',
+                      assignedTech,
+                      zoneId: incident.zone?.zoneId || incident.zoneId || incident.zone?.id || 1,
+                    };
+                    dispatch(updateIncident({ id: incidentId, data: updatedData })).then((res) => {
+                      if (updateIncident.fulfilled.match(res)) {
+                        dispatch(
+                          addNotification({
+                            message: `Incident #${incidentId} resolved successfully.`,
+                            type: 'success',
+                          })
+                        );
+                        if (onStatusUpdated) onStatusUpdated(updatedData);
+                        onClose();
+                      }
+                    });
+                  }}
+                  disabled={isUpdating}
+                >
+                  ✓ Resolve Incident
+                </button>
+              )}
+
               <button
                 type="button"
                 className="btn-danger-outline fs-btn-escalate"
