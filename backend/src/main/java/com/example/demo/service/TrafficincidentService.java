@@ -104,6 +104,16 @@ public class TrafficIncidentService {
         return repository.save(incident);
     }
 
+    public TrafficIncident resolveIncident(Long id) {
+
+        TrafficIncident incident = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("TrafficIncident not found"));
+
+        incident.setStatus(IncidentStatus.RESOLVED);
+
+        return repository.save(incident);
+    }
+
     @Transactional(readOnly = true)
     public List<TrafficIncident> getAllIncidents() {
         return repository.findAll();
