@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { create, update, fetchAll as fetchOutages } from '../../store/slices/utilityOutageSlice';
 import { addNotification } from '../../store/slices/alertNotificationSlice';
 import ErrorHandler from '../common/ErrorHandler';
+import './UtilityOutageForm.css';
 
 const UtilityOutageForm = ({ outage = null, onClose, onSuccess }) => {
   const isEditMode = !!outage;

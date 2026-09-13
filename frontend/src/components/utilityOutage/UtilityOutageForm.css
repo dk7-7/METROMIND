@@ -1,0 +1,6 @@
+/* UtilityOutageForm Component Styles */
+.outage-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

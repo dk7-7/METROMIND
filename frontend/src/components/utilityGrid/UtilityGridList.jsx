@@ -8,6 +8,7 @@ import Pagination from '../common/Pagination';
 import EmptyState from '../common/EmptyState';
 import Alert from '../common/Alert';
 import ErrorHandler from '../common/ErrorHandler';
+import './UtilityGridList.css';
 
 const UtilityGridList = () => {
   const dispatch = useDispatch();
