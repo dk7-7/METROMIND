@@ -463,7 +463,7 @@ const Login = () => {
                     id="email"
                     name="email"
                     type="text"
-                    placeholder="Enter username (operator@metromind.gov)"
+                    placeholder="Enter username"
                     value={email}
                     onChange={(e) => {
                       if (error) dispatch(clearError());
