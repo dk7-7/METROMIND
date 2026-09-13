@@ -111,16 +111,24 @@ public class UtilityGridController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('CITY_ADMINISTRATOR')")
     public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
-        boolean exists = false;
-        try {
-            exists = repository.existsById(id);
-        } catch (NullPointerException e) {
-            exists = true;
+        if (utilityGridService != null) {
+            utilityGridService.deleteGrid(id);
+        } else {
+            boolean exists = false;
+            try {
+                exists = repository.existsById(id);
+            } catch (NullPointerException e) {
+                exists = true;
+            }
+            if (!exists) {
+                throw new ResourceNotFoundException("UtilityGrid not found");
+            }
+            List<UtilityOutage> outages = outageRepository.findByGrid_GridId(id);
+            if (outages != null && !outages.isEmpty()) {
+                outageRepository.deleteAll(outages);
+            }
+            repository.deleteById(id);
         }
-        if (!exists) {
-            throw new ResourceNotFoundException("UtilityGrid not found");
-        }
-        repository.deleteById(id);
         return ResponseEntity.ok(Map.of("message", "UtilityGrid deleted successfully."));
     }
 }

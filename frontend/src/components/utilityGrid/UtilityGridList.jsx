@@ -40,6 +40,9 @@ const UtilityGridList = () => {
       setSuccessMessage(msg);
       dispatch(addNotification({ message: msg, type: 'success' }));
       dispatch(fetchAll());
+    } else {
+      const errorMsg = resultAction.payload || 'Failed to delete utility grid';
+      dispatch(addNotification({ message: errorMsg, type: 'error' }));
     }
   };
 
