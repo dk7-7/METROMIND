@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FieldSupervisorKPIs from './FieldSupervisorKPIs';
@@ -28,7 +28,7 @@ const FieldSupervisorDashboard = ({ initialTab = 'overview' }) => {
   const navigate = useNavigate();
 
   // Determine active tab from URL or prop
-  const getTabFromPath = useCallback(() => {
+  const getTabFromPath = () => {
     const path = location.pathname;
     if (path.includes('/field-supervisor/incidents')) return 'incidents';
     if (path.includes('/field-supervisor/work-orders')) return 'work-orders';
@@ -39,7 +39,7 @@ const FieldSupervisorDashboard = ({ initialTab = 'overview' }) => {
     if (path.includes('/field-supervisor/reports')) return 'reports';
     if (path.includes('/field-supervisor/profile')) return 'profile';
     return initialTab || 'overview';
-  }, [location.pathname, initialTab]);
+  };
 
   const [activeTab, setActiveTab] = useState(getTabFromPath);
   const [selectedIncidentForDrawer, setSelectedIncidentForDrawer] = useState(null);
@@ -47,12 +47,17 @@ const FieldSupervisorDashboard = ({ initialTab = 'overview' }) => {
   const [isEscalationModalOpen, setIsEscalationModalOpen] = useState(false);
   const [isAddIncidentModalOpen, setIsAddIncidentModalOpen] = useState(false);
   const [isAddObsModalOpen, setIsAddObsModalOpen] = useState(false);
+  const [lastRefreshed, setLastRefreshed] = useState(() => {
+    return new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  });
 
   // Redux Data
   const incidents = useSelector((state) => state.trafficIncident?.items || []);
   const observations = useSelector((state) => state.fieldObservation?.items || []);
   const grids = useSelector((state) => state.utilityGrid?.items || []);
   const zones = useSelector((state) => state.trafficZone?.items || []);
+  const outages = useSelector((state) => state.utilityOutage?.items || []);
+  const { user } = useSelector((state) => state.auth || {});
 
   const loading = useSelector(
     (state) =>
@@ -63,21 +68,22 @@ const FieldSupervisorDashboard = ({ initialTab = 'overview' }) => {
       false
   );
 
-  const loadData = useCallback(() => {
+  const loadData = () => {
     dispatch(fetchIncidents());
     dispatch(fetchObservations());
     dispatch(fetchGrids());
     dispatch(fetchZones());
     dispatch(fetchOutages());
-  }, [dispatch]);
+    setLastRefreshed(new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  };
 
   useEffect(() => {
     loadData();
-  }, [loadData]);
+  }, [dispatch]);
 
   useEffect(() => {
     setActiveTab(getTabFromPath());
-  }, [getTabFromPath]);
+  }, [location.pathname]);
 
   const handleTabChange = (tabKey) => {
     setActiveTab(tabKey);
@@ -89,6 +95,7 @@ const FieldSupervisorDashboard = ({ initialTab = 'overview' }) => {
   };
 
   // Metrics Calculation
+  const totalIncidents = incidents.length;
   const assignedIncidents = incidents.filter(
     (i) => i.status !== 'CLOSED' && i.status !== 'RESOLVED'
   ).length;
@@ -110,6 +117,8 @@ const FieldSupervisorDashboard = ({ initialTab = 'overview' }) => {
     setEscalationTargetIncident(incident);
     setIsEscalationModalOpen(true);
   };
+
+  const username = user?.username || localStorage.getItem('username') || 'Supervisor Vance';
 
   return (
     <div className="fs-dashboard-container">
