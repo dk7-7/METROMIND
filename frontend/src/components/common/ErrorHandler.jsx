@@ -1,4 +1,5 @@
 import React from 'react';
+import './ErrorHandler.css';
 
 const ErrorHandler = ({ error, message, errorMessage, err, status }) => {
   const errorObj = error || message || errorMessage || err;

@@ -1,4 +1,5 @@
 import React from 'react';
+import './EmptyState.css';
 
 const EmptyState = ({ message = 'No records found.' }) => {
   return (

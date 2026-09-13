@@ -1,0 +1,19 @@
+/* ErrorHandler Component Styles */
+.error-handler {
+  padding: 12px 18px;
+  border-radius: var(--radius-md, 12px);
+  margin-bottom: 16px;
+  background: rgba(239, 68, 68, 0.14);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #f87171;
+  font-size: 0.875rem;
+  font-weight: 500;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.15);
+  animation: slideDownFade 0.3s ease;
+}
+
+.error-handler-text {
+  display: block;
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import './CapacityBar.css';
 
 const CapacityBar = ({ current = 0, total = 0, currentLoad, capacityUnits }) => {
   const cur = typeof currentLoad === 'number' ? currentLoad : Number(current) || 0;
@@ -7,11 +8,11 @@ const CapacityBar = ({ current = 0, total = 0, currentLoad, capacityUnits }) => 
   const percentage = tot > 0 ? (cur / tot) * 100 : 0;
   const clampedPercentage = Math.min(Math.max(percentage, 0), 100);
 
-  let color = '#22c55e';
+  let colorClass = 'fill-green';
   if (percentage >= 90) {
-    color = '#ef4444';
+    colorClass = 'fill-red';
   } else if (percentage >= 70) {
-    color = '#f59e0b';
+    colorClass = 'fill-amber';
   }
 
   return (
@@ -21,25 +22,11 @@ const CapacityBar = ({ current = 0, total = 0, currentLoad, capacityUnits }) => 
           {cur} / {tot} ({percentage.toFixed(1)}%)
         </span>
       </div>
-      <div
-        className="capacity-bar-track"
-        style={{
-          width: '100%',
-          height: '8px',
-          backgroundColor: '#e2e8f0',
-          borderRadius: '4px',
-          overflow: 'hidden',
-        }}
-      >
+      <div className="capacity-bar-track">
         <div
-          className="capacity-bar-fill"
+          className={`capacity-bar-fill ${colorClass}`}
           data-testid="capacity-bar-fill"
-          style={{
-            width: `${clampedPercentage}%`,
-            height: '100%',
-            backgroundColor: color,
-            transition: 'width 0.3s ease',
-          }}
+          style={{ '--capacity-pct': `${clampedPercentage}%`, width: `${clampedPercentage}%` }}
         />
       </div>
     </div>
