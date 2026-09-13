@@ -1,0 +1,59 @@
+/* StatCards Component Styles */
+.stat-cards-six-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--glass-bg-primary, rgba(15, 23, 42, 0.72));
+  backdrop-filter: blur(18px) saturate(130%);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  border: 1px solid var(--glass-border-default, rgba(56, 189, 248, 0.18));
+  border-radius: var(--radius-lg, 16px);
+  padding: 16px 18px;
+  box-shadow: var(--glass-shadow, 0 8px 32px 0 rgba(0, 0, 0, 0.45)), var(--glass-inner-light, inset 0 1px 1px 0 rgba(255, 255, 255, 0.12));
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: all var(--transition-normal, 240ms cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.stat-card-hoverable {
+  cursor: pointer;
+}
+
+.stat-card-hoverable:hover {
+  border-color: var(--glass-border-hover, rgba(56, 189, 248, 0.38));
+  box-shadow: var(--glass-shadow-lg, 0 20px 48px -8px rgba(0, 0, 0, 0.75)), 0 0 16px rgba(0, 240, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.stat-card-progress-fill {
+  width: var(--card-progress-pct, 0%);
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.stat-card-progress-fill.progress-green {
+  background-color: #22c55e;
+}
+
+.stat-card-progress-fill.progress-cyan {
+  background-color: var(--accent-cyan, #00f0ff);
+}
+
+.stat-card-progress-fill.progress-purple {
+  background-color: var(--accent-purple, #a855f7);
+}
+
+.stat-card-progress-fill.progress-amber {
+  background-color: #f59e0b;
+}
+
+.stat-card-progress-fill.progress-red {
+  background-color: #ef4444;
+}

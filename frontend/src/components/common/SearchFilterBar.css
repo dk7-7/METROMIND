@@ -1,0 +1,54 @@
+/* SearchFilterBar Component Styles */
+.search-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.search-input-wrapper {
+  flex: 1;
+  min-width: 240px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 16px;
+  background: var(--glass-bg-input, rgba(11, 19, 34, 0.82));
+  border: 1px solid var(--glass-border-default, rgba(56, 189, 248, 0.18));
+  border-radius: var(--radius-md, 12px);
+  color: var(--text-main, #f8fafc);
+  font-size: 0.875rem;
+  font-family: inherit;
+  transition: all var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--accent-cyan, #00f0ff);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+}
+
+.filter-select-wrapper {
+  min-width: 180px;
+}
+
+.filter-select {
+  width: 100%;
+  padding: 10px 16px;
+  background: var(--glass-bg-input, rgba(11, 19, 34, 0.82));
+  border: 1px solid var(--glass-border-default, rgba(56, 189, 248, 0.18));
+  border-radius: var(--radius-md, 12px);
+  color: var(--text-main, #f8fafc);
+  font-size: 0.875rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--accent-cyan, #00f0ff);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.25);
+}

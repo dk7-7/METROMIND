@@ -1,4 +1,5 @@
 import React from 'react';
+import './CityHealthSummary.css';
 
 const CityHealthSummary = ({
   incidents = [],
@@ -42,7 +43,7 @@ const CityHealthSummary = ({
   if (loading) {
     return (
       <div className="city-health-summary skeleton-panel" aria-busy="true">
-        <div className="skeleton-line" style={{ width: '100%', height: '42px' }} />
+        <div className="skeleton-line skeleton-city-health" />
       </div>
     );
   }
@@ -64,7 +65,7 @@ const CityHealthSummary = ({
         {/* 1. Incident Health */}
         <div className="health-metric-item">
           <div className="metric-header">
-            <span className="metric-dot" style={{ background: incidentStatus.dot === 'green' ? 'var(--status-success)' : 'var(--status-warning)' }} />
+            <span className={`metric-dot dot-${incidentStatus.dot}`} />
             <span className="metric-label">Incident Health</span>
           </div>
           <div className="metric-value-row">
@@ -77,7 +78,7 @@ const CityHealthSummary = ({
         {/* 2. Utility Health */}
         <div className="health-metric-item">
           <div className="metric-header">
-            <span className="metric-dot" style={{ background: utilityStatus.dot === 'green' ? 'var(--status-success)' : 'var(--status-warning)' }} />
+            <span className={`metric-dot dot-${utilityStatus.dot}`} />
             <span className="metric-label">Utility Health</span>
           </div>
           <div className="metric-value-row">
@@ -90,7 +91,7 @@ const CityHealthSummary = ({
         {/* 3. Traffic Health */}
         <div className="health-metric-item">
           <div className="metric-header">
-            <span className="metric-dot" style={{ background: trafficStatus.dot === 'green' ? 'var(--status-success)' : 'var(--status-warning)' }} />
+            <span className={`metric-dot dot-${trafficStatus.dot}`} />
             <span className="metric-label">Traffic Health</span>
           </div>
           <div className="metric-value-row">
@@ -103,7 +104,7 @@ const CityHealthSummary = ({
         {/* 4. Overall City Status */}
         <div className="health-metric-item highlight-item">
           <div className="metric-header">
-            <span className="metric-dot" style={{ background: 'var(--accent-cyan)' }} />
+            <span className="metric-dot dot-cyan" />
             <span className="metric-label">Grid Telemetry</span>
           </div>
           <div className="metric-value-row">

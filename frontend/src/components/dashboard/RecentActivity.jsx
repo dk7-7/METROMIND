@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './RecentActivity.css';
 
 const RecentActivity = ({ activities = [], incidents = [], loading = false }) => {
   const navigate = useNavigate();

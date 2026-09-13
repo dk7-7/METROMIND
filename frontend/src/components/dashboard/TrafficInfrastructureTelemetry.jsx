@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './TrafficInfrastructureTelemetry.css';
 
 const TrafficInfrastructureTelemetry = ({ zones = [], grids = [], loading = false }) => {
   const navigate = useNavigate();
@@ -72,7 +73,7 @@ const TrafficInfrastructureTelemetry = ({ zones = [], grids = [], loading = fals
         <div className="card-header-flex">
           <h3>Traffic & Infrastructure Telemetry</h3>
         </div>
-        <div className="skeleton-line" style={{ height: '140px' }} />
+        <div className="skeleton-line skeleton-telemetry" />
       </div>
     );
   }
@@ -131,7 +132,7 @@ const TrafficInfrastructureTelemetry = ({ zones = [], grids = [], loading = fals
                 <div className="telemetry-progress-track" aria-hidden="true">
                   <div
                     className={`telemetry-progress-fill ${fillClass}`}
-                    style={{ width: `${item.progress}%` }}
+                    style={{ '--telemetry-progress': `${item.progress}%`, width: `${item.progress}%` }}
                   />
                 </div>
 

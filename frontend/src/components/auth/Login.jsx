@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { login, clearError } from '../../store/slices/authSlice';
+import './Login.css';
 
 /**
  * Smart City Connected Network Canvas
@@ -144,7 +145,7 @@ const SmartCityNetworkCanvas = ({ opacity = 1 }) => {
     <canvas
       ref={canvasRef}
       className="smart-city-network-canvas"
-      style={{ opacity, transition: 'opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1)' }}
+      style={{ '--canvas-opacity': opacity, opacity }}
       aria-hidden="true"
     />
   );
@@ -352,7 +353,7 @@ const Login = () => {
               <div className="hud-progress-track">
                 <div
                   className="hud-progress-fill"
-                  style={{ width: `${syncProgress}%` }}
+                  style={{ '--hud-progress': `${syncProgress}%`, width: `${syncProgress}%` }}
                 />
               </div>
             </div>
@@ -521,7 +522,7 @@ const Login = () => {
             {/* Bottom Security Compliance Stamp */}
             <div className="login-security-stamp">
               <span className="stamp-icon" aria-hidden="true">🔒</span>
-              <span>ENCRYPTED TLS 1.3 • SMART-GRID PROTOCOL VERIFIED</span>
+              <span>ENCRYPTED TLS 1.3 • SMART-GRID PROTOIFIED</span>
             </div>
           </div>
         </div>

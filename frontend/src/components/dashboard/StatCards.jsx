@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './StatCards.css';
 
 const StatCards = ({
   totalIncidents = 0,
@@ -121,55 +122,59 @@ const StatCards = ({
 
   return (
     <div className="stat-cards-six-grid" role="region" aria-label="Key Performance Indicators">
-      {cards.map((card, idx) => (
-        <div
-          key={idx}
-          className={`stat-card stat-card-hoverable accent-${card.accent}`}
-          onClick={() => card.link && navigate(card.link)}
-          tabIndex={0}
-          role="button"
-          aria-label={`${card.title}: ${card.value}, ${card.subText}`}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              card.link && navigate(card.link);
-            }
-          }}
-        >
-          <div className="stat-card-top">
-            <span className="stat-card-tag">{card.category}</span>
-            <span className="stat-card-icon" aria-hidden="true">
-              {card.icon}
-            </span>
-          </div>
+      {cards.map((card, idx) => {
+        const progressPct = card.progress !== undefined ? Math.min(100, Math.max(0, card.progress)) : 0;
 
-          <p className="stat-card-label">{card.title}</p>
-
-          <div className="stat-card-metric-row">
-            <h3 className="stat-card-value">{card.value}</h3>
-            <span className={`stat-pill-badge badge-${card.state}`}>
-              <span className="status-indicator-dot" aria-hidden="true" />
-              {card.status}
-            </span>
-          </div>
-
-          {card.progress !== undefined && (
-            <div className="stat-card-progress-wrap" aria-hidden="true">
-              <div className="stat-card-progress-track">
-                <div
-                  className={`stat-card-progress-fill progress-${card.accent}`}
-                  style={{ width: `${Math.min(100, Math.max(0, card.progress))}%` }}
-                />
-              </div>
+        return (
+          <div
+            key={idx}
+            className={`stat-card stat-card-hoverable accent-${card.accent}`}
+            onClick={() => card.link && navigate(card.link)}
+            tabIndex={0}
+            role="button"
+            aria-label={`${card.title}: ${card.value}, ${card.subText}`}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                card.link && navigate(card.link);
+              }
+            }}
+          >
+            <div className="stat-card-top">
+              <span className="stat-card-tag">{card.category}</span>
+              <span className="stat-card-icon" aria-hidden="true">
+                {card.icon}
+              </span>
             </div>
-          )}
 
-          <div className="stat-card-footer">
-            <span className="stat-card-subtext">{card.subText}</span>
-            <span className="stat-card-nav-arrow" aria-hidden="true">➔</span>
+            <p className="stat-card-label">{card.title}</p>
+
+            <div className="stat-card-metric-row">
+              <h3 className="stat-card-value">{card.value}</h3>
+              <span className={`stat-pill-badge badge-${card.state}`}>
+                <span className="status-indicator-dot" aria-hidden="true" />
+                {card.status}
+              </span>
+            </div>
+
+            {card.progress !== undefined && (
+              <div className="stat-card-progress-wrap" aria-hidden="true">
+                <div className="stat-card-progress-track">
+                  <div
+                    className={`stat-card-progress-fill progress-${card.accent}`}
+                    style={{ '--card-progress-pct': `${progressPct}%`, width: `${progressPct}%` }}
+                  />
+                </div>
+              </div>
+            )}
+
+            <div className="stat-card-footer">
+              <span className="stat-card-subtext">{card.subText}</span>
+              <span className="stat-card-nav-arrow" aria-hidden="true">➔</span>
+            </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };

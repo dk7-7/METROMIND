@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './UtilityHealthCard.css';
 
 const UtilityHealthCard = ({ grids = [], outages = [], loading = false }) => {
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ const UtilityHealthCard = ({ grids = [], outages = [], loading = false }) => {
         <div className="card-header-flex">
           <h3>Utility Infrastructure Health</h3>
         </div>
-        <div className="skeleton-line" style={{ height: '180px' }} />
+        <div className="skeleton-line skeleton-utility-health" />
       </div>
     );
   }
@@ -131,7 +132,7 @@ const UtilityHealthCard = ({ grids = [], outages = [], loading = false }) => {
                 <div className="utility-progress-track" aria-hidden="true">
                   <div
                     className={`utility-progress-fill ${progressClass}`}
-                    style={{ width: `${health}%` }}
+                    style={{ '--utility-health-pct': `${health}%`, width: `${health}%` }}
                   />
                 </div>
 

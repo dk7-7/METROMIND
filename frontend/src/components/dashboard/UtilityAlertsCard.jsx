@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './UtilityAlertsCard.css';
 
 const UtilityAlertsCard = ({ outages = [], alerts = [], grids = [], loading = false }) => {
   const navigate = useNavigate();
@@ -54,7 +55,7 @@ const UtilityAlertsCard = ({ outages = [], alerts = [], grids = [], loading = fa
         <div className="card-header-flex">
           <h3>Utility Alerts & Maintenance</h3>
         </div>
-        <div className="skeleton-line" style={{ height: '180px' }} />
+        <div className="skeleton-line skeleton-utility-alerts" />
       </div>
     );
   }

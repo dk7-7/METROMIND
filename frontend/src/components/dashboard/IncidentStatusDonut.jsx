@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import './IncidentStatusDonut.css';
 
 const IncidentStatusDonut = ({ incidents = [], statusDistribution, loading = false }) => {
   const navigate = useNavigate();
@@ -119,15 +120,13 @@ const IncidentStatusDonut = ({ incidents = [], statusDistribution, loading = fal
 
           <div className="donut-legend">
             {entries.map(([status, count]) => {
-              const color = statusColors[status] || '#38bdf8';
               const pct = total > 0 ? Math.round((count / total) * 100) : 0;
 
               return (
                 <div key={status} className="donut-legend-item">
                   <div className="legend-status-wrapper">
                     <span
-                      className="legend-dot"
-                      style={{ backgroundColor: color, boxShadow: `0 0 8px ${color}` }}
+                      className={`legend-dot dot-${status.toLowerCase()}`}
                       aria-hidden="true"
                     />
                     <span className="legend-status">{status}</span>
