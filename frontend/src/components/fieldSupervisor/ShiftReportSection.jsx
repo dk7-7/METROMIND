@@ -12,9 +12,6 @@ const ShiftReportSection = ({
   const resolved = incidents.filter(
     (i) => i.status === 'RESOLVED' || i.status === 'CLOSED'
   ).length;
-  const inProgress = incidents.filter(
-    (i) => i.status === 'IN_PROGRESS' || i.status === 'INVESTIGATING' || i.status === 'DISPATCHED'
-  ).length;
   const resolutionRate = totalIncidents > 0 ? Math.round((resolved / totalIncidents) * 100) : 100;
 
   const handleExportReport = () => {
