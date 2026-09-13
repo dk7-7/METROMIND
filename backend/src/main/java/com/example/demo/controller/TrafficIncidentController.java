@@ -129,4 +129,25 @@ public ResponseEntity<Map<String, String>> delete(@PathVariable Long id) {
 
         return ResponseEntity.ok(repository.save(incident));
     }
+
+    @PutMapping("/{id}/resolve")
+    @PreAuthorize("hasAnyRole('CITY_ADMINISTRATOR','TRAFFIC_CONTROLLER','FIELD_SUPERVISOR')")
+    public ResponseEntity<TrafficIncident> resolve(
+            @PathVariable Long id,
+            @RequestBody(required = false) Object body) {
+
+        if (trafficIncidentService != null) {
+            return ResponseEntity.ok(
+                    trafficIncidentService.resolveIncident(id)
+            );
+        }
+
+        TrafficIncident incident = repository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("TrafficIncident not found"));
+
+        incident.setStatus(IncidentStatus.RESOLVED);
+
+        return ResponseEntity.ok(repository.save(incident));
+    }
 }

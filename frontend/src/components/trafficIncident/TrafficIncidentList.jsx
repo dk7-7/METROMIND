@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAll, deleteRecord, update } from '../../store/slices/trafficIncidentSlice';
+import { fetchAll, deleteRecord, resolveIncident } from '../../store/slices/trafficIncidentSlice';
 import { addNotification } from '../../store/slices/alertNotificationSlice';
 import TrafficIncidentForm from './TrafficIncidentForm';
 import Pagination from '../common/Pagination';
@@ -22,6 +22,7 @@ const TrafficIncidentList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingIncident, setEditingIncident] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
+  const [resolvingId, setResolvingId] = useState(null);
 
   const role = user?.role || localStorage.getItem('role') || '';
   const canAddRecord =
@@ -35,24 +36,22 @@ const TrafficIncidentList = () => {
 
   const handleResolve = async (incident) => {
     const id = incident.incidentId || incident.id;
+    setResolvingId(id);
     try {
-      const payload = {
-        title: incident.title,
-        description: incident.description,
-        severity: incident.severity || 'MEDIUM',
-        incidentType: incident.incidentType,
-        status: 'RESOLVED',
-        zoneId: incident.zone?.zoneId || incident.zoneId || incident.zone?.id || 1,
-      };
-      const resultAction = await dispatch(update({ id, data: payload }));
-      if (update.fulfilled.match(resultAction)) {
+      const resultAction = await dispatch(resolveIncident(id));
+      if (resolveIncident.fulfilled.match(resultAction)) {
         const msg = 'TrafficIncident resolved successfully.';
         setSuccessMessage(msg);
         dispatch(addNotification({ message: msg, type: 'success' }));
         dispatch(fetchAll());
+      } else {
+        const errMsg = resultAction.payload || 'Failed to resolve traffic incident';
+        dispatch(addNotification({ message: errMsg, type: 'error' }));
       }
     } catch (err) {
-      // Error handled by redux
+      dispatch(addNotification({ message: 'Failed to resolve traffic incident', type: 'error' }));
+    } finally {
+      setResolvingId(null);
     }
   };
 
@@ -192,9 +191,10 @@ const TrafficIncidentList = () => {
                             <button
                               type="button"
                               className="btn-action-resolve"
+                              disabled={resolvingId === id}
                               onClick={() => handleResolve(item)}
                             >
-                              Resolve
+                              {resolvingId === id ? 'Resolving...' : 'Resolve'}
                             </button>
                           )}
                           {canAddRecord && (

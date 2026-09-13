@@ -122,6 +122,30 @@ export const dispatchResponse = createAsyncThunk(
   }
 );
 
+export const resolveIncident = createAsyncThunk(
+  'trafficIncident/resolveIncident',
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await trafficIncidentService.resolveIncident(id);
+      return {
+        id,
+        ...(typeof res === 'object' ? res : {}),
+        message:
+          (typeof res === 'string' ? res : null) ||
+          res?.message ||
+          'TrafficIncident resolved successfully.',
+      };
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        error.message ||
+        'Unable to resolve traffic incident';
+      return rejectWithValue(message);
+    }
+  }
+);
+
 const trafficIncidentSlice = createSlice({
   name: 'trafficIncident',
   initialState: {
@@ -220,6 +244,30 @@ const trafficIncidentSlice = createSlice({
             (item.incidentId || item.id) === id ? updated : item
           );
         }
+      })
+      // resolveIncident
+      .addCase(resolveIncident.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(resolveIncident.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        const targetId = action.payload?.id || action.payload?.incidentId;
+        state.items = state.items.map((item) => {
+          if ((item.incidentId || item.id) === targetId) {
+            return {
+              ...item,
+              ...(typeof action.payload === 'object' ? action.payload : {}),
+              status: 'RESOLVED',
+            };
+          }
+          return item;
+        });
+      })
+      .addCase(resolveIncident.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Unable to resolve traffic incident';
       });
   },
 });

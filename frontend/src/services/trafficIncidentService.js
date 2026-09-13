@@ -30,6 +30,16 @@ export const dispatchResponse = async (id) => {
   return response.data;
 };
 
+export const resolveIncident = async (id) => {
+  try {
+    const response = await api.put(`/incidents/${id}/resolve`);
+    return response.data;
+  } catch (err) {
+    const response = await api.put(`/incidents/${id}`, { status: 'RESOLVED' });
+    return response.data;
+  }
+};
+
 const trafficIncidentService = {
   getAll,
   getById,
@@ -37,6 +47,7 @@ const trafficIncidentService = {
   update,
   deleteRecord,
   dispatchResponse,
+  resolveIncident,
 };
 
 export default trafficIncidentService;
