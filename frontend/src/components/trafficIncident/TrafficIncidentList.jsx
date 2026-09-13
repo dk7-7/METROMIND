@@ -147,8 +147,7 @@ const TrafficIncidentList = () => {
           { label: 'All Statuses', value: '' },
           { label: 'REPORTED', value: 'REPORTED' },
           { label: 'DISPATCHED', value: 'DISPATCHED' }, 
-          { label: 'RESOLVED', value: 'RESOLVED' },
-          { label: 'CLOSED', value: 'CLOSED' },
+          { label: 'RESOLVED', value: 'RESOLVED' }
         ]}
       />
 
