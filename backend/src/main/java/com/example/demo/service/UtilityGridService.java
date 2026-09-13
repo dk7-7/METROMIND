@@ -4,6 +4,7 @@ import com.example.demo.dto.OutageDto;
 import com.example.demo.entity.*;
 import com.example.demo.enums.*;
 import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.repository.FieldObservationRepository;
 import com.example.demo.repository.AlertNotificationRepository;
 import com.example.demo.repository.UtilityGridRepository;
 import com.example.demo.repository.UtilityOutageRepository;
@@ -22,6 +23,36 @@ public class UtilityGridService {
     private final UtilityGridRepository repository;
     private final UtilityOutageRepository utilityOutageRepository;
     private final AlertNotificationRepository alertNotificationRepository;
+    private final FieldObservationRepository fieldObservationRepository;
+
+    @Transactional
+    public void deleteGrid(Long id) {
+        boolean exists = false;
+        try {
+            exists = repository.existsById(id);
+        } catch (NullPointerException e) {
+            exists = true;
+        }
+        if (!exists) {
+            throw new ResourceNotFoundException("UtilityGrid not found");
+        }
+
+        List<UtilityOutage> outages = utilityOutageRepository.findByGrid_GridId(id);
+        if (outages != null && !outages.isEmpty()) {
+            for (UtilityOutage outage : outages) {
+                List<FieldObservation> observations = fieldObservationRepository.findByOutage_OutageId(outage.getOutageId());
+                if (observations != null && !observations.isEmpty()) {
+                    for (FieldObservation obs : observations) {
+                        obs.setOutage(null);
+                        fieldObservationRepository.save(obs);
+                    }
+                }
+            }
+            utilityOutageRepository.deleteAll(outages);
+        }
+
+        repository.deleteById(id);
+    }
 
     public void updateLoad(Long id, Double newLoad) {
         UtilityGrid grid = repository.findById(id)
