@@ -162,12 +162,7 @@ const Login = () => {
       sessionStorage.removeItem('error');
     } catch (e) {}
   }, []);
-
-  // Intro Sequence Timeline State Machine
-  // Phase 0: 'video' (0.0s - 2.5s) - Full cinematic city video & smart network telemetry
-  // Phase 1: 'dissolve' (2.5s - 3.5s) - Smooth cross-dissolve, darkening, softening blur
-  // Phase 2: 'reveal' (3.0s - 5.0s) - Liquid glass login card surfaces seamlessly
-  // Phase 3: 'settled' (>5.0s) - 100% stable, fully interactable login page
+ 
   const [introPhase, setIntroPhase] = useState('video');
   const [syncProgress, setSyncProgress] = useState(14);
   const [isIntroComplete, setIsIntroComplete] = useState(false);
@@ -179,8 +174,7 @@ const Login = () => {
   const { user, isAuthenticated, loading, error } = useSelector(
     (state) => state.auth
   );
-
-  // Check for reduced motion preference
+ 
   useEffect(() => {
     if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
       try {
@@ -210,8 +204,7 @@ const Login = () => {
       }
     };
   }, [dispatch, error]);
-
-  // Master Cinematic Intro Timeline Engine (3.0–5.0 seconds)
+ 
   useEffect(() => {
     if (isIntroComplete) {
       setIntroPhase('settled');
@@ -223,9 +216,7 @@ const Login = () => {
 
     const runTimeline = (timestamp) => {
       if (!startTime) startTime = timestamp;
-      const elapsed = (timestamp - startTime) / 1000; // in seconds
-
-      // Sync progress telemetry counter
+      const elapsed = (timestamp - startTime) / 1000;  
       if (elapsed < 2.5) {
         const p = Math.min(94, Math.floor(14 + (elapsed / 2.5) * 80));
         setSyncProgress(p);
@@ -242,8 +233,7 @@ const Login = () => {
         setIntroPhase('reveal');
       } else {
         setIntroPhase('settled');
-        setIsIntroComplete(true);
-        return; // End animation loop
+        setIsIntroComplete(true); 
       }
 
       animationId = requestAnimationFrame(runTimeline);
@@ -255,8 +245,7 @@ const Login = () => {
       if (animationId) cancelAnimationFrame(animationId);
     };
   }, [isIntroComplete]);
-
-  // Video Autoplay policy handling & sync
+ 
   useEffect(() => {
     const video = videoRef.current;
     if (video && typeof video.play === 'function') {
@@ -265,12 +254,10 @@ const Login = () => {
         video.muted = true;
         const playPromise = video.play();
         if (playPromise !== undefined && typeof playPromise.catch === 'function') {
-          playPromise.catch(() => {
-            // Gracefully fallback if autoplay restricted
+          playPromise.catch(() => { 
           });
         }
-      } catch (e) {
-        // ignore video play errors in jsdom
+      } catch (e) { 
       }
     }
   }, [introPhase]);
