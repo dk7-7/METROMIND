@@ -51,6 +51,13 @@ public class UtilityGridService {
             utilityOutageRepository.deleteAll(outages);
         }
 
+        List<AlertNotification> alerts = alertNotificationRepository.findAll();
+        for (AlertNotification alert : alerts) {
+            if ("GRID".equalsIgnoreCase(alert.getRelatedEntityType()) && id.equals(alert.getRelatedEntityId())) {
+                alertNotificationRepository.delete(alert);
+            }
+        }
+
         repository.deleteById(id);
     }
 
