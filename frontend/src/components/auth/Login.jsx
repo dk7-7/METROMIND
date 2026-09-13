@@ -297,9 +297,6 @@ const Login = () => {
     if (error) {
       dispatch(clearError());
     }
-    if (sessionExpiredMessage) {
-      setSessionExpiredMessage(null);
-    }
     dispatch(login({ username: email, email, password }));
   };
 
@@ -378,36 +375,39 @@ const Login = () => {
             <span>GRID: 40.7128° N, 74.0060° W</span>
             <span className="hud-coords-sub">TLS 1.3 SECURE LINK</span>
           </div>
-              <span className="hud-percentage font-mono">{syncProgress}%</span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="hud-skip-button"
-            onClick={handleSkipIntro}
-            aria-label="Skip introduction animation"
-          >
-            Skip Intro <span>&rarr;</span>
-          </button>
         </div>
+      </div>
+
+      {/* SKIP INTRO BUTTON (Discreet & Accessible) */}
+      {!isSettled && (
+        <button
+          type="button"
+          className="intro-skip-btn"
+          onClick={handleSkipIntro}
+          aria-label="Skip cinematic introduction"
+          title="Press Esc or Space to skip"
+        >
+          <span>Skip Intro</span>
+          <span className="skip-arrow" aria-hidden="true">➔</span>
+        </button>
       )}
 
-      {/* 4. LIQUID GLASS AUTHENTICATION INTERFACE (Revealed with physics-based smoothness) */}
-      <div
-        className={`auth-container login-reveal-layer ${
-          isSettled ? 'interface-settled' : isRevealing ? 'interface-revealing' : isDissolving ? 'interface-dissolving' : 'interface-hidden'
-        }`}
-      >
-        <div className="glass-card auth-card login-glass-morphism">
-          <div className="auth-card-body">
-            {/* Header / City Command Logo */}
+      {/* 5. METROMIND CENTERED LIQUID-GLASS COMMAND LOGIN */}
+      <div className={`login-centered-container ${isSettled ? 'card-settled' : isRevealing ? 'card-revealing' : isDissolving ? 'card-emerging' : 'card-dormant'}`}>
+        <div className="login-panel-section">
+          <div className="auth-container login-card liquid-glass-panel">
+            {/* Ambient Glass Highlight Line */}
+            <div className="glass-specular-glow" aria-hidden="true" />
+
+            {/* Header & Branding */}
             <div className="auth-header">
-              <div className="login-brand-icon">
-                <div className="icon-shield-pulse">
-                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                    <path d="M9 12l2 2 4-4" />
+              <div className="login-brand-icon-wrapper">
+                <div className="brand-icon-glow" />
+                <div className="brand-icon-inner">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="#00f0ff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 17L12 22L22 17" stroke="#38bdf8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M2 12L12 17L22 12" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
               </div>
