@@ -10,6 +10,7 @@ import { fetchAll as fetchTrafficZones } from '../../store/slices/trafficZoneSli
 import { addNotification } from '../../store/slices/alertNotificationSlice';
 import Alert from '../common/Alert';
 import ErrorHandler from '../common/ErrorHandler';
+import './TrafficIncidentForm.css';
 
 const TrafficIncidentForm = ({
   incident = null,

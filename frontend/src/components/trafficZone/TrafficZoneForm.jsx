@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { create, update, fetchAll } from '../../store/slices/trafficZoneSlice';
 import { addNotification } from '../../store/slices/alertNotificationSlice';
 import ErrorHandler from '../common/ErrorHandler';
+import './TrafficZoneForm.css';
 
 const TrafficZoneForm = ({ zone = null, onClose, onSuccess }) => {
   const isEditMode = !!zone;

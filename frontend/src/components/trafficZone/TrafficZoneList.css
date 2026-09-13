@@ -1,0 +1,6 @@
+/* TrafficZoneList Component Styles */
+.zone-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

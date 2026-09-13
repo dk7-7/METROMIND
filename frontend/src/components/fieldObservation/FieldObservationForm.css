@@ -1,0 +1,6 @@
+/* FieldObservationForm Component Styles */
+.observation-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

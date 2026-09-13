@@ -8,6 +8,7 @@ import EmptyState from '../common/EmptyState';
 import SearchFilterBar from '../common/SearchFilterBar';
 import Alert from '../common/Alert';
 import ErrorHandler from '../common/ErrorHandler';
+import './TrafficIncidentList.css';
 
 const TrafficIncidentList = () => {
   const dispatch = useDispatch();

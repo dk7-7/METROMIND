@@ -1,0 +1,39 @@
+/* App Component Styles */
+.official-registry-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.registry-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--glass-border-default, rgba(56, 189, 248, 0.18));
+  padding-bottom: 12px;
+}
+
+.registry-tabs button {
+  background: var(--glass-bg-secondary, rgba(15, 23, 42, 0.52));
+  color: var(--text-secondary, #94a3b8);
+  border: 1px solid var(--glass-border-subtle, rgba(255, 255, 255, 0.08));
+  padding: 8px 16px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: var(--radius-md, 12px);
+  cursor: pointer;
+  transition: all var(--transition-fast, 150ms cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+.registry-tabs button:hover {
+  color: var(--text-main, #f8fafc);
+  background: var(--glass-bg-elevated, rgba(30, 41, 59, 0.68));
+  border-color: var(--glass-border-hover, rgba(56, 189, 248, 0.38));
+}
+
+.registry-tabs button.active {
+  color: var(--accent-cyan, #00f0ff);
+  background: rgba(0, 240, 255, 0.1);
+  border-color: rgba(0, 240, 255, 0.35);
+  box-shadow: 0 0 12px rgba(0, 240, 255, 0.18);
+}

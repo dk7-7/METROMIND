@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { create, update, fetchAll } from '../../store/slices/utilityGridSlice';
 import { addNotification } from '../../store/slices/alertNotificationSlice';
 import ErrorHandler from '../common/ErrorHandler';
+import './UtilityGridForm.css';
 
 const UtilityGridForm = ({ grid = null, onClose, onSuccess }) => {
   const isEditMode = !!grid;

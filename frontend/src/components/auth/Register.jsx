@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { registerUser, clearError } from '../../store/slices/authSlice';
+import './Register.css';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -285,4 +286,3 @@ const Register = () => {
 };
 
 export default Register;
-

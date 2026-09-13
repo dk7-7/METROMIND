@@ -1,0 +1,6 @@
+/* UtilityGridForm Component Styles */
+.grid-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

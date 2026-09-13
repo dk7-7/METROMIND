@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { create, fetchAll } from '../../store/slices/alertNotificationSlice';
 import { addNotification } from '../../store/slices/alertNotificationSlice';
 import ErrorHandler from '../common/ErrorHandler';
+import './AlertNotificationForm.css';
 
 const AlertNotificationForm = ({ onClose, onSuccess }) => {
   const dispatch = useDispatch();

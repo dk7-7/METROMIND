@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { logout } from '../../store/slices/authSlice';
+import './Navbar.css';
 
 const Navbar = () => {
   const dispatch = useDispatch();

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { create, fetchAll } from '../../store/slices/fieldObservationSlice';
 import { addNotification } from '../../store/slices/alertNotificationSlice';
 import ErrorHandler from '../common/ErrorHandler';
+import './FieldObservationForm.css';
 
 const FieldObservationForm = ({ onClose, onSuccess }) => {
   const dispatch = useDispatch();
