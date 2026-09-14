@@ -8,7 +8,6 @@ const StatCards = ({
   criticalAlerts = 0,
   congestedZones = 0,
   resolvedIncidents = 0,
-  utilityHealth = 100,
   utilityLoad = 0,
   loading = false,
   stats,
@@ -19,8 +18,8 @@ const StatCards = ({
   const incidentsCount = stats?.totalIncidents ?? totalIncidents;
   const outagesCount = stats?.activeOutages ?? activeOutages;
   const alertsCount = stats?.criticalAlerts ?? criticalAlerts;
+  const zonesCount = stats?.congestedZones ?? congestedZones;
   const resolvedCount = stats?.resolvedIncidents ?? resolvedIncidents;
-  const healthRate = stats?.utilityHealth ?? utilityHealth;
   const loadRate = stats?.utilityLoad ?? utilityLoad;
 
   const resolutionPct =
@@ -78,17 +77,16 @@ const StatCards = ({
       link: '/outages',
       accent: outagesCount > 0 ? 'amber' : 'green',
     },
-    // 5. Utility Health
+    // 5. Congested Zones
     {
-      category: 'GRID INTEGRITY',
-      title: 'Utility Health',
-      value: typeof healthRate === 'number' ? `${Math.round(healthRate)}%` : `${healthRate}%`,
-      icon: '🛡️',
-      subText: typeof healthRate === 'number' && healthRate < 90 ? 'Degradation Detected' : 'Infrastructure Online',
-      status: typeof healthRate === 'number' && healthRate < 90 ? 'Attention' : 'Operational',
-      state: typeof healthRate === 'number' && healthRate < 90 ? 'warning' : 'nominal',
-      progress: typeof healthRate === 'number' ? healthRate : 100,
-      link: '/utility-grids',
+      category: 'TRAFFIC DENSITY',
+      title: 'Congested Zones',
+      value: zonesCount,
+      icon: '🚦',
+      subText: zonesCount > 0 ? `${zonesCount} High Congestion Sector${zonesCount > 1 ? 's' : ''}` : 'All Zones Flowing',
+      status: zonesCount > 0 ? 'Congested' : 'Normal',
+      state: zonesCount > 0 ? 'warning' : 'nominal',
+      link: '/traffic-zones',
       accent: 'cyan',
     },
     // 6. Utility Load

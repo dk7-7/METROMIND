@@ -25,11 +25,6 @@ const CityHealthSummary = ({
       ? { text: 'Attention Required', state: 'warning', dot: 'amber' }
       : { text: 'Stable & Monitored', state: 'nominal', dot: 'green' };
 
-  const utilityStatus =
-    activeOutages > 0
-      ? { text: `${activeOutages} Active Outage${activeOutages > 1 ? 's' : ''}`, state: 'warning', dot: 'amber' }
-      : { text: 'Operational & Balanced', state: 'nominal', dot: 'green' };
-
   const trafficStatus =
     severeCongestion > 0
       ? { text: `${severeCongestion} Sector${severeCongestion > 1 ? 's' : ''} Restricted`, state: 'warning', dot: 'amber' }
@@ -75,20 +70,7 @@ const CityHealthSummary = ({
           </div>
         </div>
 
-        {/* 2. Utility Health */}
-        <div className="health-metric-item">
-          <div className="metric-header">
-            <span className={`metric-dot dot-${utilityStatus.dot}`} />
-            <span className="metric-label">Utility Health</span>
-          </div>
-          <div className="metric-value-row">
-            <span className={`metric-badge badge-${utilityStatus.state}`}>
-              {utilityStatus.text}
-            </span>
-          </div>
-        </div>
-
-        {/* 3. Traffic Health */}
+        {/* 2. Traffic Health */}
         <div className="health-metric-item">
           <div className="metric-header">
             <span className={`metric-dot dot-${trafficStatus.dot}`} />

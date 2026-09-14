@@ -16,7 +16,6 @@ import StatCards from './components/dashboard/StatCards';
 import IncidentStatusDonut from './components/dashboard/IncidentStatusDonut';
 import RecentActivity from './components/dashboard/RecentActivity';
 import CityHealthSummary from './components/dashboard/CityHealthSummary';
-import UtilityHealthCard from './components/dashboard/UtilityHealthCard';
 import UtilityAlertsCard from './components/dashboard/UtilityAlertsCard';
 import TrafficInfrastructureTelemetry from './components/dashboard/TrafficInfrastructureTelemetry';
 import { fetchAll as fetchIncidents } from './store/slices/trafficIncidentSlice';
@@ -81,7 +80,7 @@ const DashboardView = () => {
     (a) => a.severity === 'CRITICAL' && !a.isRead
   ).length;
 
-  // Compute utility load & health dynamically from actual grid and outage items
+  // Compute utility load dynamically from actual grid items
   let calculatedLoad = 0;
   if (grids.length > 0) {
     const totalCap = grids.reduce((s, g) => s + (Number(g.capacityUnits) || 0), 0);
@@ -89,14 +88,6 @@ const DashboardView = () => {
     if (totalCap > 0) {
       calculatedLoad = Math.round((totalLoad / totalCap) * 100);
     }
-  }
-
-  let calculatedHealth = 100;
-  if (grids.length > 0) {
-    const operationalCount = grids.filter((g) => (g.status || 'OPERATIONAL') === 'OPERATIONAL').length;
-    calculatedHealth = Math.round((operationalCount / grids.length) * 100);
-  } else if (activeOutages > 0) {
-    calculatedHealth = Math.max(0, 100 - activeOutages * 20);
   }
 
   return (
@@ -130,29 +121,25 @@ const DashboardView = () => {
         loading={loading}
       />
 
-      {/* 3. 6 Balanced Unified KPI Cards (3 Incidents + 3 Utilities) */}
+      {/* 3. Balanced Unified KPI Cards */}
       <StatCards
         totalIncidents={totalIncidents}
         resolvedIncidents={resolvedIncidents}
         activeOutages={activeOutages}
         criticalAlerts={criticalAlerts}
         congestedZones={congestedZones}
-        utilityHealth={calculatedHealth}
         utilityLoad={calculatedLoad}
         loading={loading}
       />
 
-      {/* 4. Main Dashboard Operations Section (Incident Operations + Utility Infrastructure Health) */}
+      {/* 4. Main Dashboard Operations Section */}
       <div className="dashboard-two-column-grid">
         <IncidentStatusDonut incidents={incidents} loading={loading} />
-        <UtilityHealthCard grids={grids} outages={outages} loading={loading} />
+        <RecentActivity incidents={incidents} loading={loading} />
       </div>
 
-      {/* 5. Live Activity & Telemetry Section (Recent Incidents + Utility Alerts & Maintenance) */}
-      <div className="dashboard-two-column-grid">
-        <RecentActivity incidents={incidents} loading={loading} />
-        <UtilityAlertsCard outages={outages} alerts={alerts} grids={grids} loading={loading} />
-      </div>
+      {/* 5. Utility Alerts & Maintenance */}
+      <UtilityAlertsCard outages={outages} alerts={alerts} grids={grids} loading={loading} />
 
       {/* 6. Full-Width Traffic & Infrastructure Telemetry Section */}
       <TrafficInfrastructureTelemetry zones={zones} grids={grids} loading={loading} />
