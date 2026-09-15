@@ -9,6 +9,8 @@ import java.util.List;
 
 public interface TrafficIncidentRepository extends JpaRepository<TrafficIncident, Long> {
 
+List<TrafficIncident> findByZone_ZoneId(Long zoneId);
+
 List<TrafficIncident> findByZone_ZoneIdAndStatusNotIn(Long zoneId, List<IncidentStatus> statuses);
 
 long countByStatusNotIn(List<IncidentStatus> statuses);

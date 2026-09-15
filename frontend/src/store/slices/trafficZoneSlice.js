@@ -85,8 +85,12 @@ export const deleteRecord = createAsyncThunk(
   'trafficZone/deleteRecord',
   async (id, { rejectWithValue }) => {
     try {
-      await trafficZoneService.deleteRecord(id);
-      return id;
+      const res = await trafficZoneService.deleteRecord(id);
+      const message =
+        (typeof res === 'string' ? res : null) ||
+        (typeof res === 'object' && (res?.message || res?.data?.message)) ||
+        'TrafficZone deleted successfully.';
+      return { id, message };
     } catch (error) {
       const message =
         error.response?.data?.message ||
@@ -163,10 +167,21 @@ const trafficZoneSlice = createSlice({
         state.error = action.payload || 'Failed to update traffic zone';
       })
       // deleteRecord
+      .addCase(deleteRecord.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(deleteRecord.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        const targetId = action.payload?.id ?? action.payload;
         state.items = state.items.filter(
-          (item) => (item.zoneId || item.id) !== action.payload
+          (item) => (item.zoneId || item.id) !== targetId
         );
+      })
+      .addCase(deleteRecord.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Failed to delete traffic zone';
       });
   },
 });

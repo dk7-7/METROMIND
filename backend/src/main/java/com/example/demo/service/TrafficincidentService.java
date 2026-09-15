@@ -8,6 +8,7 @@ import com.example.demo.exception.IllegalStateException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.AlertNotificationRepository;
 import com.example.demo.repository.CityUserRepository;
+import com.example.demo.repository.FieldObservationRepository;
 import com.example.demo.repository.TrafficIncidentRepository;
 import com.example.demo.repository.TrafficZoneRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class TrafficIncidentService {
     private final TrafficZoneRepository trafficZoneRepository;
     private final CityUserRepository cityUserRepository;
     private final AlertNotificationRepository alertNotificationRepository;
+    private final FieldObservationRepository fieldObservationRepository;
 
     public TrafficIncident reportIncident(IncidentDto dto, String username) {
 
@@ -206,6 +208,21 @@ public class TrafficIncidentService {
 
         if (!exists) {
             throw new ResourceNotFoundException("TrafficIncident not found");
+        }
+
+        List<FieldObservation> observations = fieldObservationRepository.findByIncident_IncidentId(id);
+        if (observations != null && !observations.isEmpty()) {
+            for (FieldObservation obs : observations) {
+                obs.setIncident(null);
+                fieldObservationRepository.save(obs);
+            }
+        }
+
+        List<AlertNotification> alerts = alertNotificationRepository.findAll();
+        for (AlertNotification alert : alerts) {
+            if ("INCIDENT".equalsIgnoreCase(alert.getRelatedEntityType()) && id.equals(alert.getRelatedEntityId())) {
+                alertNotificationRepository.delete(alert);
+            }
         }
 
         repository.deleteById(id);
