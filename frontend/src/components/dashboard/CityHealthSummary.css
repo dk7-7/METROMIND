@@ -49,8 +49,8 @@
   gap: 6px;
   padding: 4px 12px;
   border-radius: var(--radius-full, 9999px);
-  background: rgba(0, 240, 255, 0.08);
-  border: 1px solid rgba(0, 240, 255, 0.25);
+  background: rgba(255, 102, 0, 0.12);
+  border: 1px solid rgba(255, 102, 0, 0.35);
 }
 
 .beacon-dot {
@@ -65,8 +65,8 @@
 }
 
 .beacon-dot.beacon-amber {
-  background: var(--status-warning, #f59e0b);
-  box-shadow: 0 0 8px var(--status-warning, #f59e0b);
+  background: var(--brand-primary, #ff6600);
+  box-shadow: 0 0 8px var(--brand-primary, #ff6600);
 }
 
 .health-overall-label {
@@ -74,7 +74,7 @@
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  color: var(--accent-cyan, #00f0ff);
+  color: var(--accent-cyan, #ff6600);
 }
 
 .health-metrics-grid {
