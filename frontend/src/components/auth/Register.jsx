@@ -188,7 +188,6 @@ const Register = () => {
                 <option value="TRAFFIC_CONTROLLER">TRAFFIC_CONTROLLER — Traffic Management</option>
                 <option value="UTILITY_SUPERVISOR">UTILITY_SUPERVISOR — Power & Water Grids</option>
                 <option value="FIELD_TECHNICIAN">FIELD_TECHNICIAN — On-Site Inspection</option>
-                <option value="CIVIC_ANALYST">CIVIC_ANALYST — Operations & Telemetry</option>
               </select>
               <span className="select-chevron" aria-hidden="true">▼</span>
             </div>
