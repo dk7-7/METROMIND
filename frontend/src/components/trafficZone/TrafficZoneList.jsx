@@ -34,10 +34,13 @@ const TrafficZoneList = () => {
 
     const resultAction = await dispatch(deleteRecord(id));
     if (deleteRecord.fulfilled.match(resultAction)) {
-      const msg = 'TrafficZone deleted successfully.';
+      const msg = resultAction.payload?.message || 'TrafficZone deleted successfully.';
       setSuccessMessage(msg);
       dispatch(addNotification({ message: msg, type: 'success' }));
       dispatch(fetchAll());
+    } else if (deleteRecord.rejected.match(resultAction)) {
+      const errMsg = resultAction.payload || 'Failed to delete traffic zone';
+      dispatch(addNotification({ message: errMsg, type: 'error' }));
     }
   };
 
