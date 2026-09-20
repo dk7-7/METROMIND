@@ -1,105 +1,107 @@
 /* ==========================================================================
-   METROMIND - INDUSTRIAL SKEUOMORPHIC UI DESIGN SYSTEM
-   Grey & Safety Orange Tactile Command Center
+   METROMIND - LUMINOUS HYDRO-GLASS & COBALT MATRIX DESIGN SYSTEM
+   Liquid Glass UI with Electric Cyan & Blue Theme
    ========================================================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Chakra+Petch:wght@500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root {
-  /* Skeuomorphic Dark Slate & Milled Steel Background */
-  --bg-app: #16181d;
-  --bg-app-rgb: 22, 24, 29;
+  /* Liquid Glass Deep Oceanic Cobalt Background */
+  --bg-app: #030712;
+  --bg-app-rgb: 3, 7, 18;
 
-  /* Tactile Milled Metallic Surfaces */
-  --glass-bg-primary: linear-gradient(145deg, #2a2e37 0%, #1e2026 100%);
-  --glass-bg-secondary: linear-gradient(180deg, #24272f 0%, #1a1c21 100%);
-  --glass-bg-elevated: linear-gradient(180deg, #323640 0%, #23262e 100%);
-  --glass-bg-subtle: rgba(0, 0, 0, 0.35);
-  --glass-bg-input: linear-gradient(180deg, #121417 0%, #1a1c21 100%);
+  /* Translucent Liquid Glass Surfaces with Refractive Blue Gradients */
+  --glass-bg-primary: linear-gradient(135deg, rgba(14, 28, 54, 0.7) 0%, rgba(7, 16, 33, 0.8) 100%);
+  --glass-bg-secondary: linear-gradient(180deg, rgba(20, 42, 80, 0.55) 0%, rgba(9, 21, 42, 0.65) 100%);
+  --glass-bg-elevated: linear-gradient(135deg, rgba(28, 58, 110, 0.6) 0%, rgba(12, 28, 56, 0.75) 100%);
+  --glass-bg-subtle: rgba(14, 165, 233, 0.08);
+  --glass-bg-input: linear-gradient(180deg, rgba(5, 15, 32, 0.75) 0%, rgba(10, 24, 48, 0.65) 100%);
 
-  /* Skeuomorphic Metallic Borders, Chamfer Bevels & Industrial Orange */
-  --glass-border-subtle: #2d313a;
-  --glass-border-default: #3e434f;
-  --glass-border-hover: #ff6600;
-  --glass-border-focus: #ff6600;
-  --glass-border-glow: rgba(255, 102, 0, 0.45);
+  /* Crystalline Prism Glass Borders & Electric Blue Highlights */
+  --glass-border-subtle: rgba(56, 189, 248, 0.22);
+  --glass-border-default: rgba(14, 165, 233, 0.38);
+  --glass-border-hover: #00d2ff;
+  --glass-border-focus: #00d2ff;
+  --glass-border-glow: rgba(0, 210, 255, 0.5);
 
-  /* High-Contrast Tactical Typography */
-  --text-main: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --text-inverted: #121417;
+  /* High-Contrast Luminous Typography */
+  --text-main: #f0f9ff;
+  --text-secondary: #bae6fd;
+  --text-muted: #7dd3fc;
+  --text-inverted: #030712;
 
-  /* Industrial Safety Orange Spectrum */
-  --brand-primary: #ff6600;
-  --brand-primary-hover: #ea580c;
-  --brand-primary-active: #c2410c;
-  --accent-cyan: #ff6600; /* Primary Industrial Orange */
-  --accent-sky: #ff8533;  /* Warm Amber Highlights */
-  --accent-indigo: #d97706;
-  --accent-purple: #f59e0b;
+  /* Vibrant Blue Spectrum */
+  --brand-primary: #00d2ff;
+  --brand-primary-hover: #38bdf8;
+  --brand-primary-active: #0284c7;
+  --accent-cyan: #00f0ff;  /* Electric Cyan */
+  --accent-sky: #38bdf8;   /* Luminous Sky Blue */
+  --accent-indigo: #6366f1; /* Deep Cobalt Blue */
+  --accent-purple: #8b5cf6; /* Electric Sapphire Violet */
 
   /* Semantic Status Indicators */
-  --status-success: #22c55e;
-  --status-warning: #ff9900;
+  --status-success: #10b981;
+  --status-warning: #f59e0b;
   --status-error: #ef4444;
-  --status-info: #ff8533;
+  --status-info: #38bdf8;
 
-  /* Tactile Physical Shadows & Insets */
-  --glass-shadow: 0 6px 18px rgba(0, 0, 0, 0.65), inset 1px 1px 0px rgba(255, 255, 255, 0.16), inset -1px -1px 0px rgba(0, 0, 0, 0.6);
-  --glass-shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.8), inset 1px 1px 1px rgba(255, 255, 255, 0.2), inset -1px -1px 2px rgba(0, 0, 0, 0.7);
-  --glass-inner-light: inset 0 1px 1px 0 rgba(255, 255, 255, 0.18);
-  --glass-blur: blur(0px); /* Skeuomorphism relies on physical tactile depth */
-  --glass-blur-heavy: blur(0px);
+  /* Liquid Glass Depth, Shadows & Backdrop Blur Filters */
+  --glass-shadow: 0 8px 32px 0 rgba(0, 10, 30, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.25), inset 0 -1px 1px 0 rgba(0, 210, 255, 0.18);
+  --glass-shadow-lg: 0 16px 48px 0 rgba(0, 15, 45, 0.7), inset 0 1px 2px 0 rgba(255, 255, 255, 0.35), inset 0 -1px 2px 0 rgba(0, 210, 255, 0.25);
+  --glass-inner-light: inset 0 1px 1px 0 rgba(255, 255, 255, 0.25);
+  --glass-blur: blur(16px);
+  --glass-blur-heavy: blur(24px);
 
-  /* Transition Timings & Radii */
-  --transition-fast: 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  --transition-normal: 220ms cubic-bezier(0.2, 0.8, 0.2, 1);
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
-  --radius-xl: 18px;
+  /* Transition Timings & Soft Glass Radii */
+  --transition-fast: 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-normal: 240ms cubic-bezier(0.16, 1, 0.3, 1);
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 26px;
   --radius-full: 9999px;
 }
 
 [data-theme="light"], :root[data-theme="light"] {
   color-scheme: light;
-  --bg-app: #d8dde4;
-  --bg-app-rgb: 216, 221, 228;
+  --bg-app: #e0f2fe;
+  --bg-app-rgb: 224, 242, 254;
 
-  /* Skeuomorphic Light Milled Silver Surfaces */
-  --glass-bg-primary: linear-gradient(145deg, #f2f5f9 0%, #d5dae2 100%);
-  --glass-bg-secondary: linear-gradient(180deg, #ebf0f6 0%, #c9cfd8 100%);
-  --glass-bg-elevated: linear-gradient(180deg, #ffffff 0%, #e0e5ed 100%);
-  --glass-bg-subtle: rgba(0, 0, 0, 0.06);
-  --glass-bg-input: linear-gradient(180deg, #c5ccd6 0%, #dfe4ed 100%);
+  /* Crystalline Light Hydro Glass Surfaces */
+  --glass-bg-primary: linear-gradient(135deg, rgba(255, 255, 255, 0.85) 0%, rgba(224, 242, 254, 0.75) 100%);
+  --glass-bg-secondary: linear-gradient(180deg, rgba(240, 249, 255, 0.8) 0%, rgba(186, 230, 253, 0.65) 100%);
+  --glass-bg-elevated: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(203, 239, 255, 0.8) 100%);
+  --glass-bg-subtle: rgba(2, 132, 199, 0.08);
+  --glass-bg-input: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(224, 242, 254, 0.8) 100%);
 
-  /* Metallic Chamfers & Orange Highlights */
-  --glass-border-subtle: #a8b0bd;
-  --glass-border-default: #9199a6;
-  --glass-border-hover: #ea580c;
-  --glass-border-focus: #ff6600;
-  --glass-border-glow: rgba(255, 102, 0, 0.35);
+  /* Hydro Glass Azure Borders & Highlights */
+  --glass-border-subtle: rgba(2, 132, 199, 0.2);
+  --glass-border-default: rgba(2, 132, 199, 0.35);
+  --glass-border-hover: #0284c7;
+  --glass-border-focus: #0284c7;
+  --glass-border-glow: rgba(2, 132, 199, 0.4);
 
   /* Typography Colors */
-  --text-main: #1a1d22;
-  --text-secondary: #475569;
-  --text-muted: #64748b;
+  --text-main: #0c4a6e;
+  --text-secondary: #0369a1;
+  --text-muted: #0284c7;
   --text-inverted: #ffffff;
 
-  /* Industrial Orange Brand Accents */
-  --brand-primary: #ea580c;
-  --brand-primary-hover: #c2410c;
-  --brand-primary-active: #9a3412;
-  --accent-cyan: #ea580c;
-  --accent-sky: #f97316;
-  --accent-indigo: #c2410c;
-  --accent-purple: #d97706;
+  /* Luminous Azure Blue Accents */
+  --brand-primary: #0284c7;
+  --brand-primary-hover: #0369a1;
+  --brand-primary-active: #075985;
+  --accent-cyan: #0284c7;
+  --accent-sky: #0369a1;
+  --accent-indigo: #4338ca;
+  --accent-purple: #6d28d9;
 
-  /* Shadows for Light Skeuomorphism */
-  --glass-shadow: 0 6px 14px rgba(0, 0, 0, 0.18), inset 1px 1px 0px rgba(255, 255, 255, 0.9), inset -1px -1px 0px rgba(0, 0, 0, 0.25);
-  --glass-shadow-lg: 0 12px 28px rgba(0, 0, 0, 0.25), inset 1px 1px 1px rgba(255, 255, 255, 1), inset -1px -1px 2px rgba(0, 0, 0, 0.3);
-  --glass-inner-light: inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+  /* Shadows for Light Liquid Glass */
+  --glass-shadow: 0 8px 32px 0 rgba(2, 132, 199, 0.15), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+  --glass-shadow-lg: 0 16px 48px 0 rgba(2, 132, 199, 0.25), inset 0 1px 2px 0 rgba(255, 255, 255, 1);
+  --glass-inner-light: inset 0 1px 1px 0 rgba(255, 255, 255, 0.9);
+  --glass-blur: blur(16px);
+  --glass-blur-heavy: blur(24px);
 }
 
 /* ==========================================================================
