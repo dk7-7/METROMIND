@@ -25,12 +25,18 @@ import { fetchAll as fetchAlerts } from './store/slices/alertNotificationSlice';
 import { fetchAll as fetchGrids } from './store/slices/utilityGridSlice';
 
 // Protected Route Component
-const ProtectedRoute = ({ children }) => {
-  const { isAuthenticated, token } = useSelector((state) => state.auth);
+const ProtectedRoute = ({ allowedRoles, children }) => {
+  const { isAuthenticated, user, token } = useSelector((state) => state.auth);
   const storedToken = localStorage.getItem('token');
+  const isAuth = isAuthenticated || !!token || !!storedToken;
+  const role = user?.role || localStorage.getItem('role') || '';
 
-  if (!isAuthenticated && !token && !storedToken) {
+  if (!isAuth) {
     return <Navigate to="/login" replace />;
+  }
+
+  if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(role)) {
+    return <Navigate to="/" replace />;
   }
 
   return children;
@@ -288,7 +294,7 @@ function App() {
           <Route
             path="/incidents"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER', 'FIELD_TECHNICIAN']}>
                 <TrafficIncidentList />
               </ProtectedRoute>
             }
@@ -296,7 +302,7 @@ function App() {
           <Route
             path="/traffic-zones"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR', 'TRAFFIC_CONTROLLER']}>
                 <TrafficZoneList />
               </ProtectedRoute>
             }
@@ -304,7 +310,7 @@ function App() {
           <Route
             path="/utility-grids"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR', 'UTILITY_SUPERVISOR']}>
                 <UtilityGridList />
               </ProtectedRoute>
             }
@@ -312,7 +318,7 @@ function App() {
           <Route
             path="/outages"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR', 'UTILITY_SUPERVISOR']}>
                 <UtilityOutageList />
               </ProtectedRoute>
             }
@@ -320,7 +326,7 @@ function App() {
           <Route
             path="/observations"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR', 'FIELD_TECHNICIAN']}>
                 <FieldObservationList />
               </ProtectedRoute>
             }
@@ -328,7 +334,7 @@ function App() {
           <Route
             path="/alerts"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR']}>
                 <AlertNotificationList />
               </ProtectedRoute>
             }
@@ -336,7 +342,7 @@ function App() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR']}>
                 <DashboardView />
               </ProtectedRoute>
             }
@@ -344,7 +350,7 @@ function App() {
           <Route
             path="/official-registry"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={['CITY_ADMINISTRATOR']}>
                 <OfficialRegistryView />
               </ProtectedRoute>
             }
