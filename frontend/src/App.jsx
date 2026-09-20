@@ -24,6 +24,26 @@ import { fetchAll as fetchZones } from './store/slices/trafficZoneSlice';
 import { fetchAll as fetchAlerts } from './store/slices/alertNotificationSlice';
 import { fetchAll as fetchGrids } from './store/slices/utilityGridSlice';
 
+// Access Denied (403) View
+const AccessDeniedView = () => (
+  <div className="access-denied-container" style={{
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    minHeight: '60vh',
+    textAlign: 'center',
+    color: 'var(--text-primary, #ffffff)',
+    padding: '2rem'
+  }}>
+    <div style={{ fontSize: '4.5rem', fontWeight: '800', color: '#ef4444', marginBottom: '0.5rem', lineHeight: 1 }}>403</div>
+    <h2 style={{ fontSize: '1.75rem', fontWeight: '600', marginBottom: '0.75rem' }}>Access Denied</h2>
+    <p style={{ opacity: 0.8, maxWidth: '460px', fontSize: '1rem', lineHeight: 1.5, marginBottom: '1.5rem' }}>
+      You do not have permission to access this page. Dashboard access is restricted to City Administrators only.
+    </p>
+  </div>
+);
+
 // Protected Route Component
 const ProtectedRoute = ({ allowedRoles, children }) => {
   const { isAuthenticated, user, token } = useSelector((state) => state.auth);
@@ -36,7 +56,7 @@ const ProtectedRoute = ({ allowedRoles, children }) => {
   }
 
   if (allowedRoles && allowedRoles.length > 0 && !allowedRoles.includes(role)) {
-    return <Navigate to="/" replace />;
+    return <AccessDeniedView />;
   }
 
   return children;
@@ -235,7 +255,7 @@ const HomeView = () => {
     return <FieldObservationList />;
   }
 
-  return <DashboardView />;
+  return <TrafficIncidentList />;
 };
 
 function App() {
