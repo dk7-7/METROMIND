@@ -23,9 +23,9 @@
 
 .hud-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ea580c, var(--accent-cyan, #ff6600));
+  background: linear-gradient(90deg, #0284c7, var(--brand-primary, #00d2ff));
   border-radius: 4px;
-  box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+  box-shadow: 0 0 12px rgba(0, 210, 255, 0.6);
   transition: width 0.3s ease;
   width: var(--hud-progress, 0%);
 }

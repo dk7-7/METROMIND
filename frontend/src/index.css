@@ -1099,8 +1099,8 @@ h3 {
 }
 
 .progress-cyan {
-  background: linear-gradient(90deg, #ea580c, #ff6600);
-  box-shadow: 0 0 6px #ff6600;
+  background: linear-gradient(90deg, #0284c7, #00d2ff);
+  box-shadow: 0 0 8px rgba(0, 210, 255, 0.6);
 }
 
 .progress-green {
